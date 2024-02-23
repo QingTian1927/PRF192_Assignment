@@ -19,12 +19,22 @@
 // !
 // !       This is the same as the result of <string.h> strlen()
 
-#include <stddef.h>
+#include <stddef.h>  // For NULL value
 #include "dateParser.h"
+
+#define YEAR_SPECIFIER 'y'
+#define MONTH_SPECIFIER 'M'
+#define DAY_SPECIFIER 'd'
 
 #define FORMAT_ERROR -1
 #define PADDING_NONE 0
 #define PADDING_REQUIRED 1
+
+#define MONTH_NO_PADDING 1
+#define MONTH_WITH_PADDING 2
+
+#define DAY_NO_PADDING 1
+#define DAY_WITH_PADDING 2
 
 int getDayFormat(struct parserSettings settingsPtr) {
     int format = settingsPtr.isPaddedDay;
@@ -67,10 +77,10 @@ int interpretMonthSpecifiers(
     struct parserSettings* settingsPtr
 ) {
     switch (monthSpecifiers) {
-        case 1:
+        case MONTH_NO_PADDING:
             setMonthFormat(settingsPtr, PADDING_NONE);
             break;
-        case 2:
+        case MONTH_WITH_PADDING:
             setMonthFormat(settingsPtr, PADDING_REQUIRED);
             break;
         default:
@@ -85,10 +95,10 @@ int interpretDaySpecifiers(
     struct parserSettings* settingsPtr
 ) {
     switch (daySpecifiers) {
-        case 1:
+        case DAY_NO_PADDING:
             setDayFormat(settingsPtr, PADDING_NONE);
             break;
-        case 2:
+        case DAY_WITH_PADDING:
             setDayFormat(settingsPtr, PADDING_REQUIRED);
             break;
         default:
@@ -121,13 +131,13 @@ int parseFormatString(
         if (formatString[i] == separator && separator != 0) { continue; }
         if (formatString[i] == '\0') { break; }
         switch (formatString[i]) {
-            case 'y':
+            case YEAR_SPECIFIER:
                 yearSpecifiers++;
                 break;
-            case 'M':
+            case MONTH_SPECIFIER:
                 monthSpecifiers++;
                 break;
-            case 'd':
+            case DAY_SPECIFIER:
                 daySpecifiers++;
                 break;
             default:
