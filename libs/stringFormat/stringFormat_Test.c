@@ -221,9 +221,9 @@ int singleTest_capitalizeString(
     result = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
 
     printf("Test %d:\n", testNumber);
-    printf("  *) input: %s\n", preservedTestInput);
-    printf("  *) output: %s\n", testInput);
-    printf("  *) expected: %s\n", expectedOutput);
+    printf("  *) input:    \"%s\"\n", preservedTestInput);
+    printf("  *) output:   \"%s\"\n", testInput);
+    printf("  *) expected: \"%s\"\n", expectedOutput);
     printf("--> %s ", testName);
 
     if (result) {
@@ -246,7 +246,7 @@ void test_capitalizeString(void) {
     printf("------------------------\n");
     printf("TEST: %s\n\n", testName);
 
-    const int maxStrLen = 100;
+    const int maxStrLen = 50;
     int failCount = 0, successCount = 0;
     int testNumber = 1;
     int result;
@@ -295,10 +295,205 @@ void test_capitalizeString(void) {
     printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
 }
 
+int singleTest_trimFunction(
+    const char* testName,
+    int testNumber,
+    const char* inputStr,
+    const char* expectedOutputStr,
+    int maxStrLen,
+    int (*trimFunction)(char*, int)
+) {
+    char* testInput;
+    char* expectedOutput;
+    char* preservedTestInput;
+    int result;
+
+    testInput = newString(maxStrLen + 1);
+    expectedOutput = newString(maxStrLen + 1);
+    preservedTestInput = newString(maxStrLen + 1);
+
+    testInput = strncpy(testInput, inputStr, maxStrLen);
+    preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
+    expectedOutput = strncpy(expectedOutput, expectedOutputStr, maxStrLen);
+
+    trimFunction(testInput, strlen(testInput));
+    result = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
+
+    printf("Test %d:\n", testNumber);
+    printf("  *) input:    \"%s\"\n", preservedTestInput);
+    printf("  *) output:   \"%s\"\n", testInput);
+    printf("  *) expected: \"%s\"\n", expectedOutput);
+    printf("--> %s ", testName);
+
+    if (result) {
+        printf("%s\n", TEST_OKAY);
+        result = TEST_OKAY_STATUS;
+    } else {
+        printf("%s\n", TEST_FAIL);
+        result = TEST_FAIL_STATUS;
+    }
+
+    free(testInput);
+    free(expectedOutput);
+    free(preservedTestInput);
+
+    return result;
+}
+
+void test_trimLeft(void) {
+    const char testName[] = "trimLeft()";
+    printf("----------------\n");
+    printf("TEST: %s\n\n", testName);
+
+    const int maxStrLen = 50;
+    int failCount = 0, successCount = 0;
+    int testNumber = 1;
+    int result;
+    int (*trimFunction)(char*, int) = &trimLeft;
+
+    result = singleTest_trimFunction(
+        testName,
+        testNumber++,
+        "    abcdxyz",
+        "abcdxyz",
+        maxStrLen,
+        trimFunction
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
+
+    result = singleTest_trimFunction(
+        testName,
+        testNumber++,
+        "  lorem ipsum dolor sit amet   ",
+        "lorem ipsum dolor sit amet   ",
+        maxStrLen,
+        trimFunction
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
+
+    result = singleTest_trimFunction(
+        testName,
+        testNumber++,
+        "   東風と  桜の花が    空を飛ぶ    ",
+        "東風と  桜の花が    空を飛ぶ    ",
+        maxStrLen,
+        trimFunction
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
+
+    printf("\n");
+    printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
+}
+
+void test_trimRight(void) {
+    const char testName[] = "trimRight()";
+    printf("-----------------\n");
+    printf("TEST: %s\n\n", testName);
+
+    const int maxStrLen = 50;
+    int failCount = 0, successCount = 0;
+    int testNumber = 1;
+    int result;
+    int (*trimFunction)(char*, int) = &trimRight;
+
+    result = singleTest_trimFunction(
+        testName,
+        testNumber++,
+        "    abcdxyz  ",
+        "    abcdxyz",
+        maxStrLen,
+        trimFunction
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
+
+    result = singleTest_trimFunction(
+        testName,
+        testNumber++,
+        "  lorem ipsum dolor sit amet   ",
+        "  lorem ipsum dolor sit amet",
+        maxStrLen,
+        trimFunction
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
+
+    result = singleTest_trimFunction(
+        testName,
+        testNumber++,
+        "   東風と  桜の花が    空を飛ぶ    ",
+        "   東風と  桜の花が    空を飛ぶ",
+        maxStrLen,
+        trimFunction
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
+
+    printf("\n");
+    printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
+}
+
+void test_fullTrim(void) {
+    const char testName[] = "fullTrim()";
+    printf("----------------\n");
+    printf("TEST: %s\n\n", testName);
+
+    const int maxStrLen = 50;
+    int failCount = 0, successCount = 0;
+    int testNumber = 1;
+    int result;
+    int (*trimFunction)(char*, int) = &fullTrim;
+
+    result = singleTest_trimFunction(
+        testName,
+        testNumber++,
+        "    abcdxyz  ",
+        "abcdxyz",
+        maxStrLen,
+        trimFunction
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
+
+    result = singleTest_trimFunction(
+        testName,
+        testNumber++,
+        "  lorem ipsum dolor sit amet   ",
+        "lorem ipsum dolor sit amet",
+        maxStrLen,
+        trimFunction
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
+
+    result = singleTest_trimFunction(
+        testName,
+        testNumber++,
+        "   東風と  桜の花が    空を飛ぶ    ",
+        "東風と 桜の花が 空を飛ぶ",
+        maxStrLen,
+        trimFunction
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
+
+    printf("\n");
+    printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
+}
+
 int main() {
     test_upper();
     test_lower();
+
     test_isWhiteSpace();
     test_capitalizeString();
+
+    test_trimLeft();
+    test_trimRight();
+    test_fullTrim();
+
     return 0;
 }

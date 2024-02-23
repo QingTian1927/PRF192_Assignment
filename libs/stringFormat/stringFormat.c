@@ -9,6 +9,7 @@
 // !
 // !       This is the same as the result of <string.h> strlen()
 
+#include <stddef.h>  // For NULL value
 #include "stringFormat.h"
 
 #define LOWER_UPPER_OFFSET 32 // 'a' - 'A'
@@ -108,4 +109,94 @@ void capitalizeString(char* str, int len) {
         }
         str[i] = lower(str[i]);
     }
+}
+
+int trimLeft(char* str, int len) {
+    if (str == NULL || len == 0) {
+        return 0;
+    }
+
+    int whiteSpaces = 0;
+    while (isWhiteSpace(str[whiteSpaces]) && whiteSpaces <= len) {
+        whiteSpaces++;
+    }
+    if (whiteSpaces <= 0) { return len; }
+
+    int i = 0;
+    while (i <= len) {
+        // Shifts string to the left
+        str[i] = str[i + whiteSpaces];
+        i++;
+    }
+    str[i] = '\0';
+
+    int newLen = len - whiteSpaces;
+    return newLen;
+}
+
+int trimRight(char* str, int len) {
+    if (str == NULL || len == 0) {
+        return 0;
+    }
+
+    int i = len - 1;  // To account for zero-based indexing
+    while (isWhiteSpace(str[i]) && i >= 0) {
+        i--;
+    }
+
+    // Null terminates string on the right
+    str[i + 1] = '\0';
+    int newLen = i + 1;
+    return newLen;
+}
+
+int trimInner(char* str, int len) {
+    if (str == NULL || len == 0) {
+        return 0;
+    }
+
+    int i = 0;
+    int whiteSpaces = 0;
+    while (i <= len) {
+        if (isWhiteSpace(str[i]) == 0) {
+            whiteSpaces = 0;
+            i++;
+            continue;
+        }
+
+        // Count the number of spaces between two words
+        int j = i;
+        while (isWhiteSpace(str[j]) && j <= len) {
+            whiteSpaces++;
+            j++;
+        }
+
+        // One space between words is valid
+        if (whiteSpaces <= 1) {
+            i++;
+            continue;
+        }
+        int invalidSpaces = whiteSpaces - 1;
+
+        for (j = i; j <= len - invalidSpaces; j++) {
+            // Shift array to the left
+            str[j] = str[j + invalidSpaces];
+        }
+        len -= invalidSpaces;
+        i++;
+    }
+    str[len] = '\0';
+    return len;
+}
+
+int fullTrim(char* str, int len) {
+    if (str == NULL || len == 0) {
+        return 0;
+    }
+
+    len = trimLeft(str, len);
+    len = trimRight(str, len);
+    len = trimInner(str, len);
+
+    return len;
 }
