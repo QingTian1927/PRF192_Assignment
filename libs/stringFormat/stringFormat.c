@@ -81,3 +81,21 @@ int isWhiteSpace(char ch) {
             return 0;
     }
 }
+
+char* capitalizeString(char* str, int len) {
+    int isNewWord = 1;
+    int i;
+    for (i = 0; i <= len; i++) {
+        if (str[i] == ' ') {
+            isNewWord = 1;
+            continue;
+        }
+        if (isNewWord) {
+            str[i] = upper(str[i]);
+            isNewWord = 0;
+            continue;
+        }
+        str[i] = lower(str[i]);
+    }
+    return str;
+}

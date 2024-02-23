@@ -5,6 +5,9 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "stringFormat.h"
 
 #define TEST_FAIL "FAIL"
@@ -356,10 +359,113 @@ void test_isWhiteSpace(void) {
     printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
 }
 
+char* newString(int strLen) {
+    char* newStr = (char*) calloc(strLen, sizeof(char));
+    if (newStr == NULL) {
+        printf("newString(): calloc() returned NULL.\n");
+        printf("Process terminated.\n");
+        exit(1);
+    }
+    return newStr;
+}
+
+void test_capitalizeString(void) {
+    const char testName[] = "capitalizeString()";
+    printf("------------------------\n");
+    printf("TEST: %s\n\n", testName);
+
+    const int maxStrLen = 100;
+    char* testInput;
+    char* expectedOutput;
+    char* preservedTestInput;
+    int failCount = 0, successCount = 0;
+    int testResult;
+
+    testInput = newString(maxStrLen + 1);
+    expectedOutput = newString(maxStrLen + 1);
+    preservedTestInput = newString(maxStrLen + 1);
+
+    // TEST 1
+    // ------
+    testInput = strncpy(testInput, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", maxStrLen);
+    preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
+    expectedOutput = strncpy(expectedOutput, "Lorem Ipsum Dolor Sit Amet, Consectetur Adipiscing Elit.", maxStrLen);
+
+    testInput = capitalizeString(testInput, strlen(testInput));
+    testResult = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
+
+    printf("Test 1:\n");
+    printf("  *) input: %s\n", preservedTestInput);
+    printf("  *) output: %s\n", testInput);
+    printf("  *) expected: %s\n", expectedOutput);
+    printf("--> ");
+    if (testResult) {
+        printf("%s\n", TEST_OKAY);
+        successCount++;
+    }
+    else {
+        printf("%s\n", TEST_FAIL);
+        failCount++;
+    }
+
+    // TEST 2
+    // ------
+    testInput = strncpy(testInput, "pUbLiC STatIc VOiD MaIN STRiNg arGs", maxStrLen);
+    preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
+    expectedOutput = strncpy(expectedOutput, "Public Static Void Main String Args", maxStrLen);
+
+    testInput = capitalizeString(testInput, strlen(testInput));
+    testResult = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
+
+    printf("Test 2:\n");
+    printf("  *) input: %s\n", preservedTestInput);
+    printf("  *) output: %s\n", testInput);
+    printf("  *) expected: %s\n", expectedOutput);
+    printf("--> ");
+    if (testResult) {
+        printf("%s\n", TEST_OKAY);
+        successCount++;
+    }
+    else {
+        printf("%s\n", TEST_FAIL);
+        failCount++;
+    }
+
+    // TEST 3
+    // ------
+    testInput = strncpy(testInput, "愿此刻永遠是我们的晴天", maxStrLen);
+    preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
+    expectedOutput = strncpy(expectedOutput, "愿此刻永遠是我们的晴天", maxStrLen);
+
+    testInput = capitalizeString(testInput, strlen(testInput));
+    testResult = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
+
+    printf("Test 3:\n");
+    printf("  *) input: %s\n", preservedTestInput);
+    printf("  *) output: %s\n", testInput);
+    printf("  *) expected: %s\n", expectedOutput);
+    printf("--> ");
+    if (testResult) {
+        printf("%s\n", TEST_OKAY);
+        successCount++;
+    }
+    else {
+        printf("%s\n", TEST_FAIL);
+        failCount++;
+    }
+
+    free(testInput);
+    free(expectedOutput);
+    free(preservedTestInput);
+
+    printf("\n");
+    printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
+}
+
 int main() {
     test_upper();
     test_lower();
     test_isWhiteSpace();
-
+    test_capitalizeString();
     return 0;
 }
