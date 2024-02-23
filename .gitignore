@@ -1,2 +1,5 @@
 # Unnecessary VSCode configurations
 .vscode/
+
+# Ignore temp directories
+temp/
