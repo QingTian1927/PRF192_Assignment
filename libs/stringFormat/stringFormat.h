@@ -7,6 +7,6 @@ char lower(char ch);
 
 int isWhiteSpace(char ch);
 
-char* capitalizeString(char* str, int len);
+void capitalizeString(char* str, int len);
 
 #endif

@@ -391,14 +391,14 @@ void test_capitalizeString(void) {
     preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
     expectedOutput = strncpy(expectedOutput, "Lorem Ipsum Dolor Sit Amet, Consectetur Adipiscing Elit.", maxStrLen);
 
-    testInput = capitalizeString(testInput, strlen(testInput));
+    capitalizeString(testInput, strlen(testInput));
     testResult = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
 
     printf("Test 1:\n");
     printf("  *) input: %s\n", preservedTestInput);
     printf("  *) output: %s\n", testInput);
     printf("  *) expected: %s\n", expectedOutput);
-    printf("--> ");
+    printf("--> %s ", testName);
     if (testResult) {
         printf("%s\n", TEST_OKAY);
         successCount++;
@@ -414,14 +414,14 @@ void test_capitalizeString(void) {
     preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
     expectedOutput = strncpy(expectedOutput, "Public Static Void Main String Args", maxStrLen);
 
-    testInput = capitalizeString(testInput, strlen(testInput));
+    capitalizeString(testInput, strlen(testInput));
     testResult = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
 
     printf("Test 2:\n");
     printf("  *) input: %s\n", preservedTestInput);
     printf("  *) output: %s\n", testInput);
     printf("  *) expected: %s\n", expectedOutput);
-    printf("--> ");
+    printf("--> %s ", testName);
     if (testResult) {
         printf("%s\n", TEST_OKAY);
         successCount++;
@@ -437,14 +437,14 @@ void test_capitalizeString(void) {
     preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
     expectedOutput = strncpy(expectedOutput, "愿此刻永遠是我们的晴天", maxStrLen);
 
-    testInput = capitalizeString(testInput, strlen(testInput));
+    capitalizeString(testInput, strlen(testInput));
     testResult = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
 
     printf("Test 3:\n");
     printf("  *) input: %s\n", preservedTestInput);
     printf("  *) output: %s\n", testInput);
     printf("  *) expected: %s\n", expectedOutput);
-    printf("--> ");
+    printf("--> %s ", testName);
     if (testResult) {
         printf("%s\n", TEST_OKAY);
         successCount++;

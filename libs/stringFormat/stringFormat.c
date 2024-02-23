@@ -82,11 +82,22 @@ int isWhiteSpace(char ch) {
     }
 }
 
-char* capitalizeString(char* str, int len) {
+/**
+ * @brief Directly capitalizes all words in a string.
+ *
+ * Capitalizes all words in a string by directly accessing the characters in
+ * the array and then modifying it accordingly.
+ *
+ * E.g: Lorem ipsum dolor sit amet -> Lorem Ipsum Dolor Sit Amet
+ *
+ * @param str The string to be capitalized.
+ * @param len The length of the string to be capitalized.
+ */
+void capitalizeString(char* str, int len) {
     int isNewWord = 1;
     int i;
     for (i = 0; i <= len; i++) {
-        if (str[i] == ' ') {
+        if (isWhiteSpace(str[i])) {
             isNewWord = 1;
             continue;
         }
@@ -97,5 +108,4 @@ char* capitalizeString(char* str, int len) {
         }
         str[i] = lower(str[i]);
     }
-    return str;
 }
