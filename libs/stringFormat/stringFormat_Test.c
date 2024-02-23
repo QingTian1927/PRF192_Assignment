@@ -13,101 +13,78 @@
 #define TEST_FAIL "FAIL"
 #define TEST_OKAY "OKAY"
 
+#define TEST_FAIL_STATUS 0
+#define TEST_OKAY_STATUS 1
+
+int singleTest_upper(
+    const char* testName,
+    int testNumber,
+    char testInput,
+    char expectedOutput
+) {
+    char testOutput = upper(testInput);
+    printf(
+        "Test %d: %c -> %s -> %c | expected: %c | ",
+        testNumber, testInput, testName, testOutput, expectedOutput
+    );
+    if (testOutput == expectedOutput) {
+        printf("%s\n", TEST_OKAY);
+        return TEST_OKAY_STATUS;
+    }
+    printf("%s\n", TEST_FAIL);
+    return TEST_FAIL_STATUS;
+}
+
 void test_upper(void) {
     const char testName[] = "upper()";
     printf("-------------\n");
     printf("TEST: %s\n\n", testName);
 
-    char testInput, testOutput, expectedOutput;
     int failCount = 0, successCount = 0;
+    int testNumber = 1;
+    int result;
 
-    // TEST 1
-    // ------
-    testInput = 'a'; expectedOutput = 'A';
-    testOutput = upper(testInput);
-    printf(
-        "Test 1: %c -> %s -> %c | expected: %c | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_upper(testName, testNumber++, 'a', 'A');
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 2
-    // ------
-    testInput = 'r'; expectedOutput = 'R';
-    testOutput = upper(testInput);
-    printf(
-        "Test 1: %c -> %s -> %c | expected: %c | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_upper(testName, testNumber++, 'r', 'R');
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 3
-    // ------
-    testInput = '6'; expectedOutput = '6';
-    testOutput = upper(testInput);
-    printf(
-        "Test 1: %c -> %s -> %c | expected: %c | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_upper(testName, testNumber++, '6', '6');
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 4
-    // ------
-    testInput = 'R'; expectedOutput = 'R';
-    testOutput = upper(testInput);
-    printf(
-        "Test 1: %c -> %s -> %c | expected: %c | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_upper(testName, testNumber++, 'H', 'H');
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 5
-    // ------
-    testInput = '%'; expectedOutput = '%';
-    testOutput = upper(testInput);
-    printf(
-        "Test 1: %c -> %s -> %c | expected: %c | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_upper(testName, testNumber++, '%', '%');
+    if (result) { successCount++; }
+    else { failCount++; }
 
     printf("\n");
     printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
+}
+
+int singleTest_lower(
+    const char* testName,
+    int testNumber,
+    char testInput,
+    char expectedOutput
+) {
+    char testOutput = lower(testInput);
+    printf(
+        "Test %d: %c -> %s -> %c | expected: %c | ",
+        testNumber, testInput, testName, testOutput, expectedOutput
+    );
+    if (testOutput == expectedOutput) {
+        printf("%s\n", TEST_OKAY);
+        return TEST_OKAY_STATUS;
+    }
+    printf("%s\n", TEST_FAIL);
+    return TEST_FAIL_STATUS;
 }
 
 void test_lower(void) {
@@ -115,96 +92,51 @@ void test_lower(void) {
     printf("-------------\n");
     printf("TEST: %s\n\n", testName);
 
-    char testInput, testOutput, expectedOutput;
     int failCount = 0, successCount = 0;
+    int testNumber = 1;
+    int result;
 
-    // TEST 1
-    // ------
-    testInput = 'A'; expectedOutput = 'a';
-    testOutput = lower(testInput);
-    printf(
-        "Test 1: %c -> %s -> %c | expected: %c | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_lower(testName, testNumber++, 'B', 'b');
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 2
-    // ------
-    testInput = 'Z'; expectedOutput = 'z';
-    testOutput = lower(testInput);
-    printf(
-        "Test 2: %c -> %s -> %c | expected: %c | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_lower(testName, testNumber++, 'Z', 'z');
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 3
-    // ------
-    testInput = '6'; expectedOutput = '6';
-    testOutput = lower(testInput);
-    printf(
-        "Test 3: %c -> %s -> %c | expected: %c | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_lower(testName, testNumber++, '0', '0');
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 4
-    // ------
-    testInput = 'f'; expectedOutput = 'f';
-    testOutput = lower(testInput);
-    printf(
-        "Test 4: %c -> %s -> %c | expected: %c | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_lower(testName, testNumber++, 'f', 'f');
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 5
-    // ------
-    testInput = '%'; expectedOutput = '%';
-    testOutput = lower(testInput);
-    printf(
-        "Test 5: %c -> %s -> %c | expected: %c | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_lower(testName, testNumber++, '#', '#');
+    if (result) { successCount++; }
+    else { failCount++; }
 
     printf("\n");
     printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
+}
+
+int singleTest_isWhiteSpace(
+    const char* testName,
+    int testNumber,
+    char testInput,
+    int expectedOutput
+) {
+    int testOutput = isWhiteSpace(testInput);
+    printf(
+        "Test %d: %3d -> %s -> %d | expected: %d | ",
+        testNumber, testInput, testName, testOutput, expectedOutput
+    );
+    if (testOutput == expectedOutput) {
+        printf("%s\n", TEST_OKAY);
+        return TEST_OKAY_STATUS;
+    }
+    printf("%s\n", TEST_FAIL);
+    return TEST_FAIL_STATUS;
 }
 
 void test_isWhiteSpace(void) {
@@ -212,148 +144,44 @@ void test_isWhiteSpace(void) {
     printf("--------------------\n");
     printf("TEST: %s\n\n", testName);
 
-    char testInput;
-    int testOutput, expectedOutput;
     int failCount = 0, successCount = 0;
+    int testNumber = 1;
+    int result;
 
     const int resultIsWhiteSpace = 1;
     const int resultIsNotWhiteSpace = 0;
 
-    // TEST 1
-    // ------
-    testInput = 'A'; expectedOutput = resultIsNotWhiteSpace;
-    testOutput = isWhiteSpace(testInput);
-    printf(
-        "Test 1: %3d -> %s -> %d | expected: %d | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_isWhiteSpace(testName, testNumber++, 'A', resultIsNotWhiteSpace);
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 2
-    // ------
-    testInput = ' '; expectedOutput = resultIsWhiteSpace;
-    testOutput = isWhiteSpace(testInput);
-    printf(
-        "Test 2: %3d -> %s -> %d | expected: %d | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_isWhiteSpace(testName, testNumber++, ' ', resultIsWhiteSpace);
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 3
-    // ------
-    testInput = '\t'; expectedOutput = resultIsWhiteSpace;
-    testOutput = isWhiteSpace(testInput);
-    printf(
-        "Test 3: %3d -> %s -> %d | expected: %d | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_isWhiteSpace(testName, testNumber++, '\t', resultIsWhiteSpace);
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 4
-    // ------
-    testInput = '\v'; expectedOutput = resultIsWhiteSpace;
-    testOutput = isWhiteSpace(testInput);
-    printf(
-        "Test 4: %3d -> %s -> %d | expected: %d | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_isWhiteSpace(testName, testNumber++, '\v', resultIsWhiteSpace);
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 5
-    // ------
-    testInput = '\f'; expectedOutput = resultIsWhiteSpace;
-    testOutput = isWhiteSpace(testInput);
-    printf(
-        "Test 5: %3d -> %s -> %d | expected: %d | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_isWhiteSpace(testName, testNumber++, '\f', resultIsWhiteSpace);
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 6
-    // ------
-    testInput = '\n'; expectedOutput = resultIsWhiteSpace;
-    testOutput = isWhiteSpace(testInput);
-    printf(
-        "Test 6: %3d -> %s -> %d | expected: %d | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_isWhiteSpace(testName, testNumber++, '\n', resultIsWhiteSpace);
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 7
-    // ------
-    testInput = '\r'; expectedOutput = resultIsWhiteSpace;
-    testOutput = isWhiteSpace(testInput);
-    printf(
-        "Test 7: %3d -> %s -> %d | expected: %d | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_isWhiteSpace(testName, testNumber++, '\r', resultIsWhiteSpace);
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 8
-    // ------
-    testInput = '%'; expectedOutput = resultIsNotWhiteSpace;
-    testOutput = isWhiteSpace(testInput);
-    printf(
-        "Test 8: %3d -> %s -> %d | expected: %d | ",
-        testInput, testName, testOutput, expectedOutput
-    );
-    if (testOutput == expectedOutput) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
+    result = singleTest_isWhiteSpace(testName, testNumber++, '>', resultIsNotWhiteSpace);
+    if (result) { successCount++; }
+    else { failCount++; }
 
     printf("\n");
     printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
@@ -369,94 +197,99 @@ char* newString(int strLen) {
     return newStr;
 }
 
+int singleTest_capitalizeString(
+    const char* testName,
+    int testNumber,
+    const char* inputStr,
+    const char* expectedOutputStr,
+    int maxStrLen
+) {
+    char* testInput;
+    char* expectedOutput;
+    char* preservedTestInput;
+    int result;
+
+    testInput = newString(maxStrLen + 1);
+    expectedOutput = newString(maxStrLen + 1);
+    preservedTestInput = newString(maxStrLen + 1);
+
+    testInput = strncpy(testInput, inputStr, maxStrLen);
+    preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
+    expectedOutput = strncpy(expectedOutput, expectedOutputStr, maxStrLen);
+
+    capitalizeString(testInput, strlen(testInput));
+    result = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
+
+    printf("Test %d:\n", testNumber);
+    printf("  *) input: %s\n", preservedTestInput);
+    printf("  *) output: %s\n", testInput);
+    printf("  *) expected: %s\n", expectedOutput);
+    printf("--> %s ", testName);
+
+    if (result) {
+        printf("%s\n", TEST_OKAY);
+        result = TEST_OKAY_STATUS;
+    } else {
+        printf("%s\n", TEST_FAIL);
+        result = TEST_FAIL_STATUS;
+    }
+
+    free(testInput);
+    free(expectedOutput);
+    free(preservedTestInput);
+
+    return result;
+}
+
 void test_capitalizeString(void) {
     const char testName[] = "capitalizeString()";
     printf("------------------------\n");
     printf("TEST: %s\n\n", testName);
 
     const int maxStrLen = 100;
-    char* testInput;
-    char* expectedOutput;
-    char* preservedTestInput;
     int failCount = 0, successCount = 0;
-    int testResult;
+    int testNumber = 1;
+    int result;
 
-    testInput = newString(maxStrLen + 1);
-    expectedOutput = newString(maxStrLen + 1);
-    preservedTestInput = newString(maxStrLen + 1);
+    result = singleTest_capitalizeString(
+        testName,
+        testNumber++,
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "Lorem Ipsum Dolor Sit Amet, Consectetur Adipiscing Elit.",
+        maxStrLen
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    // TEST 1
-    // ------
-    testInput = strncpy(testInput, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", maxStrLen);
-    preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
-    expectedOutput = strncpy(expectedOutput, "Lorem Ipsum Dolor Sit Amet, Consectetur Adipiscing Elit.", maxStrLen);
+    result = singleTest_capitalizeString(
+        testName,
+        testNumber++,
+        "pUbLiC STatIc VOiD MaIN STRiNg arGs",
+        "Public Static Void Main String Args",
+        maxStrLen
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    capitalizeString(testInput, strlen(testInput));
-    testResult = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
+    result = singleTest_capitalizeString(
+        testName,
+        testNumber++,
+        "愿此刻永遠是我们的晴天",
+        "愿此刻永遠是我们的晴天",
+        maxStrLen
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
 
-    printf("Test 1:\n");
-    printf("  *) input: %s\n", preservedTestInput);
-    printf("  *) output: %s\n", testInput);
-    printf("  *) expected: %s\n", expectedOutput);
-    printf("--> %s ", testName);
-    if (testResult) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
-
-    // TEST 2
-    // ------
-    testInput = strncpy(testInput, "pUbLiC STatIc VOiD MaIN STRiNg arGs", maxStrLen);
-    preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
-    expectedOutput = strncpy(expectedOutput, "Public Static Void Main String Args", maxStrLen);
-
-    capitalizeString(testInput, strlen(testInput));
-    testResult = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
-
-    printf("Test 2:\n");
-    printf("  *) input: %s\n", preservedTestInput);
-    printf("  *) output: %s\n", testInput);
-    printf("  *) expected: %s\n", expectedOutput);
-    printf("--> %s ", testName);
-    if (testResult) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
-
-    // TEST 3
-    // ------
-    testInput = strncpy(testInput, "愿此刻永遠是我们的晴天", maxStrLen);
-    preservedTestInput = strncpy(preservedTestInput, testInput, maxStrLen);
-    expectedOutput = strncpy(expectedOutput, "愿此刻永遠是我们的晴天", maxStrLen);
-
-    capitalizeString(testInput, strlen(testInput));
-    testResult = (strncmp(testInput, expectedOutput, maxStrLen) == 0);
-
-    printf("Test 3:\n");
-    printf("  *) input: %s\n", preservedTestInput);
-    printf("  *) output: %s\n", testInput);
-    printf("  *) expected: %s\n", expectedOutput);
-    printf("--> %s ", testName);
-    if (testResult) {
-        printf("%s\n", TEST_OKAY);
-        successCount++;
-    }
-    else {
-        printf("%s\n", TEST_FAIL);
-        failCount++;
-    }
-
-    free(testInput);
-    free(expectedOutput);
-    free(preservedTestInput);
+    result = singleTest_capitalizeString(
+        testName,
+        testNumber++,
+        "Oăn mắt in ma giừn si sớt phớt háp pi",
+        "Oăn Mắt In Ma Giừn Si Sớt Phớt Háp Pi",
+        maxStrLen
+    );
+    if (result) { successCount++; }
+    else { failCount++; }
 
     printf("\n");
     printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
