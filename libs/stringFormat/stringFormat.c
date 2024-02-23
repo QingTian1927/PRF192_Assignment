@@ -21,3 +21,17 @@ char lower(char ch) {
     }
     return ch;
 }
+
+int isWhiteSpace(char ch) {
+    switch (ch) {
+        case ' ':   // space
+        case '\t':  // horizontal tab
+        case '\v':  // vertical tab
+        case '\f':  // feed
+        case '\n':  // newline
+        case '\r':  // carriage return
+            return 1;
+        default:
+            return 0;
+    }
+}

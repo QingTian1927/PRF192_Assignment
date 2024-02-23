@@ -5,4 +5,6 @@ char upper(char ch);
 
 char lower(char ch);
 
+int isWhiteSpace(char ch);
+
 #endif
