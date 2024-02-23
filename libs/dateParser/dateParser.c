@@ -30,6 +30,8 @@
 #define PADDING_NONE 0
 #define PADDING_REQUIRED 1
 
+#define FOUR_DIGIT_YEARS 4
+
 #define MONTH_NO_PADDING 1
 #define MONTH_WITH_PADDING 2
 
@@ -60,8 +62,6 @@ int interpretYearSpecifiers(
     int yearSpecifiers,
     struct parserSettings* settingsPtr
 ) {
-    #define FOUR_DIGIT_YEARS 4
-
     switch (yearSpecifiers) {
         case FOUR_DIGIT_YEARS:
             return 1;
