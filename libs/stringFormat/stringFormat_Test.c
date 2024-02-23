@@ -351,6 +351,9 @@ void test_isWhiteSpace(void) {
         printf("%s\n", TEST_FAIL);
         failCount++;
     }
+
+    printf("\n");
+    printf("SUCCESS: %d | FAILURE: %d\n\n", successCount, failCount);
 }
 
 int main() {
