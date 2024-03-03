@@ -6,8 +6,8 @@ mkdirIfNotExist() {
     fi
 }
 
-name="dateParser"
-testName="dateParser_Test"
+name="dateparser"
+testName="dateparser_test"
 
 outputDir="$PWD/temp"
 mkdirIfNotExist "$outputDir"
