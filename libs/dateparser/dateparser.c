@@ -26,12 +26,26 @@ struct dateObj* parseDateString(char* dateStr, int len) {
     short int year, month, day;
     int parsingResult = sscanf(dateStr, "%hd-%hd-%hd", &year, &month, &day);
     if (parsingResult != 3) { return NULL; }
-    
+
     newDate->year = year;
     newDate->month = month;
     newDate->day = day;
-    
+
     return newDate;
+}
+
+int isValidDate(char* dateStr, int len) {
+    if (len != DATE_STRING_LEN || dateStr == NULL) { return 0; }
+
+    short int year, month, day;
+    int parsingResult = sscanf(dateStr, "%hd-%hd-%hd", &year, &month, &day);
+    if (parsingResult != 3) { return 0; }
+
+    int isValidDateString = (
+        isValidYear(year) && isValidMonth(month) &&
+        isValidDay(day, month, year)
+    );
+    return isValidDateString;
 }
 
 int isValidYear(short int year) {
@@ -49,7 +63,7 @@ int isValidMonth(short int month) {
     return result;
 }
 
-int isValidDay(short int day, short int currentMonth, int isLeapYear) {
+int isValidDay(short int day, short int currentMonth, int currentYear) {
     if (day <= 0) { return -1; }
 
     int result = 0;
@@ -70,7 +84,7 @@ int isValidDay(short int day, short int currentMonth, int isLeapYear) {
             result = day <= 30;
             break;
         case 2:
-            result = (isLeapYear) ? (day <= 28) : (day <= 29);
+            result = (isLeapYear(currentYear)) ? (day <= 28) : (day <= 29);
             break;
         default:
             return -1;

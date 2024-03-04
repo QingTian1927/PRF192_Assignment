@@ -12,10 +12,10 @@ struct dateObj {
 };
 
 struct dateObj* parseDateString(char* dateStr, int len);
+int isValidDate(char* dateStr, int len);
 
 int isValidYear(short int year);
 int isLeapYear(short int year);
-
 int isValidMonth(short int month);
 int isValidDay(short int day, short int currentMonth, int isLeapYear);
 
