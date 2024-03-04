@@ -84,7 +84,7 @@ int isValidDay(short int day, short int currentMonth, int currentYear) {
             result = day <= 30;
             break;
         case 2:
-            result = (isLeapYear(currentYear)) ? (day <= 28) : (day <= 29);
+            result = (isLeapYear(currentYear)) ? (day <= 29) : (day <= 28);
             break;
         default:
             return -1;
