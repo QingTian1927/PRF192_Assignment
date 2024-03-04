@@ -15,15 +15,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#define UNIQUE_SPECIFIERS_NUM 3
-#define DATE_SEPARATOR '-'
-#define DATE_STRING_LEN 10
-
-struct dateObj {
-    short int year;
-    short int month;
-    short int day;
-};
+#include "dateparser.h"
 
 struct dateObj* parseDateString(char* dateStr, int len) {
     if (len != DATE_STRING_LEN || dateStr == NULL) { return NULL; }
