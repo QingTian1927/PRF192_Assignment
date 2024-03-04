@@ -11,11 +11,36 @@
 // !
 // !       This is the same as the result of <string.h> strlen()
 
+#include <stdio.h>
+#include <stddef.h>
+#include <stdlib.h>
+
+#define UNIQUE_SPECIFIERS_NUM 3
+#define DATE_SEPARATOR '-'
+#define DATE_STRING_LEN 10
+
 struct dateObj {
     short int year;
     short int month;
     short int day;
 };
+
+struct dateObj* parseDateString(char* dateStr, int len) {
+    if (len != DATE_STRING_LEN || dateStr == NULL) { return NULL; }
+
+    struct dateObj* newDate = (struct dateObj*) malloc(sizeof(struct dateObj));
+    if (newDate == NULL) { return NULL; }
+
+    short int year, month, day;
+    int parsingResult = sscanf(dateStr, "%hd-%hd-%hd", &year, &month, &day);
+    if (parsingResult != 3) { return NULL; }
+    
+    newDate->year = year;
+    newDate->month = month;
+    newDate->day = day;
+    
+    return newDate;
+}
 
 int isValidYear(short int year) {
     int result = (year >= 1900);
