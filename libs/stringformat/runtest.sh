@@ -6,8 +6,8 @@ mkdirIfNotExist() {
     fi
 }
 
-name="stringFormat"
-testName="stringFormat_Test"
+name="stringformat"
+testName="stringformat_test"
 
 outputDir="$PWD/temp"
 mkdirIfNotExist "$outputDir"

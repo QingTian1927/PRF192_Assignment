@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "stringFormat.h"
+#include "stringformat.h"
 
 #define TEST_FAIL "FAIL"
 #define TEST_OKAY "OKAY"

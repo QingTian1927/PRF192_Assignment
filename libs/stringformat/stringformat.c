@@ -10,7 +10,7 @@
 // !       This is the same as the result of <string.h> strlen()
 
 #include <stddef.h>  // For NULL value
-#include "stringFormat.h"
+#include "stringformat.h"
 
 #define LOWER_UPPER_OFFSET 32 // 'a' - 'A'
 
