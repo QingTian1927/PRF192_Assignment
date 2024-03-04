@@ -18,7 +18,7 @@
 #include "dateparser.h"
 
 int isValidYear(short int year) {
-    int result = (year >= 1900);
+    int result = year >= 1900 && year <= 9999;
     return result;
 }
 
@@ -80,7 +80,22 @@ struct dateObj* parseDateString(char* dateStr) {
     return newDate;
 }
 
-int isValidDate(char* dateStr) {
+int isValidDateObj(struct dateObj* date) {
+    if (date == 0) { return 0; }
+
+    short int year = date->year;
+    short int month = date->month;
+    short int day = date->day;
+
+    int isValidDate = (
+        isValidYear(year) &&
+        isValidMonth(month) &&
+        isValidDay(day, month, year)
+    );
+    return isValidDate;
+}
+
+int isValidDateString(char* dateStr) {
     int len = strlen(dateStr);
     if (len != DATE_STRING_LEN || dateStr == NULL) { return 0; }
 
@@ -88,9 +103,52 @@ int isValidDate(char* dateStr) {
     int parsingResult = sscanf(dateStr, "%hd-%hd-%hd", &year, &month, &day);
     if (parsingResult != 3) { return 0; }
 
-    int isValidDateString = (
+    int isValidDate = (
         isValidYear(year) && isValidMonth(month) &&
         isValidDay(day, month, year)
     );
-    return isValidDateString;
+    return isValidDate;
+}
+
+char* convertToDateString(struct dateObj* date) {
+    int isInvalidParameter = date == NULL || !isValidDateObj(date);
+    if (isInvalidParameter) { return NULL; }
+
+    int actualLen = DATE_STRING_LEN + 1;
+    char* dateStr = (char*) calloc(actualLen, sizeof(char));
+    if (dateStr == NULL) { return NULL; }
+
+    short int year = date->year;
+    short int month = date->month;
+    short int day = date->day;
+
+    char yearStr[MAX_YEAR_LEN];
+    char monthStr[MAX_MONTH_LEN];
+    char dayStr[MAX_DAY_LEN];
+
+    sprintf(yearStr, "%d", year);
+
+    // God helps me.
+    if (month >= 10) {
+        sprintf(monthStr, "%d", month);
+    } else {
+        monthStr[0] = '0';
+        monthStr[1] = (char) month + '0';
+    }
+
+    if (day >= 10) {
+        sprintf(dayStr, "%d", day);
+    } else {
+        dayStr[0] = '0';
+        dayStr[1] = (char) day + '0';
+    }
+
+    strncat(dateStr, yearStr, actualLen);
+    dateStr[4] = DATE_SEPARATOR;
+    strncat(dateStr, monthStr, actualLen);
+    dateStr[7] = DATE_SEPARATOR;
+    strncat(dateStr, dayStr, actualLen);
+
+    dateStr[DATE_STRING_LEN] = '\0';
+    return dateStr;
 }
