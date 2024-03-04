@@ -12,41 +12,10 @@
 // !       This is the same as the result of <string.h> strlen()
 
 #include <stdio.h>
-#include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "dateparser.h"
-
-struct dateObj* parseDateString(char* dateStr, int len) {
-    if (len != DATE_STRING_LEN || dateStr == NULL) { return NULL; }
-
-    struct dateObj* newDate = (struct dateObj*) malloc(sizeof(struct dateObj));
-    if (newDate == NULL) { return NULL; }
-
-    short int year, month, day;
-    int parsingResult = sscanf(dateStr, "%hd-%hd-%hd", &year, &month, &day);
-    if (parsingResult != 3) { return NULL; }
-
-    newDate->year = year;
-    newDate->month = month;
-    newDate->day = day;
-
-    return newDate;
-}
-
-int isValidDate(char* dateStr, int len) {
-    if (len != DATE_STRING_LEN || dateStr == NULL) { return 0; }
-
-    short int year, month, day;
-    int parsingResult = sscanf(dateStr, "%hd-%hd-%hd", &year, &month, &day);
-    if (parsingResult != 3) { return 0; }
-
-    int isValidDateString = (
-        isValidYear(year) && isValidMonth(month) &&
-        isValidDay(day, month, year)
-    );
-    return isValidDateString;
-}
 
 int isValidYear(short int year) {
     int result = (year >= 1900);
@@ -90,4 +59,38 @@ int isValidDay(short int day, short int currentMonth, int currentYear) {
             return -1;
     }
     return result;
+}
+
+struct dateObj* parseDateString(char* dateStr) {
+    int len = strlen(dateStr);
+
+    if (len != DATE_STRING_LEN || dateStr == NULL) { return NULL; }
+
+    struct dateObj* newDate = (struct dateObj*) malloc(sizeof(struct dateObj));
+    if (newDate == NULL) { return NULL; }
+
+    short int year, month, day;
+    int parsingResult = sscanf(dateStr, "%hd-%hd-%hd", &year, &month, &day);
+    if (parsingResult != 3) { return NULL; }
+
+    newDate->year = year;
+    newDate->month = month;
+    newDate->day = day;
+
+    return newDate;
+}
+
+int isValidDate(char* dateStr) {
+    int len = strlen(dateStr);
+    if (len != DATE_STRING_LEN || dateStr == NULL) { return 0; }
+
+    short int year, month, day;
+    int parsingResult = sscanf(dateStr, "%hd-%hd-%hd", &year, &month, &day);
+    if (parsingResult != 3) { return 0; }
+
+    int isValidDateString = (
+        isValidYear(year) && isValidMonth(month) &&
+        isValidDay(day, month, year)
+    );
+    return isValidDateString;
 }

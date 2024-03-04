@@ -11,8 +11,8 @@ struct dateObj {
     short int day;
 };
 
-struct dateObj* parseDateString(char* dateStr, int len);
-int isValidDate(char* dateStr, int len);
+struct dateObj* parseDateString(char* dateStr);
+int isValidDate(char* dateStr);
 
 int isValidYear(short int year);
 int isLeapYear(short int year);
