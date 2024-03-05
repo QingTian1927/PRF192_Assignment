@@ -8,6 +8,15 @@
 
 #include "chefobject.h"
 #include "../dateparser/dateparser.h"
+#include "../stringformat/stringformat.h"
+
+const char* ROLES_TABLE[] = {
+    "APPRENTICE COOK",
+    "JUNIOR CHEF",
+    "SEASONED CHEF",
+    "MASTER CHEF"
+};
+const int ROLES_TABLE_LEN = sizeof(ROLES_TABLE) / sizeof(ROLES_TABLE[0]);
 
 int isInvalidString(char* str, int expectedLen) {
     int strLen = strlen(str);
@@ -15,16 +24,35 @@ int isInvalidString(char* str, int expectedLen) {
     return result;
 }
 
+void formatName(char* namePtr) {
+    int len = fullTrim(namePtr, strlen(namePtr));
+    capitalizeString(namePtr, len);
+}
+
+int isValidRole(char* rolePtr) {
+    if (rolePtr == NULL) { return 0; }
+
+    int i;
+    for (i = 0; i < ROLES_TABLE_LEN; i++) {
+        if (strncmp(rolePtr, ROLES_TABLE[i], strlen(ROLES_TABLE[i])) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 int setName(struct chefObj* chefPtr, char* namePtr) {
     if (chefPtr == NULL || namePtr == NULL) { return SET_PROPERTY_FAIL; }
 
     if (isInvalidString(namePtr, MAX_NAME_LEN)) { return SET_PROPERTY_FAIL; }
 
-    chefPtr->name = namePtr;
+    formatName(namePtr);
+    strncpy(chefPtr->name, namePtr, MAX_NAME_LEN);
+
     return SET_PROPERTY_OKAY;
 }
 
-int setSpecialization(struct chefObj* chefPtr, char* rolePtr) {
+int setRole(struct chefObj* chefPtr, char* rolePtr) {
     if (chefPtr == NULL || rolePtr == NULL) {
         return SET_PROPERTY_FAIL;
     }
@@ -33,7 +61,10 @@ int setSpecialization(struct chefObj* chefPtr, char* rolePtr) {
         return SET_PROPERTY_FAIL;
     }
 
-    chefPtr->role = rolePtr;
+    if (!isValidRole(rolePtr)) { return SET_PROPERTY_FAIL; }
+
+    strncpy(chefPtr->role, rolePtr, MAX_ROLE_LEN);
+
     return SET_PROPERTY_OKAY;
 }
 
@@ -47,31 +78,32 @@ int setSalary(struct chefObj* chefPtr, long salary) {
 int setDateOfBirth(struct chefObj* chefPtr, char* dateOfBirth) {
     if (chefPtr == NULL || dateOfBirth == NULL) { return SET_PROPERTY_FAIL; }
 
-    if (!isValidDate(dateOfBirth, strlen(dateOfBirth))) {
+    if (!isValidDateString(dateOfBirth)) {
         return SET_PROPERTY_FAIL;
     }
 
-    chefPtr->dateOfBirth = dateOfBirth;
+    strncpy(chefPtr->dateOfBirth, dateOfBirth, MAX_DATE_LEN);
+
     return SET_PROPERTY_OKAY;
 }
 
 
-char* getName(struct chefObj chef) {
-    char* name = chef.name;
+char* getName(struct chefObj* chef) {
+    char* name = chef->name;
     return name;
 }
 
-char* getSpecialization(struct chefObj chef) {
-    char* role = chef.role;
+char* getRole(struct chefObj* chef) {
+    char* role = chef->role;
     return role;
 }
 
-char* getDateOfBirth(struct chefObj chef) {
-    char* dateOfBirth = chef.dateOfBirth;
+char* getDateOfBirth(struct chefObj* chef) {
+    char* dateOfBirth = chef->dateOfBirth;
     return dateOfBirth;
 }
 
-long getSalary(struct chefObj chef) {
-    long salary = chef.salary;
+long getSalary(struct chefObj* chef) {
+    long salary = chef->salary;
     return salary;
 }
