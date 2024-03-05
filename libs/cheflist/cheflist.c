@@ -16,7 +16,7 @@ int initializeChefList(chefObj** chefList, int listLen) {
 
 // Returns an array of pointers to struct
 chefObj ** newChefList(int listLen) {
-    if (listLen <= 0) { return NULL; }
+    if (listLen <= 0 || listLen > MAX_CHEFS) { return NULL; }
 
     int pointerSize = sizeof(chefObj*);
     chefObj** chefList = calloc(listLen, pointerSize);
