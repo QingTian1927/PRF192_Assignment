@@ -88,22 +88,22 @@ int setDateOfBirth(struct chefObj* chefPtr, char* dateOfBirth) {
 }
 
 
-char* getName(struct chefObj chef) {
-    char* name = chef.name;
+char* getName(struct chefObj* chef) {
+    char* name = chef->name;
     return name;
 }
 
-char* getRole(struct chefObj chef) {
-    char* role = chef.role;
+char* getRole(struct chefObj* chef) {
+    char* role = chef->role;
     return role;
 }
 
-char* getDateOfBirth(struct chefObj chef) {
-    char* dateOfBirth = chef.dateOfBirth;
+char* getDateOfBirth(struct chefObj* chef) {
+    char* dateOfBirth = chef->dateOfBirth;
     return dateOfBirth;
 }
 
-long getSalary(struct chefObj chef) {
-    long salary = chef.salary;
+long getSalary(struct chefObj* chef) {
+    long salary = chef->salary;
     return salary;
 }

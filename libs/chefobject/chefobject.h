@@ -21,9 +21,9 @@ int setRole(struct chefObj* chefPtr, char* rolePtr);
 int setSalary(struct chefObj* chefPtr, long salary);
 int setDateOfBirth(struct chefObj* chefPtr, char* dateOfBirth);
 
-char* getName(struct chefObj chef);
-char* getRole(struct chefObj chef);
-char* getDateOfBirth(struct chefObj chef);
-long getSalary(struct chefObj chef);
+char* getName(struct chefObj* chef);
+char* getRole(struct chefObj* chef);
+char* getDateOfBirth(struct chefObj* chef);
+long getSalary(struct chefObj* chef);
 
 #endif
