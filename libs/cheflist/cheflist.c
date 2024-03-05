@@ -33,7 +33,7 @@ chefObj* newChef(void) {
     return newChef;
 }
 
-chefObj ** appendChefToList(
+chefObj ** appendChefToFullList(
     chefObj ** chefList,
     int* listLenPtr,
     chefObj* chefPtr
@@ -50,3 +50,4 @@ chefObj ** appendChefToList(
 
     return resizedList;
 }
+
