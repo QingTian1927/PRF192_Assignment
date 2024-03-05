@@ -9,21 +9,21 @@
 #define SET_PROPERTY_FAIL 0
 #define SET_PROPERTY_OKAY 1
 
-struct chefObj {
+typedef struct {
     char name[MAX_NAME_LEN];
     char role[MAX_ROLE_LEN];
     char dateOfBirth[MAX_DATE_LEN];
     long salary;
-};
+} chefObj;
 
-int setName(struct chefObj* chefPtr, char* namePtr);
-int setRole(struct chefObj* chefPtr, char* rolePtr);
-int setSalary(struct chefObj* chefPtr, long salary);
-int setDateOfBirth(struct chefObj* chefPtr, char* dateOfBirth);
+int setName(chefObj* chefPtr, char* namePtr);
+int setRole(chefObj* chefPtr, char* rolePtr);
+int setSalary(chefObj* chefPtr, long salary);
+int setDateOfBirth(chefObj* chefPtr, char* dateOfBirth);
 
-char* getName(struct chefObj* chef);
-char* getRole(struct chefObj* chef);
-char* getDateOfBirth(struct chefObj* chef);
-long getSalary(struct chefObj* chef);
+char* getName(chefObj* chef);
+char* getRole(chefObj* chef);
+char* getDateOfBirth(chefObj* chef);
+long getSalary(chefObj* chef);
 
 #endif

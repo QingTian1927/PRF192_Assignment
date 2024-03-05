@@ -41,7 +41,7 @@ int isValidRole(char* rolePtr) {
     return 0;
 }
 
-int setName(struct chefObj* chefPtr, char* namePtr) {
+int setName(chefObj* chefPtr, char* namePtr) {
     if (chefPtr == NULL || namePtr == NULL) { return SET_PROPERTY_FAIL; }
 
     if (isInvalidString(namePtr, MAX_NAME_LEN)) { return SET_PROPERTY_FAIL; }
@@ -52,7 +52,7 @@ int setName(struct chefObj* chefPtr, char* namePtr) {
     return SET_PROPERTY_OKAY;
 }
 
-int setRole(struct chefObj* chefPtr, char* rolePtr) {
+int setRole(chefObj* chefPtr, char* rolePtr) {
     if (chefPtr == NULL || rolePtr == NULL) {
         return SET_PROPERTY_FAIL;
     }
@@ -68,14 +68,14 @@ int setRole(struct chefObj* chefPtr, char* rolePtr) {
     return SET_PROPERTY_OKAY;
 }
 
-int setSalary(struct chefObj* chefPtr, long salary) {
+int setSalary(chefObj* chefPtr, long salary) {
     if (chefPtr == NULL || salary < 0) { return SET_PROPERTY_FAIL; }
 
     chefPtr->salary = salary;
     return SET_PROPERTY_OKAY;
 }
 
-int setDateOfBirth(struct chefObj* chefPtr, char* dateOfBirth) {
+int setDateOfBirth(chefObj* chefPtr, char* dateOfBirth) {
     if (chefPtr == NULL || dateOfBirth == NULL) { return SET_PROPERTY_FAIL; }
 
     if (!isValidDateString(dateOfBirth)) {
@@ -88,22 +88,22 @@ int setDateOfBirth(struct chefObj* chefPtr, char* dateOfBirth) {
 }
 
 
-char* getName(struct chefObj* chef) {
+char* getName(chefObj* chef) {
     char* name = chef->name;
     return name;
 }
 
-char* getRole(struct chefObj* chef) {
+char* getRole(chefObj* chef) {
     char* role = chef->role;
     return role;
 }
 
-char* getDateOfBirth(struct chefObj* chef) {
+char* getDateOfBirth(chefObj* chef) {
     char* dateOfBirth = chef->dateOfBirth;
     return dateOfBirth;
 }
 
-long getSalary(struct chefObj* chef) {
+long getSalary(chefObj* chef) {
     long salary = chef->salary;
     return salary;
 }
