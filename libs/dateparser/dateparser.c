@@ -149,6 +149,6 @@ char* convertToDateString(struct dateObj* date) {
     dateStr[7] = DATE_SEPARATOR;
     strncat(dateStr, dayStr, actualLen);
 
-    dateStr[DATE_STRING_LEN] = '\0';
+    dateStr[DATE_STRING_LEN - 1] = '\0';
     return dateStr;
 }
