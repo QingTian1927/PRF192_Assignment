@@ -6,8 +6,8 @@ MASTERCHEF MANAGEMENT SOFTWARE
 * Add, edit, delete MASTERCHEFs.
 * Save managed MASTERCHEFs a specified file.
 * Load managed MASTERCHEFs from a specified file.
-* Display managed MASTERCHEFs in tabular format (descending order: name, salary)
-* Search for a MASTERCHEF by name, by specialization or within a salary range
+* Display managed MASTERCHEFs in tabular format
+* Search for a MASTERCHEF by name or within a salary range
 * Calculate the total spending on employees' salaries.
 
 # MASTERCHEF GENERAL DATA STRUCTURE
