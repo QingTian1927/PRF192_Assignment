@@ -132,7 +132,7 @@ chefObj ** searchChefBySalaryRange(
     for (i = 0; i < listLen; i++) {
         if (chefList[i] == NULL) { continue; }
 
-        long currentSalary = chefList[i]->salary;
+        long currentSalary = getSalary(chefList[i]);
         int isMatchingSalary = minSalary >= currentSalary || currentSalary <= maxSalary;
 
         if (isMatchingSalary == 0) { continue; }
@@ -145,4 +145,18 @@ chefObj ** searchChefBySalaryRange(
         return NULL;
     }
     return searchResult;
+}
+
+long long calculateChefTotalSalary(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return 0; }
+
+    long long total = 0;
+    int i;
+    for (i = 0; i < listLen; i++) {
+        if (chefList[i] == NULL) { continue; }
+
+        long long currentSalary = (long long) getSalary(chefList[i]);
+        total += currentSalary;
+    }
+    return total;
 }
