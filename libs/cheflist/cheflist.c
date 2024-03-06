@@ -8,17 +8,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "../chefobject/chefobject.h"
-
-#define MAX_CHEFS 100
-#define DEFAULT_CHEFLIST_SIZE 10
-
-#define APPEND_CHEF_FAIL -1
-#define APPEND_CHEF_FULL 0
-#define APPEND_CHEF_OKAY 1
-
-#define CHEFLIST_ERRO -2
-#define CHEFLIST_FULL -1
+#include "cheflist.h"
 
 int initializeChefList(chefObj** chefList, int listLen) {
     if (chefList == NULL || listLen <= 0) { return 0; }
