@@ -4,6 +4,13 @@
 #define MAX_CHEFS 100
 #define DEFAULT_CHEFLIST_SIZE 10
 
+#define APPEND_CHEF_FAIL -1
+#define APPEND_CHEF_FULL 0
+#define APPEND_CHEF_OKAY 1
+
+#define CHEFLIST_ERRO -2
+#define CHEFLIST_FULL -1
+
 int initializeChefList(chefObj** chefList, int listLen) {
     if (chefList == NULL || listLen <= 0) { return 0; }
 
@@ -51,3 +58,25 @@ chefObj ** appendChefToFullList(
     return resizedList;
 }
 
+int checkChefListStatus(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return CHEFLIST_ERRO; }
+
+    int i;
+    for (i = 0; i < listLen; i++) {
+        if (chefList[i] != NULL) { continue; }
+        return i;
+    }
+    return CHEFLIST_FULL;
+}
+
+int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr) {
+    if (chefList == NULL || chefPtr == NULL || listLen <= 0) {
+        return APPEND_CHEF_FAIL;
+    }
+
+    int listStatus = checkChefListStatus(chefList, listLen);
+    if (listStatus == CHEFLIST_FULL) { return APPEND_CHEF_FULL; }
+
+    chefList[listStatus] = chefPtr;
+    return APPEND_CHEF_OKAY;
+}
