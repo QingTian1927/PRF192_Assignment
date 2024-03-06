@@ -112,3 +112,37 @@ chefObj ** searchChefByName(chefObj ** chefList, int listLen, char* nameQuery) {
     }
     return searchResult;
 }
+
+chefObj ** searchChefBySalaryRange(
+    chefObj ** chefList,
+    int listLen,
+    long minSalary,
+    long maxSalary
+) {
+    int isInvalidParameter = (
+        chefList == NULL || listLen <= 0 || minSalary < 0 || maxSalary < 0
+    );
+    if (isInvalidParameter) { return NULL; }
+
+    chefObj ** searchResult = calloc(listLen, sizeof(chefObj*));
+    if (searchResult == NULL) { return NULL; }
+
+    int hasNoMatch = 1;
+    int i;
+    for (i = 0; i < listLen; i++) {
+        if (chefList[i] == NULL) { continue; }
+
+        long currentSalary = chefList[i]->salary;
+        int isMatchingSalary = minSalary >= currentSalary || currentSalary <= maxSalary;
+
+        if (isMatchingSalary == 0) { continue; }
+        appendChefToList(searchResult, listLen, chefList[i]);
+        hasNoMatch = 0;
+    }
+
+    if (hasNoMatch) {
+        free(searchResult);
+        return NULL;
+    }
+    return searchResult;
+}
