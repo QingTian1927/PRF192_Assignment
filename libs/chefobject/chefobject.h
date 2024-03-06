@@ -7,6 +7,9 @@
 #ifndef _CHEFOBJECT_H_
 #define _CHEFOBJECT_H_
 
+#include "../dateparser/dateparser.h"
+#include "../stringformat/stringformat.h"
+
 // Not including null terminator
 #define MAX_NAME_LEN 30
 #define MAX_DATE_LEN 10
