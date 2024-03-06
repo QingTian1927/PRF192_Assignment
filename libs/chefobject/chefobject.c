@@ -84,6 +84,21 @@ int setDateOfBirth(chefObj* chefPtr, char* dateOfBirth) {
     return SET_PROPERTY_OKAY;
 }
 
+int setAll(
+    chefObj* chefPtr,
+    char* namePtr,
+    char* rolePtr,
+    char* dateOfBirth,
+    long salary
+) {
+    int nameResult = setName(chefPtr, namePtr);
+    int roleResult = setRole(chefPtr, rolePtr);
+    int dobResult = setDateOfBirth(chefPtr, dateOfBirth);
+    int salaryResult = setSalary(chefPtr, salary);
+
+    int allResult = nameResult && roleResult && dobResult && salaryResult;
+    return allResult;
+}
 
 char* getName(chefObj* chef) {
     char* name = chef->name;

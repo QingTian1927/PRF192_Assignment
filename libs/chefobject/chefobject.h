@@ -31,6 +31,13 @@ int setName(chefObj* chefPtr, char* namePtr);
 int setRole(chefObj* chefPtr, char* rolePtr);
 int setSalary(chefObj* chefPtr, long salary);
 int setDateOfBirth(chefObj* chefPtr, char* dateOfBirth);
+int setAll(
+    chefObj* chefPtr,
+    char* namePtr,
+    char* rolePtr,
+    char* dateOfBirth,
+    long salary
+);
 
 char* getName(chefObj* chef);
 char* getRole(chefObj* chef);
