@@ -25,6 +25,8 @@ typedef struct {
     long salary;
 } chefObj;
 
+int isValidRole(char* rolePtr);
+
 int setName(chefObj* chefPtr, char* namePtr);
 int setRole(chefObj* chefPtr, char* rolePtr);
 int setSalary(chefObj* chefPtr, long salary);
