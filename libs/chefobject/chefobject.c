@@ -66,7 +66,11 @@ int setRole(chefObj* chefPtr, char* rolePtr) {
 }
 
 int setSalary(chefObj* chefPtr, long salary) {
-    if (chefPtr == NULL || salary < 0) { return SET_PROPERTY_FAIL; }
+    int isInvalidParameter = (
+        chefPtr == NULL ||
+        salary < 0 || salary > MAX_SALARY
+    );
+    if (isInvalidParameter) { return SET_PROPERTY_FAIL; }
 
     chefPtr->salary = salary;
     return SET_PROPERTY_OKAY;
