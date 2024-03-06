@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "../chefobject/chefobject.h"
 
 #define MAX_CHEFS 100
@@ -79,4 +80,35 @@ int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr) {
 
     chefList[listStatus] = chefPtr;
     return APPEND_CHEF_OKAY;
+}
+
+chefObj ** searchChefByName(chefObj ** chefList, int listLen, char* nameQuery) {
+    int isInvalidParameter = (
+        chefList == NULL || listLen <= 0 || nameQuery == NULL ||
+        strlen(nameQuery) > MAX_NAME_LEN
+    );
+    if (isInvalidParameter) { return NULL; }
+
+    chefObj ** searchResult = calloc(listLen, sizeof(chefObj*));
+    if (searchResult == NULL) { return NULL; }
+    initializeChefList(searchResult, listLen);
+
+    int hasNoMatch = 1;
+    int i;
+    for (i = 0; i < listLen; i++) {
+        if (chefList[i] == NULL) { continue; }
+
+        char* currentName = getName(chefList[i]);
+        int isMatchingName = strncmp(currentName, nameQuery, MAX_NAME_LEN);
+
+        if (isMatchingName != 0) { continue; }
+        appendChefToList(searchResult, listLen, chefList[i]);
+        hasNoMatch = 0;
+    }
+
+    if (hasNoMatch) {
+        free(searchResult);
+        return NULL;
+    }
+    return searchResult;
 }
