@@ -1,3 +1,11 @@
+/**
+ * @file cheflist.c
+ * @author QingTian
+ * @brief functions related to managing a list of chefs
+ *
+ * NOTE: a list of chefs is essentially an array of pointers to structs.
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include "../chefobject/chefobject.h"
@@ -22,7 +30,7 @@ int initializeChefList(chefObj** chefList, int listLen) {
     return 1;
 }
 
-// Returns an array of pointers to struct
+// Returns an array of pointers to structs
 chefObj ** newChefList(int listLen) {
     if (listLen <= 0 || listLen > MAX_CHEFS) { return NULL; }
 

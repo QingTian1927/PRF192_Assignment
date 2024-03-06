@@ -1,3 +1,9 @@
+/**
+ * @file chefobject.h
+ * @author QingTian
+ * @brief header file for chefobject.c
+ */
+
 #ifndef _CHEFOBJECT_H_
 #define _CHEFOBJECT_H_
 
