@@ -3,3 +3,6 @@
 
 # Ignore temp directories
 temp/
+
+# Ignore test builds
+test.bin
