@@ -57,16 +57,22 @@ chefObj ** appendChefToFullList(
     return resizedList;
 }
 
-chefObj ** extendChefList(chefObj ** chefList, int* oldLenPtr, int newLen) {
+chefObj ** resizeChefList(chefObj ** chefList, int *oldLenPtr, int newLen) {
     int oldLen = *oldLenPtr;
     int isInvalidParameter = (
-        chefList == NULL || oldLen <= 0 || newLen <= 0 || oldLen > newLen
+        chefList == NULL || oldLen <= 0 || newLen <= 0
     );
     if (isInvalidParameter) { return NULL; }
     if (oldLen == newLen) { return chefList; }
 
     chefObj ** resizedList = realloc(chefList, newLen * sizeof(chefObj*));
     if (resizedList == NULL) { return NULL; }
+
+
+    if (oldLen > newLen) {
+        *oldLenPtr = newLen;
+        return resizedList;
+    }
 
     // Initialize extended list
     int i;
