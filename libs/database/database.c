@@ -137,12 +137,18 @@ readFileResult* readChefsFile(const char* fileName) {
     if (fileDoesNotExist) { return NULL; }
 
     FILE* file = fopen(fileName, "r");
-    if (file == NULL) { return NULL; }
+    if (file == NULL) {
+        fclose(file);
+        return NULL;
+    }
 
     char line[MAX_LINE_LEN];
 
     chefObj ** chefList = newChefList(MAX_CHEFS);
-    if (chefList == NULL) { return NULL; }
+    if (chefList == NULL) {
+        fclose(file);
+        return NULL;
+    }
 
     int chefCount = 0;
     while (fgets(line, MAX_LINE_LEN, file) != NULL) {
@@ -157,6 +163,7 @@ readFileResult* readChefsFile(const char* fileName) {
         chefList[chefCount] = parsedChef;
         chefCount++;
     }
+    fclose(file);
 
     if (chefCount <= 0) {
         free(chefList);
