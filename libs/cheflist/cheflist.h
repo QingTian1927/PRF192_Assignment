@@ -28,7 +28,7 @@ int checkChefListStatus(chefObj ** chefList, int listLen);
 int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr);
 
 chefObj ** appendChefToFullList(chefObj ** chefList, int* listLenPtr, chefObj* chefPtr);
-chefObj ** resizeChefList(chefObj ** chefList, int *oldLenPtr, int newLen);
+chefObj ** resizeChefList(chefObj ** chefList, int oldLen, int newLen);
 
 chefObj ** searchChefByName(
     chefObj ** chefList,
