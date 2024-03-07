@@ -143,7 +143,7 @@ void upper1stltr(char arr[]){
         else if(i == 0 && isalpha(arr[i]) != 0) {
             arr[i] = toupper(arr[i]);
         }
-        else { continue };
+        else { continue; }
     }
 }
 
