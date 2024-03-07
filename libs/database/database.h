@@ -30,4 +30,9 @@
 #define DOB_IDENTIFIER_FLAG 'd'
 #define SAL_IDENTIFIER_FLAG 's'
 
+typedef struct {
+    int listLen;
+    chefObj ** chefList;
+} readFileResult;
+
 #endif

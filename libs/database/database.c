@@ -71,6 +71,21 @@ char determineIdentifier(const char* identifier) {
     return 0;
 }
 
+int interpretIdentifierFlag(chefObj* chefPtr, char* identifier, const char identifierFlag) {
+    switch (identifierFlag) {
+        case NAME_IDENTIFIER_FLAG:
+            return setName(chefPtr, identifier);
+        case ROLE_IDENTIFIER_FLAG:
+            return setRole(chefPtr, identifier);
+        case DOB_IDENTIFIER_FLAG:
+            return setDateOfBirth(chefPtr, identifier);
+        case SAL_IDENTIFIER_FLAG:
+            return setSalary(chefPtr, convertSalary(identifier));
+        default:
+            return SET_PROPERTY_FAIL;
+    }
+}
+
 chefObj* parseChefLine(char* line) {
     if (line == NULL) { return NULL; }
 
@@ -102,28 +117,10 @@ chefObj* parseChefLine(char* line) {
                 identifier = strtok_r(
                     NULL, IDENTIFIER_SEPARATOR, &identifierSavePtr
                 );
-
                 continue;
             }
 
-            int result;
-            switch (identifierFlag) {
-                case NAME_IDENTIFIER_FLAG:
-                    result = setName(chefPtr, identifier);
-                    break;
-                case ROLE_IDENTIFIER_FLAG:
-                    result = setRole(chefPtr, identifier);
-                    break;
-                case DOB_IDENTIFIER_FLAG:
-                    result = setDateOfBirth(chefPtr, identifier);
-                    break;
-                case SAL_IDENTIFIER_FLAG:
-                    result = setSalary(chefPtr, convertSalary(identifier));
-                    break;
-                default:
-                    result = SET_PROPERTY_FAIL;
-            }
-
+            int result = interpretIdentifierFlag(chefPtr, identifier, identifierFlag);
             if (result == SET_PROPERTY_FAIL) {
                 free(chefPtr);
                 return NULL;
@@ -132,11 +129,10 @@ chefObj* parseChefLine(char* line) {
         }
         property = strtok_r(NULL, PROPERTY_SEPARATOR, &propertySavePtr);
     }
-
     return chefPtr;
 }
 
-chefObj ** readChefsFile(const char* fileName) {
+readFileResult* readChefsFile(const char* fileName) {
     int fileDoesNotExist = doesFileExist(fileName) == 0;
     if (fileDoesNotExist) { return NULL; }
 
@@ -145,17 +141,46 @@ chefObj ** readChefsFile(const char* fileName) {
 
     char line[MAX_LINE_LEN];
 
-    while (fgets(line, MAX_LINE_LEN, file) != NULL) {
-        chefObj* parsedChef = parseChefLine(line);
+    chefObj ** chefList = newChefList(MAX_CHEFS);
+    if (chefList == NULL) { return NULL; }
 
+    int chefCount = 0;
+    while (fgets(line, MAX_LINE_LEN, file) != NULL) {
+        if (chefCount > MAX_CHEFS) { break; }
+
+        int isEmptyLine = line[0] == '\n';
+        if (isEmptyLine) { continue; }
+
+        chefObj* parsedChef = parseChefLine(line);
         if (parsedChef == NULL) { continue; }
-        printf(
-            "%s - %s - %s - %ld\n",
-            getName(parsedChef),
-            getRole(parsedChef),
-            getDateOfBirth(parsedChef),
-            getSalary(parsedChef)
-        );
+
+        chefList[chefCount] = parsedChef;
+        chefCount++;
     }
-    return NULL;
+
+    if (chefCount <= 0) {
+        free(chefList);
+        return NULL;
+    }
+
+    readFileResult* readFile = malloc(sizeof(readFileResult));
+
+    if (chefCount == MAX_CHEFS) {
+        readFile->listLen = MAX_CHEFS;
+        readFile->chefList = chefList;
+        return readFile;
+    }
+
+    chefObj ** resizedList = resizeChefList(chefList, MAX_CHEFS, chefCount);
+    if (resizedList == NULL) {
+        readFile->listLen = MAX_CHEFS;
+        readFile->chefList = chefList;
+        return readFile;
+    }
+
+    chefList = resizedList;
+    readFile->listLen = chefCount;
+    readFile->chefList = chefList;
+
+    return readFile;
 }
