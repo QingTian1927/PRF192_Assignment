@@ -111,6 +111,44 @@ void capitalizeString(char* str, int len) {
     }
 }
 
+/**
+ * @brief Directly capitalizes all words in a string.
+ * @author L. Nga.
+ *
+ * Nga's implementation of the capitalizeString(). Both functions are
+ * fundamentally equivalent, except for the fact that upper1stltr() is not
+ * portable. This is simply because strlwr() is a non-standard function built
+ * into older versions of Microsoft C.
+ *
+ * Nevertheless, were one to compile this with Dev-C++ using its custom GCC
+ * compiler, the code would execute just fine. Thus, credit must be given where
+ * credit is due.
+ *
+ * NOTE: the original code has been reformatted a bit to make it more readable.
+ *       Other than that, nothing else have been changed.
+ *
+ * @param arr The string to be capitalized.
+ */
+
+/*
+
+void upper1stltr(char arr[]){
+    int i;
+    strlwr(arr);
+
+    for (i = 0; i < strlen(arr); i++){
+        if(arr[i] == ' ' && isalpha(arr[i + 1]) !=0 ) {
+            arr[i + 1] = toupper(arr[i + 1]);
+        }
+        else if(i == 0 && isalpha(arr[i]) != 0) {
+            arr[i] = toupper(arr[i]);
+        }
+        else { continue };
+    }
+}
+
+*/
+
 int trimLeft(char* str, int len) {
     if (str == NULL || len == 0) {
         return 0;
