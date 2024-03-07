@@ -61,12 +61,12 @@ int isValidDay(short int day, short int currentMonth, int currentYear) {
     return result;
 }
 
-struct dateObj* parseDateString(char* dateStr) {
+dateObj* parseDateString(char* dateStr) {
     int len = strlen(dateStr);
 
     if (len != DATE_STRING_LEN || dateStr == NULL) { return NULL; }
 
-    struct dateObj* newDate = (struct dateObj*) malloc(sizeof(struct dateObj));
+    dateObj* newDate = (dateObj*) malloc(sizeof(dateObj));
     if (newDate == NULL) { return NULL; }
 
     short int year, month, day;
@@ -80,7 +80,7 @@ struct dateObj* parseDateString(char* dateStr) {
     return newDate;
 }
 
-int isValidDateObj(struct dateObj* date) {
+int isValidDateObj(dateObj* date) {
     if (date == 0) { return 0; }
 
     short int year = date->year;
@@ -91,7 +91,7 @@ int isValidDateObj(struct dateObj* date) {
         isValidYear(year) &&
         isValidMonth(month) &&
         isValidDay(day, month, year)
-    );
+    );
     return isValidDate;
 }
 
@@ -110,7 +110,7 @@ int isValidDateString(char* dateStr) {
     return isValidDate;
 }
 
-char* convertToDateString(struct dateObj* date) {
+char* convertToDateString(dateObj* date) {
     int isInvalidParameter = date == NULL || !isValidDateObj(date);
     if (isInvalidParameter) { return NULL; }
 

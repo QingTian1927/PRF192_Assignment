@@ -9,11 +9,11 @@
 #define MAX_MONTH_LEN 2
 #define MAX_DAY_LEN 2
 
-struct dateObj {
+typedef struct {
     short int year;
     short int month;
     short int day;
-};
+} dateObj;
 
 int isValidYear(short int year);
 int isLeapYear(short int year);
@@ -21,9 +21,9 @@ int isValidMonth(short int month);
 int isValidDay(short int day, short int currentMonth, int isLeapYear);
 
 int isValidDateString(char* dateStr);
-int isValidDateObj(struct dateObj* date);
+int isValidDateObj(dateObj* date);
 
-struct dateObj* parseDateString(char* dateStr);
-int isValidDateObj(struct dateObj* date);
+dateObj* parseDateString(char* dateStr);
+int isValidDateObj(dateObj* date);
 
 #endif
