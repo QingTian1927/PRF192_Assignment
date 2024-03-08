@@ -38,10 +38,12 @@ const int FLAGS_TABLE_LEN = sizeof(FLAGS_TABLE) / sizeof(FLAGS_TABLE[0]);
 
 int doesFileExist(const char* fileName) {
     FILE* filePtr = fopen(fileName, "r");
-    if (filePtr == NULL) {
-        return 0;
-    }
-    return 1;
+
+    int result = 1;
+    if (filePtr == NULL) { result = 0; }
+
+    fclose(filePtr);
+    return result;
 }
 
 long convertSalary(const char* str) {
@@ -202,4 +204,36 @@ chefFileObj* readChefsFile(const char* fileName) {
     setProperties(readFile, chefCount, chefList);
 
     return readFile;
+}
+
+int writeChefsFile (const char* fileName, chefObj ** chefList, int listLen) {
+    if (fileName == NULL || chefList == NULL || listLen <= 0) {
+        return WRITE_FILE_FAIL;
+    }
+
+    FILE* file = fopen(fileName, "w");
+    if (file == NULL) {
+        fclose(file);
+        return WRITE_FILE_FAIL;
+    }
+
+    int i;
+    for (i = 0; i < listLen; i++) {
+        chefObj* chef = chefList[i];
+        if (chef == NULL) { continue; }
+
+        char* name = getName(chef);
+        char* role = getRole(chef);
+        char* dob = getDateOfBirth(chef);
+        long sal = getSalary(chef);
+
+        fprintf(
+            file,
+            "NAME:%s,ROLE:%s,DOB:%s,SAL:%ld\n",
+            name, role, dob, sal
+        );
+    }
+
+    fclose(file);
+    return WRITE_FILE_OKAY;
 }
