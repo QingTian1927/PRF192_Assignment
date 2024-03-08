@@ -39,32 +39,41 @@ chefObj* newChef(void) {
     return newChef;
 }
 
-chefObj ** copyChefList(chefObj ** sourcedList, int listLen) {
-    if (sourcedList == NULL || listLen <= 0) { return NULL; }
-
-    chefObj ** copiedList = newChefList(listLen);
-    if (copiedList == NULL) { return NULL; }
+int checkChefListStatus(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return CHEFLIST_ERRO; }
 
     int i;
     for (i = 0; i < listLen; i++) {
-        chefObj* originalChef = sourcedList[i];
-        if (originalChef == NULL) { continue; }
+        if (chefList[i] != NULL) { continue; }
+        return i;
+    }
+    return CHEFLIST_FULL;
+}
 
-        chefObj* copiedChef = newChef();
-        if (copiedChef == NULL) {
-            free(copiedList);
-            return NULL;
-        }
-
-        setName(copiedChef, getName(originalChef));
-        setRole(copiedChef, getRole(originalChef));
-        setDateOfBirth(copiedChef, getDateOfBirth(originalChef));
-        setSalary(copiedChef, getSalary(originalChef));
-
-        copiedList[i] = copiedChef;
+int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr) {
+    if (chefList == NULL || chefPtr == NULL || listLen <= 0) {
+        return APPEND_CHEF_FAIL;
     }
 
-    return copiedList;
+    int listStatus = checkChefListStatus(chefList, listLen);
+    if (listStatus == CHEFLIST_FULL) { return APPEND_CHEF_FULL; }
+
+    chefList[listStatus] = chefPtr;
+    return APPEND_CHEF_OKAY;
+}
+
+long long calculateChefTotalSalary(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return 0; }
+
+    long long total = 0;
+    int i;
+    for (i = 0; i < listLen; i++) {
+        if (chefList[i] == NULL) { continue; }
+
+        long long currentSalary = (long long) getSalary(chefList[i]);
+        total += currentSalary;
+    }
+    return total;
 }
 
 chefObj ** appendChefToFullList(
@@ -105,27 +114,88 @@ chefObj ** resizeChefList(chefObj ** chefList, int oldLen, int newLen) {
     return resizedList;
 }
 
-int checkChefListStatus(chefObj ** chefList, int listLen) {
-    if (chefList == NULL || listLen <= 0) { return CHEFLIST_ERRO; }
+chefObj ** copyChefList(chefObj ** sourcedList, int listLen) {
+    if (sourcedList == NULL || listLen <= 0) { return NULL; }
+
+    chefObj ** copiedList = newChefList(listLen);
+    if (copiedList == NULL) { return NULL; }
 
     int i;
     for (i = 0; i < listLen; i++) {
-        if (chefList[i] != NULL) { continue; }
-        return i;
+        chefObj* originalChef = sourcedList[i];
+        if (originalChef == NULL) { continue; }
+
+        chefObj* copiedChef = newChef();
+        if (copiedChef == NULL) {
+            free(copiedList);
+            return NULL;
+        }
+
+        setName(copiedChef, getName(originalChef));
+        setRole(copiedChef, getRole(originalChef));
+        setDateOfBirth(copiedChef, getDateOfBirth(originalChef));
+        setSalary(copiedChef, getSalary(originalChef));
+
+        copiedList[i] = copiedChef;
     }
-    return CHEFLIST_FULL;
+
+    return copiedList;
 }
 
-int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr) {
-    if (chefList == NULL || chefPtr == NULL || listLen <= 0) {
-        return APPEND_CHEF_FAIL;
+void swapChef(chefObj ** firstChef, chefObj ** secondChef) {
+    chefObj* temp = *firstChef;
+    *firstChef = *secondChef;
+    *secondChef = temp;
+}
+
+chefObj ** orderBySalary(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return NULL; }
+
+    chefObj ** sortedList = copyChefList(chefList, listLen);
+    if (sortedList == NULL) { return NULL; }
+
+    // Reverse selection sort.
+    int i, j;
+    for (i = 0; i < listLen; i++) {
+        int maxIndex = i;
+        for (j = i + 1; j < listLen; j++) {
+            long comparedSalary = getSalary(sortedList[maxIndex]);
+            long currentSalary = getSalary(sortedList[j]);
+
+            if (currentSalary <= comparedSalary) { continue; }
+            maxIndex = j;
+        }
+        swapChef(&sortedList[maxIndex], &sortedList[i]);
     }
 
-    int listStatus = checkChefListStatus(chefList, listLen);
-    if (listStatus == CHEFLIST_FULL) { return APPEND_CHEF_FULL; }
+    return sortedList;
+}
 
-    chefList[listStatus] = chefPtr;
-    return APPEND_CHEF_OKAY;
+chefObj ** orderByName(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return NULL; }
+
+    chefObj ** sortedList = copyChefList(chefList, listLen);
+    if (sortedList == NULL) { return NULL; }
+
+    // Selection sort.
+    int i, j;
+    for (i = 0; i < listLen; i++) {
+        int minIndex = i;
+        for (j = i + 1; j < listLen; j++) {
+            char* comparedName = getName(sortedList[minIndex]);
+            char* currentName = getName(sortedList[j]);
+
+            int isNotAlphabeticallySmaller = (
+                strncmp(currentName, comparedName, MAX_NAME_LEN) >= 0
+            );
+            if (isNotAlphabeticallySmaller) { continue; }
+
+            minIndex = j;
+        }
+        swapChef(&sortedList[minIndex], &sortedList[i]);
+    }
+
+    return sortedList;
 }
 
 int setSearchProperties(
@@ -233,74 +303,4 @@ chefSearchResult* searchChefBySalaryRange(
     }
 
     return handleSearchResult(matchList, matches, listLen);
-}
-
-long long calculateChefTotalSalary(chefObj ** chefList, int listLen) {
-    if (chefList == NULL || listLen <= 0) { return 0; }
-
-    long long total = 0;
-    int i;
-    for (i = 0; i < listLen; i++) {
-        if (chefList[i] == NULL) { continue; }
-
-        long long currentSalary = (long long) getSalary(chefList[i]);
-        total += currentSalary;
-    }
-    return total;
-}
-
-void swapChef(chefObj ** firstChef, chefObj ** secondChef) {
-    chefObj* temp = *firstChef;
-    *firstChef = *secondChef;
-    *secondChef = temp;
-}
-
-chefObj ** orderBySalary(chefObj ** chefList, int listLen) {
-    if (chefList == NULL || listLen <= 0) { return NULL; }
-
-    chefObj ** sortedList = copyChefList(chefList, listLen);
-    if (sortedList == NULL) { return NULL; }
-
-    // Reverse selection sort.
-    int i, j;
-    for (i = 0; i < listLen; i++) {
-        int maxIndex = i;
-        for (j = i + 1; j < listLen; j++) {
-            long comparedSalary = getSalary(sortedList[maxIndex]);
-            long currentSalary = getSalary(sortedList[j]);
-
-            if (currentSalary <= comparedSalary) { continue; }
-            maxIndex = j;
-        }
-        swapChef(&sortedList[maxIndex], &sortedList[i]);
-    }
-
-    return sortedList;
-}
-
-chefObj ** orderByName(chefObj ** chefList, int listLen) {
-    if (chefList == NULL || listLen <= 0) { return NULL; }
-
-    chefObj ** sortedList = copyChefList(chefList, listLen);
-    if (sortedList == NULL) { return NULL; }
-
-    // Selection sort.
-    int i, j;
-    for (i = 0; i < listLen; i++) {
-        int minIndex = i;
-        for (j = i + 1; j < listLen; j++) {
-            char* comparedName = getName(sortedList[minIndex]);
-            char* currentName = getName(sortedList[j]);
-
-            int isNotAlphabeticallySmaller = (
-                strncmp(currentName, comparedName, MAX_NAME_LEN) >= 0
-            );
-            if (isNotAlphabeticallySmaller) { continue; }
-
-            minIndex = j;
-        }
-        swapChef(&sortedList[minIndex], &sortedList[i]);
-    }
-
-    return sortedList;
 }

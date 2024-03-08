@@ -32,8 +32,14 @@ chefObj* newChef(void);
 int checkChefListStatus(chefObj ** chefList, int listLen);
 int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr);
 
+long long calculateChefTotalSalary(chefObj ** chefList, int listLen);
+
 chefObj ** appendChefToFullList(chefObj ** chefList, int* listLenPtr, chefObj* chefPtr);
 chefObj ** resizeChefList(chefObj ** chefList, int oldLen, int newLen);
+chefObj ** copyChefList(chefObj ** sourcedList, int listLen);
+
+chefObj ** orderBySalary(chefObj ** chefList, int listLen);
+chefObj ** orderByName(chefObj ** chefList, int listLen);
 
 chefSearchResult* searchChefByName(
     chefObj ** chefList,
@@ -46,10 +52,5 @@ chefSearchResult* searchChefBySalaryRange(
     long minSalary,
     long maxSalary
 );
-
-long long calculateChefTotalSalary(chefObj ** chefList, int listLen);
-
-chefObj ** orderBySalary(chefObj ** chefList, int listLen);
-chefObj ** orderByName(chefObj ** chefList, int listLen);
 
 #endif
