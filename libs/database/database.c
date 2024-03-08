@@ -132,7 +132,18 @@ chefObj* parseChefLine(char* line) {
     return chefPtr;
 }
 
-readFileResult* readChefsFile(const char* fileName) {
+int setProperties(chefFileObj* readFile, int listLen, chefObj ** chefList) {
+    if (readFile == NULL || listLen <= 0 || chefList == NULL) {
+        return SET_PROPERTY_FAIL;
+    }
+
+    readFile->listLen = listLen;
+    readFile->chefList = chefList;
+
+    return SET_PROPERTY_OKAY;
+}
+
+chefFileObj* readChefsFile(const char* fileName) {
     int fileDoesNotExist = doesFileExist(fileName) == 0;
     if (fileDoesNotExist) { return NULL; }
 
@@ -170,24 +181,25 @@ readFileResult* readChefsFile(const char* fileName) {
         return NULL;
     }
 
-    readFileResult* readFile = malloc(sizeof(readFileResult));
+    chefFileObj* readFile = malloc(sizeof(chefFileObj));
+    if (readFile == NULL) {
+        free(chefList);
+        return NULL;
+    }
 
     if (chefCount == MAX_CHEFS) {
-        readFile->listLen = MAX_CHEFS;
-        readFile->chefList = chefList;
+        setProperties(readFile, MAX_CHEFS, chefList);
         return readFile;
     }
 
     chefObj ** resizedList = resizeChefList(chefList, MAX_CHEFS, chefCount);
     if (resizedList == NULL) {
-        readFile->listLen = MAX_CHEFS;
-        readFile->chefList = chefList;
+        setProperties(readFile, MAX_CHEFS, chefList);
         return readFile;
     }
 
     chefList = resizedList;
-    readFile->listLen = chefCount;
-    readFile->chefList = chefList;
+    setProperties(readFile, chefCount, chefList);
 
     return readFile;
 }

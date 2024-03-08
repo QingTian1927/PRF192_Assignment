@@ -33,6 +33,6 @@
 typedef struct {
     int listLen;
     chefObj ** chefList;
-} readFileResult;
+} chefFileObj;
 
 #endif
