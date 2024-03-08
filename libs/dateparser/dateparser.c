@@ -122,33 +122,8 @@ char* convertToDateString(dateObj* date) {
     short int month = date->month;
     short int day = date->day;
 
-    char yearStr[MAX_YEAR_LEN];
-    char monthStr[MAX_MONTH_LEN];
-    char dayStr[MAX_DAY_LEN];
+    sprintf(dateStr, "%hd-%02hd-%02hd", year, month, day);
 
-    sprintf(yearStr, "%d", year);
-
-    // God helps me.
-    if (month >= 10) {
-        sprintf(monthStr, "%d", month);
-    } else {
-        monthStr[0] = '0';
-        monthStr[1] = (char) month + '0';
-    }
-
-    if (day >= 10) {
-        sprintf(dayStr, "%d", day);
-    } else {
-        dayStr[0] = '0';
-        dayStr[1] = (char) day + '0';
-    }
-
-    strncat(dateStr, yearStr, actualLen);
-    dateStr[4] = DATE_SEPARATOR;
-    strncat(dateStr, monthStr, actualLen);
-    dateStr[7] = DATE_SEPARATOR;
-    strncat(dateStr, dayStr, actualLen);
-
-    dateStr[DATE_STRING_LEN - 1] = '\0';
+    dateStr[DATE_STRING_LEN] = '\0';
     return dateStr;
 }
