@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "graphics.h"
+#include "userinterface.h"
 
 void flushBuffer(void) {
     while (getchar() != '\n');
@@ -201,8 +201,9 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
         );
 
         if (enablePager && pos % DEFAULT_PAGE_SIZE == 0) {
-            printf("\nPress <ENTER> to continue: ");
-            while (getchar() != '\n');
+            printf("\nPress <ENTER> to continue or type 'q' to exit: ");
+            if (getchar() == 'q') { break; }
+
             printf("\n");
 
             printTableHeader(maxLens);
