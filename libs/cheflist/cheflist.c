@@ -39,6 +39,18 @@ chefObj* newChef(void) {
     return newChef;
 }
 
+chefObj* copyChef(chefObj* chefPtr) {
+    chefObj* copiedChef = newChef();
+    if (copiedChef == NULL) { return NULL; }
+
+    setName(copiedChef, getName(chefPtr));
+    setRole(copiedChef, getRole(chefPtr));
+    setDateOfBirth(copiedChef, getDateOfBirth(chefPtr));
+    setSalary(copiedChef, getSalary(chefPtr));
+
+    return copiedChef;
+}
+
 int checkChefListStatus(chefObj ** chefList, int listLen) {
     if (chefList == NULL || listLen <= 0) { return CHEFLIST_ERRO; }
 
