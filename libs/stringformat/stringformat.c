@@ -238,3 +238,12 @@ int fullTrim(char* str, int len) {
 
     return len;
 }
+
+short int getNumLen(long num) {
+    short int numLen = 1;
+    while (num < -1 || num > 1) {
+        num /= 10;
+        numLen++;
+    }
+    return numLen;
+}

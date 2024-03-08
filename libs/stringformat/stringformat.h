@@ -19,4 +19,6 @@ int trimRight(char* str, int len);
 int trimInner(char* str, int len);
 int fullTrim(char* str, int len);
 
+short int getNumLen(long num);
+
 #endif
