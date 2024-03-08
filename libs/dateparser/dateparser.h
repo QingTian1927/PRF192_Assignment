@@ -1,3 +1,9 @@
+/**
+ * @file dateparser.h
+ * @author QingTian
+ * @brief header file for dateparser.c
+ */
+
 #ifndef _DATEPARSER_H_
 #define _DATEPARSER_H_
 

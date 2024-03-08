@@ -1,3 +1,9 @@
+/**
+ * @file stringformat.h
+ * @author QingTian
+ * @brief header file for stringformat.c
+ */
+
 #ifndef _STRINGFORMAT_H_
 #define _STRINGFORMAT_H_
 
