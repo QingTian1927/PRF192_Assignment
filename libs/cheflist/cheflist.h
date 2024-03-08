@@ -19,6 +19,11 @@
 #define CHEFLIST_ERRO -2
 #define CHEFLIST_FULL -1
 
+typedef struct {
+    int resultLen;
+    chefObj ** resultList;
+} chefSearchResult;
+
 int initializeChefList(chefObj** chefList, int listLen);
 
 chefObj ** newChefList(int listLen);
@@ -30,12 +35,12 @@ int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr);
 chefObj ** appendChefToFullList(chefObj ** chefList, int* listLenPtr, chefObj* chefPtr);
 chefObj ** resizeChefList(chefObj ** chefList, int oldLen, int newLen);
 
-chefObj ** searchChefByName(
+chefSearchResult* searchChefByName(
     chefObj ** chefList,
     int listLen,
     char* nameQuery
 );
-chefObj ** searchChefBySalaryRange(
+chefSearchResult* searchChefBySalaryRange(
     chefObj ** chefList,
     int listLen,
     long minSalary,
@@ -43,5 +48,8 @@ chefObj ** searchChefBySalaryRange(
 );
 
 long long calculateChefTotalSalary(chefObj ** chefList, int listLen);
+
+chefObj ** orderBySalary(chefObj ** chefList, int listLen);
+chefObj ** orderByName(chefObj ** chefList, int listLen);
 
 #endif

@@ -128,38 +128,83 @@ int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr) {
     return APPEND_CHEF_OKAY;
 }
 
-chefObj ** searchChefByName(chefObj ** chefList, int listLen, char* nameQuery) {
+int setSearchProperties(
+    chefSearchResult* searchResult,
+    chefObj ** chefList,
+    int listLen
+) {
+    if (searchResult == NULL || chefList == NULL || listLen <= 0) {
+        return SET_PROPERTY_FAIL;
+    }
+
+    searchResult->resultLen = listLen;
+    searchResult->resultList = chefList;
+
+    return SET_PROPERTY_OKAY;
+}
+
+chefSearchResult* handleSearchResult(
+    chefObj ** matchList,
+    int matches,
+    int queriedListLen
+) {
+    chefSearchResult* searchResult = malloc(sizeof(chefSearchResult));
+    if (searchResult == NULL) {
+        free(matchList);
+        return NULL;
+    }
+
+    if (matches <= 0) {
+        free(matchList);
+        setSearchProperties(searchResult, NULL, 0);
+        return searchResult;
+    }
+
+    if (matches == queriedListLen) {
+        setSearchProperties(searchResult, matchList, queriedListLen);
+        return searchResult;
+    }
+
+    chefObj ** resizedList = resizeChefList(matchList, queriedListLen, matches);
+    if (resizedList == NULL) {
+        setSearchProperties(searchResult, matchList, queriedListLen);
+        return searchResult;
+    }
+
+    matchList = resizedList;
+    setSearchProperties(searchResult, matchList, matches);
+
+    return searchResult;
+}
+
+chefSearchResult* searchChefByName(chefObj ** chefList, int listLen, char* nameQuery) {
     int isInvalidParameter = (
         chefList == NULL || listLen <= 0 || nameQuery == NULL ||
         strlen(nameQuery) > MAX_NAME_LEN
     );
     if (isInvalidParameter) { return NULL; }
 
-    chefObj ** searchResult = calloc(listLen, sizeof(chefObj*));
-    if (searchResult == NULL) { return NULL; }
-    initializeChefList(searchResult, listLen);
+    chefObj ** matchList = newChefList(listLen);
+    if (matchList == NULL) { return NULL; }
 
-    int hasNoMatch = 1;
+    int matches = 0;
     int i;
     for (i = 0; i < listLen; i++) {
         if (chefList[i] == NULL) { continue; }
 
         char* currentName = getName(chefList[i]);
-        int isMatchingName = strncmp(currentName, nameQuery, MAX_NAME_LEN);
+        int matchNameResult = strncmp(currentName, nameQuery, MAX_NAME_LEN);
 
-        if (isMatchingName != 0) { continue; }
-        appendChefToList(searchResult, listLen, chefList[i]);
-        hasNoMatch = 0;
+        if (matchNameResult != 0) { continue; }
+
+        appendChefToList(matchList, listLen, chefList[i]);
+        matches++;
     }
 
-    if (hasNoMatch) {
-        free(searchResult);
-        return NULL;
-    }
-    return searchResult;
+    return handleSearchResult(matchList, matches, listLen);
 }
 
-chefObj ** searchChefBySalaryRange(
+chefSearchResult* searchChefBySalaryRange(
     chefObj ** chefList,
     int listLen,
     long minSalary,
@@ -170,27 +215,24 @@ chefObj ** searchChefBySalaryRange(
     );
     if (isInvalidParameter) { return NULL; }
 
-    chefObj ** searchResult = calloc(listLen, sizeof(chefObj*));
-    if (searchResult == NULL) { return NULL; }
+    chefObj ** matchList = newChefList(listLen);
+    if (matchList == NULL) { return NULL; }
 
-    int hasNoMatch = 1;
+    int matches = 0;
     int i;
     for (i = 0; i < listLen; i++) {
         if (chefList[i] == NULL) { continue; }
 
         long currentSalary = getSalary(chefList[i]);
-        int isMatchingSalary = minSalary >= currentSalary || currentSalary <= maxSalary;
+        int isMatchingSalary = currentSalary >= minSalary && currentSalary <= maxSalary;
 
         if (isMatchingSalary == 0) { continue; }
-        appendChefToList(searchResult, listLen, chefList[i]);
-        hasNoMatch = 0;
+
+        appendChefToList(matchList, listLen, chefList[i]);
+        matches++;
     }
 
-    if (hasNoMatch) {
-        free(searchResult);
-        return NULL;
-    }
-    return searchResult;
+    return handleSearchResult(matchList, matches, listLen);
 }
 
 long long calculateChefTotalSalary(chefObj ** chefList, int listLen) {
