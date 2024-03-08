@@ -185,14 +185,3 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
 
     free(maxLens);
 }
-
-#include "../database/database.h"
-int main() {
-    chefFileObj* chefFile = readChefsFile("../database/test/test.chefs");
-    chefObj ** chefList = chefFile->chefList;
-    int listLen = chefFile->listLen;
-
-    printUnsortedChefList(chefList, listLen, ENABLE_PAGER);
-
-    return 0;
-}
