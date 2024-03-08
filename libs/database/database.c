@@ -46,6 +46,38 @@ int doesFileExist(const char* fileName) {
     return result;
 }
 
+int writeChefsFile (const char* fileName, chefObj ** chefList, int listLen) {
+    if (fileName == NULL || chefList == NULL || listLen <= 0) {
+        return WRITE_FILE_FAIL;
+    }
+
+    FILE* file = fopen(fileName, "w");
+    if (file == NULL) {
+        fclose(file);
+        return WRITE_FILE_FAIL;
+    }
+
+    int i;
+    for (i = 0; i < listLen; i++) {
+        chefObj* chef = chefList[i];
+        if (chef == NULL) { continue; }
+
+        char* name = getName(chef);
+        char* role = getRole(chef);
+        char* dob = getDateOfBirth(chef);
+        long sal = getSalary(chef);
+
+        fprintf(
+            file,
+            "NAME:%s,ROLE:%s,DOB:%s,SAL:%ld\n",
+            name, role, dob, sal
+        );
+    }
+
+    fclose(file);
+    return WRITE_FILE_OKAY;
+}
+
 int setProperties(chefFileObj* readFile, int listLen, chefObj ** chefList) {
     if (readFile == NULL || listLen <= 0 || chefList == NULL) {
         return SET_PROPERTY_FAIL;
@@ -212,36 +244,4 @@ chefFileObj* readChefsFile(const char* fileName) {
     setProperties(readFile, chefCount, chefList);
 
     return readFile;
-}
-
-int writeChefsFile (const char* fileName, chefObj ** chefList, int listLen) {
-    if (fileName == NULL || chefList == NULL || listLen <= 0) {
-        return WRITE_FILE_FAIL;
-    }
-
-    FILE* file = fopen(fileName, "w");
-    if (file == NULL) {
-        fclose(file);
-        return WRITE_FILE_FAIL;
-    }
-
-    int i;
-    for (i = 0; i < listLen; i++) {
-        chefObj* chef = chefList[i];
-        if (chef == NULL) { continue; }
-
-        char* name = getName(chef);
-        char* role = getRole(chef);
-        char* dob = getDateOfBirth(chef);
-        long sal = getSalary(chef);
-
-        fprintf(
-            file,
-            "NAME:%s,ROLE:%s,DOB:%s,SAL:%ld\n",
-            name, role, dob, sal
-        );
-    }
-
-    fclose(file);
-    return WRITE_FILE_OKAY;
 }
