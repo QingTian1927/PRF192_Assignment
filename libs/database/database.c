@@ -78,7 +78,7 @@ int writeChefsFile (const char* fileName, chefObj ** chefList, int listLen) {
     return WRITE_FILE_OKAY;
 }
 
-int setProperties(chefFileObj* readFile, int listLen, chefObj ** chefList) {
+int setFileProperties(chefFileObj* readFile, int listLen, chefObj ** chefList) {
     if (readFile == NULL || listLen <= 0 || chefList == NULL) {
         return SET_PROPERTY_FAIL;
     }
@@ -230,18 +230,18 @@ chefFileObj* readChefsFile(const char* fileName) {
     }
 
     if (chefCount == MAX_CHEFS) {
-        setProperties(readFile, MAX_CHEFS, chefList);
+        setFileProperties(readFile, MAX_CHEFS, chefList);
         return readFile;
     }
 
     chefObj ** resizedList = resizeChefList(chefList, MAX_CHEFS, chefCount);
     if (resizedList == NULL) {
-        setProperties(readFile, MAX_CHEFS, chefList);
+        setFileProperties(readFile, MAX_CHEFS, chefList);
         return readFile;
     }
 
     chefList = resizedList;
-    setProperties(readFile, chefCount, chefList);
+    setFileProperties(readFile, chefCount, chefList);
 
     return readFile;
 }
