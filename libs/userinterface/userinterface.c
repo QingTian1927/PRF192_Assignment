@@ -10,14 +10,41 @@
 
 #include "graphics.h"
 
-// No maxDateLen because it is always the same.
-typedef struct {
-    short int maxNameLen;
-    short int maxRoleLen;
-    short int maxSalLen;
-    short int maxDobLen;
-    short int maxPosLen;
-} maxLenObj;
+void flushBuffer(void) {
+    while (getchar() != '\n');
+}
+
+int getIntInput(void) {
+    int num;
+    while (scanf(" %d", &num) != 1) {
+        printf("Invalid input. Please try again: ");
+        flushBuffer();
+    }
+    return num;
+}
+
+double getDoubleInput(void) {
+    double num;
+    while (scanf(" %lf", &num) != 1) {
+        printf("Invalid input. Please try again: ");
+        flushBuffer();
+    }
+    return num;
+}
+
+int getStringInput(char* strPtr, int maxLen) {
+    if (fgets(strPtr, maxLen, stdin) != NULL) {
+        int len = strlen(strPtr);
+        if (len > 0 && strPtr[len - 1] == '\n') {
+            strPtr[len - 1] = '\0';
+            return strlen(strPtr);
+        }
+    }
+    printf("\n");
+    printf("getStringInput() fgets() returned NULL.\n");
+    printf("Process terminated unexpectedly.\n\n");
+    exit(1);
+}
 
 void printHorizontalDivider(const char* ch, int maxLineLen) {
     int i;

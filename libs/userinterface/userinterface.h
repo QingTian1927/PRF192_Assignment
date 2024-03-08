@@ -30,4 +30,26 @@
 #define STANDARD_PROMPT "Enter your choice: "
 #define INVALID_PROMPT "Invalid option. Please try again: "
 
+typedef struct {
+    short int maxNameLen;
+    short int maxRoleLen;
+    short int maxSalLen;
+    short int maxDobLen;
+    short int maxPosLen;
+} maxLenObj;
+
+void flushBuffer(void);
+
+int getIntInput(void);
+double getDoubleInput(void);
+int getStringInput(char* strPtr, int maxLen);
+
+int handleMaxLens(maxLenObj* maxLens, int listLen);
+short int getMaxLineLen(maxLenObj* maxLens);
+
+void printHorizontalDivider(const char* ch, int maxLineLen);
+void printTableHeader(maxLenObj* maxLens);
+
+void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager);
+
 #endif
