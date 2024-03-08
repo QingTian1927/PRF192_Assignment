@@ -80,21 +80,6 @@ dateObj* parseDateString(char* dateStr) {
     return newDate;
 }
 
-int isValidDateObj(dateObj* date) {
-    if (date == 0) { return 0; }
-
-    short int year = date->year;
-    short int month = date->month;
-    short int day = date->day;
-
-    int isValidDate = (
-        isValidYear(year) &&
-        isValidMonth(month) &&
-        isValidDay(day, month, year)
-    );
-    return isValidDate;
-}
-
 int isValidDateString(char* dateStr) {
     int len = strlen(dateStr);
     if (len != DATE_STRING_LEN || dateStr == NULL) { return 0; }
@@ -105,6 +90,21 @@ int isValidDateString(char* dateStr) {
 
     int isValidDate = (
         isValidYear(year) && isValidMonth(month) &&
+        isValidDay(day, month, year)
+    );
+    return isValidDate;
+}
+
+int isValidDateObj(dateObj* date) {
+    if (date == 0) { return 0; }
+
+    short int year = date->year;
+    short int month = date->month;
+    short int day = date->day;
+
+    int isValidDate = (
+        isValidYear(year) &&
+        isValidMonth(month) &&
         isValidDay(day, month, year)
     );
     return isValidDate;
