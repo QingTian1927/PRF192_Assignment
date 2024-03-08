@@ -206,3 +206,32 @@ long long calculateChefTotalSalary(chefObj ** chefList, int listLen) {
     }
     return total;
 }
+
+void swapChef(chefObj ** firstChef, chefObj ** secondChef) {
+    chefObj* temp = *firstChef;
+    *firstChef = *secondChef;
+    *secondChef = temp;
+}
+
+chefObj ** orderBySalary(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return NULL; }
+
+    chefObj ** sortedList = copyChefList(chefList, listLen);
+    if (sortedList == NULL) { return NULL; }
+
+    // Reverse selection sort.
+    int i, j;
+    for (i = 0; i < listLen; i++) {
+        int maxIndex = i;
+        for (j = i + 1; j < listLen; j++) {
+            long comparedSalary = getSalary(sortedList[maxIndex]);
+            long currentSalary = getSalary(sortedList[j]);
+
+            if (currentSalary <= comparedSalary) { continue; }
+            maxIndex = j;
+        }
+        swapChef(&sortedList[maxIndex], &sortedList[i]);
+    }
+
+    return sortedList;
+}
