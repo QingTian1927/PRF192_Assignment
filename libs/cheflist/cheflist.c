@@ -39,6 +39,34 @@ chefObj* newChef(void) {
     return newChef;
 }
 
+chefObj ** copyChefList(chefObj ** sourcedList, int listLen) {
+    if (sourcedList == NULL || listLen <= 0) { return NULL; }
+
+    chefObj ** copiedList = newChefList(listLen);
+    if (copiedList == NULL) { return NULL; }
+
+    int i;
+    for (i = 0; i < listLen; i++) {
+        chefObj* originalChef = sourcedList[i];
+        if (originalChef == NULL) { continue; }
+
+        chefObj* copiedChef = newChef();
+        if (copiedChef == NULL) {
+            free(copiedList);
+            return NULL;
+        }
+
+        setName(copiedChef, getName(originalChef));
+        setRole(copiedChef, getRole(originalChef));
+        setDateOfBirth(copiedChef, getDateOfBirth(originalChef));
+        setSalary(copiedChef, getSalary(originalChef));
+
+        copiedList[i] = copiedChef;
+    }
+
+    return copiedList;
+}
+
 chefObj ** appendChefToFullList(
     chefObj ** chefList,
     int* listLenPtr,
