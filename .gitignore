@@ -4,6 +4,9 @@
 # Ignore temp directories
 temp/
 
+# Ignore temp files
+temp.*
+
 # Ignore test directories
 test/
 
