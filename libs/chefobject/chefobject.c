@@ -15,9 +15,9 @@ const char* ROLES_TABLE[] = {
 };
 const int ROLES_TABLE_LEN = sizeof(ROLES_TABLE) / sizeof(ROLES_TABLE[0]);
 
-int isInvalidString(char* str, int expectedLen) {
+int isInvalidString(char* str, int maxLen) {
     int strLen = strlen(str);
-    int result = strLen <= 0 || strLen >= expectedLen;
+    int result = strLen <= 0 || strLen > maxLen;
     return result;
 }
 
