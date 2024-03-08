@@ -11,6 +11,11 @@
 #include "../cheflist/cheflist.h"
 
 #define DEFAULT_EXTENSION ".chefs"
+#define WRITE_FILE_FAIL 0
+#define WRITE_FILE_OKAY 1
+
+#define FILE_NOTFOUND 0
+#define FILE_EXISTS 1
 
 #define SEPARATOR_LEN 1
 #define NEWLINE_LEN 1
@@ -34,5 +39,11 @@ typedef struct {
     int listLen;
     chefObj ** chefList;
 } chefFileObj;
+
+int doesFileExist(const char* fileName);
+
+int writeChefsFile (const char* fileName, chefObj ** chefList, int listLen);
+
+chefFileObj* readChefsFile(const char* fileName);
 
 #endif

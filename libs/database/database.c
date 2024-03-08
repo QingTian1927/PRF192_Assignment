@@ -39,8 +39,8 @@ const int FLAGS_TABLE_LEN = sizeof(FLAGS_TABLE) / sizeof(FLAGS_TABLE[0]);
 int doesFileExist(const char* fileName) {
     FILE* filePtr = fopen(fileName, "r");
 
-    int result = 1;
-    if (filePtr == NULL) { result = 0; }
+    int result = FILE_EXISTS;
+    if (filePtr == NULL) { result = FILE_NOTFOUND; }
 
     fclose(filePtr);
     return result;
