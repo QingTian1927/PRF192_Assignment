@@ -28,7 +28,6 @@ chefObj ** newChefList(int listLen) {
     chefObj** chefList = calloc(listLen, pointerSize);
     if (chefList == NULL) { return NULL; }
 
-    initializeChefList(chefList, listLen);
     return chefList;
 }
 
