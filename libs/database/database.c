@@ -46,6 +46,17 @@ int doesFileExist(const char* fileName) {
     return result;
 }
 
+int setProperties(chefFileObj* readFile, int listLen, chefObj ** chefList) {
+    if (readFile == NULL || listLen <= 0 || chefList == NULL) {
+        return SET_PROPERTY_FAIL;
+    }
+
+    readFile->listLen = listLen;
+    readFile->chefList = chefList;
+
+    return SET_PROPERTY_OKAY;
+}
+
 long convertSalary(const char* str) {
     if (str == NULL) { return -1; }
 
@@ -88,6 +99,32 @@ int interpretIdentifierFlag(chefObj* chefPtr, char* identifier, const char ident
     }
 }
 
+int parseChefProperty(char* property, chefObj* chefPtr) {
+    if (property == NULL || chefPtr == NULL) { return SET_PROPERTY_FAIL; }
+
+    char* identifierSavePtr;
+    char* identifier = strtok_r(
+        property, IDENTIFIER_SEPARATOR, &identifierSavePtr
+    );
+
+    char identifierFlag = 0;
+    while (identifier != NULL) {
+
+        if (identifierFlag == 0) {
+            identifierFlag = determineIdentifier(identifier);
+            identifier = strtok_r(
+                NULL, IDENTIFIER_SEPARATOR, &identifierSavePtr
+            );
+            continue;
+        }
+        int result = interpretIdentifierFlag(chefPtr, identifier, identifierFlag);
+        if (result == SET_PROPERTY_FAIL) { return SET_PROPERTY_FAIL; }
+
+        identifierFlag = 0;
+    }
+    return SET_PROPERTY_OKAY;
+}
+
 chefObj* parseChefLine(char* line) {
     if (line == NULL) { return NULL; }
 
@@ -96,7 +133,6 @@ chefObj* parseChefLine(char* line) {
 
     char* property;
     char* propertySavePtr;
-    char* identifierSavePtr;
 
     property = strtok_r(line, PROPERTY_SEPARATOR, &propertySavePtr);
 
@@ -106,43 +142,15 @@ chefObj* parseChefLine(char* line) {
             property[propertyLen - 1] = '\0';
         }
 
-        char* identifier = strtok_r(
-            property, IDENTIFIER_SEPARATOR, &identifierSavePtr
-        );
-
-        char identifierFlag = 0;
-        while (identifier != NULL) {
-
-            if (identifierFlag == 0) {
-                identifierFlag = determineIdentifier(identifier);
-
-                identifier = strtok_r(
-                    NULL, IDENTIFIER_SEPARATOR, &identifierSavePtr
-                );
-                continue;
-            }
-
-            int result = interpretIdentifierFlag(chefPtr, identifier, identifierFlag);
-            if (result == SET_PROPERTY_FAIL) {
-                free(chefPtr);
-                return NULL;
-            }
-            identifierFlag = 0;
+        int parsingResult = parseChefProperty(property, chefPtr);
+        if (parsingResult == SET_PROPERTY_FAIL) {
+            free(chefPtr);
+            return NULL;
         }
+
         property = strtok_r(NULL, PROPERTY_SEPARATOR, &propertySavePtr);
     }
     return chefPtr;
-}
-
-int setProperties(chefFileObj* readFile, int listLen, chefObj ** chefList) {
-    if (readFile == NULL || listLen <= 0 || chefList == NULL) {
-        return SET_PROPERTY_FAIL;
-    }
-
-    readFile->listLen = listLen;
-    readFile->chefList = chefList;
-
-    return SET_PROPERTY_OKAY;
 }
 
 chefFileObj* readChefsFile(const char* fileName) {
