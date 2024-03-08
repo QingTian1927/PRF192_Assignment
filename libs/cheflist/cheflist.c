@@ -235,3 +235,30 @@ chefObj ** orderBySalary(chefObj ** chefList, int listLen) {
 
     return sortedList;
 }
+
+chefObj ** orderByName(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return NULL; }
+
+    chefObj ** sortedList = copyChefList(chefList, listLen);
+    if (sortedList == NULL) { return NULL; }
+
+    // Selection sort.
+    int i, j;
+    for (i = 0; i < listLen; i++) {
+        int minIndex = i;
+        for (j = i + 1; j < listLen; j++) {
+            char* comparedName = getName(sortedList[minIndex]);
+            char* currentName = getName(sortedList[j]);
+
+            int isNotAlphabeticallySmaller = (
+                strncmp(currentName, comparedName, MAX_NAME_LEN) >= 0
+            );
+            if (isNotAlphabeticallySmaller) { continue; }
+
+            minIndex = j;
+        }
+        swapChef(&sortedList[minIndex], &sortedList[i]);
+    }
+
+    return sortedList;
+}
