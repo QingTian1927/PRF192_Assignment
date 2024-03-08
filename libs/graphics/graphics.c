@@ -4,4 +4,195 @@
  * @brief functions that print out some graphical elements
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "graphics.h"
+
+// No maxDateLen because it is always the same.
+typedef struct {
+    short int maxNameLen;
+    short int maxRoleLen;
+    short int maxSalLen;
+    short int maxDobLen;
+    short int maxPosLen;
+} maxLenObj;
+
+void printHorizontalDivider(const char* ch, int maxLineLen) {
+    int i;
+    for (i = 0; i <= maxLineLen; i++) {
+        printf("%s", ch);
+    }
+    printf("\n");
+}
+
+maxLenObj* getPropertiesMaxLen(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return NULL; }
+
+    maxLenObj* maxLens = malloc(sizeof(maxLenObj));
+    if (maxLens == NULL) { return NULL; }
+
+    short int maxName = 0;
+    short int maxRole = 0;
+    short int maxSal = 0;
+
+    int i;
+    for (i = 0; i < listLen; i++) {
+        if (chefList[i] == NULL) { continue; }
+
+        char* name = getName(chefList[i]);
+        char* role = getRole(chefList[i]);
+        long sal = getSalary(chefList[i]);
+
+        short int nameLen = strlen(name);
+        short int roleLen = strlen(role);
+        short int salLen = getNumLen(sal);
+
+        maxName = (nameLen > maxName) ? nameLen : maxName;
+        maxRole = (roleLen > maxRole) ? roleLen : maxRole;
+        maxSal = (salLen > maxSal) ? salLen : maxSal;
+    }
+
+    maxLens->maxNameLen = maxName;
+    maxLens->maxRoleLen = maxRole;
+    maxLens->maxSalLen = maxSal;
+    maxLens->maxDobLen = MAX_DATE_LEN;
+    maxLens->maxPosLen = getNumLen(listLen - 1);
+
+    return maxLens;
+}
+
+int handleMaxLens(maxLenObj* maxLens, int listLen) {
+    if (maxLens == NULL) {
+        maxLens->maxNameLen = MAX_NAME_LEN;
+        maxLens->maxRoleLen = MAX_ROLE_LEN;
+        maxLens->maxSalLen = MAX_SALARY_LEN;
+        maxLens->maxDobLen = MAX_DATE_LEN;
+        maxLens->maxPosLen = getNumLen(listLen - 1);
+        return MAXLENS_REGULAR;
+    }
+
+    short int maxNameLen = maxLens->maxNameLen;
+    short int maxRoleLen = maxLens->maxRoleLen;
+    short int maxSalLen = maxLens->maxSalLen;
+    short int maxDobLen = maxLens->maxDobLen;
+    short int maxPosLen = maxLens->maxPosLen;
+
+    int allZeroes = (
+        (maxPosLen + maxNameLen + maxRoleLen + maxDobLen + maxSalLen) == 0
+    );
+    if (allZeroes) { return MAXLENS_ZEROES; }
+
+    short int nameLabelLen = strlen(NAME_LABEL);
+    short int roleLabelLen = strlen(ROLE_LABEL);
+    short int salLabelLen = strlen(SAL_LABEL);
+    short int dobLabelLen = strlen(DOB_LABEL);
+    short int posLabelLen = strlen(POS_LABEL);
+
+    maxLens->maxNameLen = (maxNameLen > nameLabelLen) ? maxNameLen : nameLabelLen;
+    maxLens->maxRoleLen = (maxRoleLen > roleLabelLen) ? maxRoleLen : roleLabelLen;
+    maxLens->maxSalLen = (maxSalLen > salLabelLen) ? maxSalLen : salLabelLen;
+    maxLens->maxDobLen = (maxDobLen > dobLabelLen) ? maxDobLen : dobLabelLen;
+    maxLens->maxPosLen = (maxPosLen > posLabelLen) ? maxPosLen : posLabelLen;
+
+    return MAXLENS_REGULAR;
+}
+
+short int getMaxLineLen(maxLenObj* maxLens) {
+    if (maxLens == NULL) { return 0; }
+
+    short int extraSpace = MARGIN_LEN + VERTICAL_DIVIDER_LEN + MARGIN_LEN;
+    short int result = (
+        maxLens->maxPosLen + extraSpace +
+        maxLens->maxNameLen + extraSpace +
+        maxLens->maxRoleLen + extraSpace +
+        maxLens->maxDobLen + extraSpace +
+        maxLens->maxSalLen - 1
+    );
+
+    return result;
+}
+
+void printTableHeader(maxLenObj* maxLens) {
+    printf(
+        "%-*s | %-*s | %-*s | %-*s | %-*s\n",
+        maxLens->maxPosLen, POS_LABEL,
+        maxLens->maxNameLen, NAME_LABEL,
+        maxLens->maxRoleLen, ROLE_LABEL,
+        maxLens->maxDobLen, DOB_LABEL,
+        maxLens->maxSalLen, SAL_LABEL
+    );
+}
+
+void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
+    if (chefList == NULL || listLen <= 0) {
+        printf("Encountered an error while trying to display chef list.\n");
+        printf("Please try again.\n");
+        return;
+    }
+
+    short int maxNameLen, maxRoleLen, maxSalLen, maxDobLen, maxPosLen;
+
+    maxLenObj* maxLens = getPropertiesMaxLen(chefList, listLen);
+    int maxLensResult = handleMaxLens(maxLens, listLen);
+
+    if (maxLensResult == MAXLENS_ZEROES) {
+        printf("The list is empty ...\n");
+        free(maxLens);
+        return;
+    }
+
+    maxNameLen = maxLens->maxNameLen;
+    maxRoleLen = maxLens->maxRoleLen;
+    maxSalLen = maxLens->maxSalLen;
+    maxDobLen = maxLens->maxDobLen;
+    maxPosLen = maxLens->maxPosLen;
+
+    short int maxLineLen = getMaxLineLen(maxLens);
+
+    printTableHeader(maxLens);
+    printHorizontalDivider("-", maxLineLen);
+
+    int i;
+    for (i = 0; i < listLen; i++) {
+        if (chefList[i] == NULL) { continue; }
+
+        char* name = getName(chefList[i]);
+        char* role = getRole(chefList[i]);
+        char* dob = getDateOfBirth(chefList[i]);
+        long sal = getSalary(chefList[i]);
+        int pos = i + 1;
+
+        printf(
+            "%0*d | %-*s | %-*s | %*s | %*ld\n",
+            maxPosLen, pos,
+            maxNameLen, name,
+            maxRoleLen, role,
+            maxDobLen, dob,
+            maxSalLen, sal
+        );
+
+        if (enablePager && pos % DEFAULT_PAGE_SIZE == 0) {
+            printf("\nPress <ENTER> to continue: ");
+            while (getchar() != '\n');
+            printf("\n");
+
+            printTableHeader(maxLens);
+            printHorizontalDivider("-", maxLineLen);
+        }
+    }
+
+    free(maxLens);
+}
+
+#include "../database/database.h"
+int main() {
+    chefFileObj* chefFile = readChefsFile("../database/test/test.chefs");
+    chefObj ** chefList = chefFile->chefList;
+    int listLen = chefFile->listLen;
+
+    printUnsortedChefList(chefList, listLen, ENABLE_PAGER);
+
+    return 0;
+}
