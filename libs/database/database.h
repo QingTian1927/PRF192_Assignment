@@ -48,6 +48,4 @@ int writeChefsFile (const char* fileName, chefObj ** chefList, int listLen);
 
 chefFileObj* readChefsFile(const char* fileName);
 
-void freeChefFile(chefFileObj* chefFile);
-
 #endif

@@ -245,8 +245,3 @@ chefFileObj* readChefsFile(const char* fileName) {
 
     return readFile;
 }
-
-void freeChefFile(chefFileObj* chefFile) {
-    free(chefFile->chefList);
-    free(chefFile);
-}
