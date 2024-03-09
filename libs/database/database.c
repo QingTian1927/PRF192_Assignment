@@ -39,11 +39,11 @@ const int FLAGS_TABLE_LEN = sizeof(FLAGS_TABLE) / sizeof(FLAGS_TABLE[0]);
 int doesFileExist(const char* fileName) {
     FILE* filePtr = fopen(fileName, "r");
 
-    int result = FILE_EXISTS;
-    if (filePtr == NULL) { result = FILE_NOTFOUND; }
+    // fclose(NULL) could be problematic.
+    if (filePtr == NULL) { return FILE_NOTFOUND; }
 
     fclose(filePtr);
-    return result;
+    return FILE_EXISTS;
 }
 
 int writeChefsFile (const char* fileName, chefObj ** chefList, int listLen) {
@@ -52,10 +52,7 @@ int writeChefsFile (const char* fileName, chefObj ** chefList, int listLen) {
     }
 
     FILE* file = fopen(fileName, "w");
-    if (file == NULL) {
-        fclose(file);
-        return WRITE_FILE_FAIL;
-    }
+    if (file == NULL) { return WRITE_FILE_FAIL; }
 
     int i;
     for (i = 0; i < listLen; i++) {
@@ -186,14 +183,8 @@ chefObj* parseChefLine(char* line) {
 }
 
 chefFileObj* readChefsFile(const char* fileName) {
-    int fileDoesNotExist = doesFileExist(fileName) == 0;
-    if (fileDoesNotExist) { return NULL; }
-
     FILE* file = fopen(fileName, "r");
-    if (file == NULL) {
-        fclose(file);
-        return NULL;
-    }
+    if (file == NULL) { return NULL; }
 
     char line[MAX_LINE_LEN];
 
