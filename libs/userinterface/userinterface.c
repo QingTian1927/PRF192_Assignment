@@ -222,6 +222,11 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
     free(maxLens);
 }
 
+void pressEnterToContinue(void) {
+    printf("\nPress <Enter> to return to the menu: ");
+    getchar();
+}
+
 void printTitleCard(void) {
     printf("MASTERCHEFS MANAGEMENT SOFTWARE\n");
     printf("-------------------------------\n\n");
