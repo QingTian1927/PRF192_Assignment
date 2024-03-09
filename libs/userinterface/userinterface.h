@@ -38,6 +38,7 @@ typedef struct {
     short int maxPosLen;
 } maxLenObj;
 
+void exitOnFatalException(const char* message);
 void flushBuffer(void);
 
 int getIntInput(void);

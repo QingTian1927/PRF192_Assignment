@@ -10,6 +10,12 @@
 
 #include "userinterface.h"
 
+void exitOnFatalException(const char* message) {
+	printf("[FATAL] %s\n", message);
+	printf("Process terminated unconditionally.\n");
+	exit(EXIT_FAILURE);
+}
+
 void flushBuffer(void) {
     while (getchar() != '\n');
 }
