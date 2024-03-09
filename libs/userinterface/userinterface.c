@@ -228,8 +228,9 @@ void pressEnterTo(const char* prompt) {
 }
 
 void printTitleCard(void) {
-    printf("MASTERCHEFS MANAGEMENT SOFTWARE\n");
-    printf("-------------------------------\n\n");
+    printf("--------------------------------------------\n");
+    printf("***** MASTERCHEFS MANAGEMENT SOFTWARE ******\n");
+    printf("--------------------------------------------\n\n");
 }
 
 void printEditSubmenu(const char* prompt) {
