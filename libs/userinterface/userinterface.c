@@ -233,7 +233,7 @@ void printTitleCard(void) {
     printf("--------------------------------------------\n\n");
 }
 
-void printEditSubmenu(const char* prompt) {
+void printEditChefSubmenu(const char* prompt) {
     printf("1) Edit the name of the chef\n");
     printf("2) Edit the role of the chef\n");
     printf("3) Edit the date of birth of the chef\n");
@@ -242,13 +242,19 @@ void printEditSubmenu(const char* prompt) {
     printf("%s", prompt);
 }
 
+void printEditListSubmenu(const char* prompt) {
+    printf("1) Add a new chef to the list\n");
+    printf("2) Edit the profile of a particular chef\n");
+    printf("3) Remove a particular chef\n");
+    printf("0) Return to main menu\n\n");
+    printf("%s", prompt);
+}
+
 void printMainMenu(const char* prompt) {
     printf("1) Display the list of chefs\n");
     printf("2) Search for specific chefs\n");
-    printf("3) Add a new chef\n");
-    printf("4) Edit the profile of a particular chef\n");
-    printf("5) Remove a particular chef\n");
-    printf("6) Calculate the total salary of all chefs\n");
+    printf("3) Edit the list of chefs\n");
+    printf("4) Calculate the total salary of all chefs\n");
     printf("0) Exit\n\n");
     printf("%s", prompt);
 }

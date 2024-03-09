@@ -57,7 +57,10 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager);
 void pressEnterTo(const char* prompt);
 
 void printTitleCard(void);
-void printEditSubmenu(const char* prompt);
+
+void printEditChefSubmenu(const char* prompt);
+void printEditListSubmenu(const char* prompt);
+
 void printMainMenu(const char* prompt);
 
 #endif
