@@ -15,14 +15,20 @@
 #define SEARCH_CHEFS '2'
 #define EDIT_CHEF_LIST '3'
 #define RUN_CALCULATIONS '4'
+#define MANUAL_SAVE '5'
 #define EXIT_MENU '0'
+
+#define LOAD_FILE_MANUAL 0
+#define LOAD_FILE_STARTUP 1
 
 #define FALLBACK_SAVE_FILE "fallback_save.chefs"
 #define MAX_SAVE_RETRIES 3
 
-chefFileObj* loadChefFileOnStartup(char* fileNameSavePtr) {
+chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option) {
     int isInvalidOption = 0;
     int hasToLoadFile = -1;
+
+    if (option == LOAD_FILE_MANUAL) { hasToLoadFile = 1; }
 
     while (hasToLoadFile == -1) {
         clearScreen();
@@ -284,12 +290,12 @@ int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
 
 int main() {
     chefObj ** chefList = NULL;
-    int listLen = 9;
+    int listLen = DEFAULT_CHEFLIST_SIZE;
 
     char fileName[MAX_PATH_LEN + 1];  // Including null terminator
     fileName[0] = '\0';
 
-    chefFileObj* chefFile = loadChefFileOnStartup(fileName);
+    chefFileObj* chefFile = loadFileWrapper(fileName, LOAD_FILE_MANUAL);
     if (chefFile != NULL) {
         chefList = chefFile->chefList;
         listLen = chefFile->listLen;
@@ -303,6 +309,7 @@ int main() {
     int hasNotExited = 1;
     int isInvalidOption = 0;
     int hasModifiedList = 0;
+    int saveResult;
 
     while (hasNotExited) {
         clearScreen();
@@ -330,6 +337,14 @@ int main() {
                 hasModifiedList = 1;
                 break;
             case RUN_CALCULATIONS:
+                break;
+            case MANUAL_SAVE:
+                saveResult = saveFileWrapper(fileName, chefList, listLen);
+                if (saveResult == WRITE_FILE_FAIL) {
+                    printf("Failed to write to specified file and fallback file!\n");
+                    printf("Please check you working directory and try again.\n");
+                }
+                pressEnterTo("continue");
                 break;
             case EXIT_MENU:
                 hasNotExited = 0;
@@ -383,7 +398,7 @@ int main() {
         exit(EXIT_SUCCESS);
     }
 
-    int saveResult = saveFileWrapper(fileName, chefList, listLen);
+    saveResult = saveFileWrapper(fileName, chefList, listLen);
     free(chefList);
     free(chefFile);
 
