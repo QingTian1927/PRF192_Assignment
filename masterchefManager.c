@@ -11,7 +11,16 @@
 #include "libs/dateparser/dateparser.h"
 #include "libs/stringformat/stringformat.h"
 
-chefFileObj* loadChefFileOnStartup(void) {
+#define DISPLAY_CHEFS '1'
+#define SEARCH_CHEFS '2'
+#define EDIT_CHEF_LIST '3'
+#define RUN_CALCULATIONS '4'
+#define EXIT_MENU '0'
+
+#define FALLBACK_SAVE_FILE "fallback_save.chefs"
+#define MAX_SAVE_RETRIES 3
+
+chefFileObj* loadChefFileOnStartup(char* fileNameSavePtr) {
     int isInvalidOption = 0;
     int hasToLoadFile = -1;
 
@@ -22,7 +31,7 @@ chefFileObj* loadChefFileOnStartup(void) {
         if (isInvalidOption == 0) {
             printf("Do you want to load an existing chef file? [y/n]: ");
         } else {
-            printf("Invalid option. Please try again [y/n]: ");
+            printf("%s", INVALID_YESNO_PROMPT);
             isInvalidOption = 0;
         }
         char choice = lower(getchar());
@@ -42,10 +51,9 @@ chefFileObj* loadChefFileOnStartup(void) {
 
     if (hasToLoadFile <= 0) { return NULL; }
 
-    char fileName[MAX_PATH_LEN + 1];  // Including null terminator
-    printf("Please enter the path to the chef file [max %d characters]: ", MAX_PATH_LEN);
-
-    int result = getStringInput(fileName, MAX_PATH_LEN);
+    printf("\nPlease enter the path to the chef file [max %d characters]:\n", MAX_PATH_LEN);
+    printf("> ");
+    int result = getStringInput(fileNameSavePtr, MAX_PATH_LEN);
     printf("\n");
 
     if (result == -1) {
@@ -54,21 +62,21 @@ chefFileObj* loadChefFileOnStartup(void) {
         return NULL;
     }
 
-    int checkFileResult = doesFileExist(fileName);
+    int checkFileResult = doesFileExist(fileNameSavePtr);
     if (checkFileResult == FILE_NOTFOUND) {
         printf("> The specified file could not be located\n");
         pressEnterTo("continue to the main program");
         return NULL;
     }
 
-    chefFileObj* chefFile = readChefsFile(fileName);
+    chefFileObj* chefFile = readChefsFile(fileNameSavePtr);
     if (chefFile == NULL) {
         printf("> Experienced an error while trying to read from the specified file\n");
         pressEnterTo("continue to the main program");
         return NULL;
     }
 
-    printf("> Successfully loaded a list of chefs from the specified file\n");
+    printf("> Successfully loaded a chef list from the specified file\n");
     pressEnterTo("continue to the main program");
 
     return chefFile;
@@ -89,9 +97,9 @@ void displayChefsWrapper(chefObj ** chefList, int listLen) {
         printTitleCard();
 
         if (isInvalidOption == 0) {
-            printf("Do you want to view the entire chef list at once? [y/n]: ");
+            printf("Do you wish to view the entire chef list at once? [y/n]: ");
         } else {
-            printf("Invalid option. Please try again [y/n]: ");
+            printf("%s", INVALID_YESNO_PROMPT);
             isInvalidOption = 0;
         }
         char choice = lower(getchar());
@@ -151,6 +159,10 @@ void editChefWrapper() {
     }
 }
 
+void addChefWrapper(chefObj ** chefList, int listLen) {
+
+}
+
 void editListWrapper(chefObj ** chefList, int listLen) {
     int hasNotExited = 1;
     int isInvalidOption = 0;
@@ -186,14 +198,98 @@ void editListWrapper(chefObj ** chefList, int listLen) {
     }
 }
 
-int main() {
-    int hasNotExited = 1;
+int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
+    char fileName[MAX_PATH_LEN + 1];
+    fileName[0] = '\0';
+
+    int reuseFile = -1;
     int isInvalidOption = 0;
 
+    if (strlen(savedFileName) > 0) {
+        while (reuseFile == -1) {
+            clearScreen();
+            printTitleCard();
+
+            printf("You originally loaded a chef list from %s\n", savedFileName);
+            if (isInvalidOption == 0) {
+                printf("Do you want to save to this file? [y/n]: ");
+            } else {
+                printf("%s", INVALID_YESNO_PROMPT);
+                isInvalidOption = 0;
+            }
+
+            char choice = lower(getchar());
+            flushBuffer();
+            printf("\n");
+
+            switch (choice) {
+                case 'y':
+                    reuseFile = 1;
+                    break;
+                case 'n':
+                    reuseFile = 0;
+                    break;
+                default:
+                    isInvalidOption = 1;
+            }
+        }
+        if (reuseFile) {
+            strncpy(fileName, savedFileName, MAX_PATH_LEN + 1);
+        }
+    }
+
+    if (reuseFile == 0 || strlen(savedFileName) <= 0) {
+        int result = 0;
+        while (result <= 0) {
+            if (result == - 1) {
+                printf("> Failed to register the file path\n\n");
+                result = 0;
+            }
+            printf("Enter the path to the new chef file [max %d characters]:\n", MAX_PATH_LEN);
+            printf("> ");
+
+            result = getStringInput(fileName, MAX_PATH_LEN);
+            printf("\n");
+        }
+    }
+
+    printf("Attempting to save to the given location ...\n");
+    int attemptNo;
+
+    for (attemptNo = 1; attemptNo <= MAX_SAVE_RETRIES; attemptNo++) {
+        int writeResult = writeChefsFile(fileName, chefList, listLen);
+
+        if (writeResult == WRITE_FILE_OKAY) {
+            printf("Successfully saved the chef list to %s\n", fileName);
+            return WRITE_FILE_OKAY;
+        }
+        printf("Attempt [%d] to write to %s failed!\n", attemptNo, fileName);
+    }
+
+    printf("\nFailed to write to %s after %d retries!\n", fileName, MAX_SAVE_RETRIES);
+    printf("Attempting to save to fallback location ...\n");
+
+    for (attemptNo = 1; attemptNo <= MAX_SAVE_RETRIES; attemptNo++) {
+        int writeResult = writeChefsFile(FALLBACK_SAVE_FILE, chefList, listLen);
+
+        if (writeResult == WRITE_FILE_OKAY) {
+            printf("\nSuccessfully saved the chef list to %s\n", FALLBACK_SAVE_FILE);
+            return WRITE_FILE_OKAY;
+        }
+        printf("Attempt [%d] to write to %s failed!\n", attemptNo, FALLBACK_SAVE_FILE);
+    }
+
+    return WRITE_FILE_FAIL;
+}
+
+int main() {
     chefObj ** chefList = NULL;
     int listLen = 9;
 
-    chefFileObj* chefFile = loadChefFileOnStartup();
+    char fileName[MAX_PATH_LEN + 1];  // Including null terminator
+    fileName[0] = '\0';
+
+    chefFileObj* chefFile = loadChefFileOnStartup(fileName);
     if (chefFile != NULL) {
         chefList = chefFile->chefList;
         listLen = chefFile->listLen;
@@ -203,6 +299,10 @@ int main() {
             exitOnFatalException("Failed to create a new chef list upon start up");
         }
     }
+
+    int hasNotExited = 1;
+    int isInvalidOption = 0;
+    int hasModifiedList = 0;
 
     while (hasNotExited) {
         clearScreen();
@@ -221,16 +321,17 @@ int main() {
         printf("\n");
 
         switch (choice) {
-            case '1':
+            case DISPLAY_CHEFS:
                 displayChefsWrapper(chefList, listLen);
                 break;
-            case '2':
+            case SEARCH_CHEFS:
                 break;
-            case '3':
+            case EDIT_CHEF_LIST:
+                hasModifiedList = 1;
                 break;
-            case '4':
+            case RUN_CALCULATIONS:
                 break;
-            case '0':
+            case EXIT_MENU:
                 hasNotExited = 0;
                 break;
             default:
@@ -238,8 +339,59 @@ int main() {
         }
     }
 
+    if (hasModifiedList == 0) {
+        free(chefList);
+        free(chefFile);
+        exit(EXIT_SUCCESS);
+    }
+
+    int saveOption = -1;
+    isInvalidOption = 0;
+
+    while (saveOption == -1) {
+        clearScreen();
+        printTitleCard();
+
+        printf("You have potentially unsaved changes!\n");
+        if (isInvalidOption == 0) {
+            printf("Do you want to save now? [y/n]: ");
+        } else {
+            printf("%s", INVALID_YESNO_PROMPT);
+            isInvalidOption = 0;
+        }
+
+        char choice = lower(getchar());
+        flushBuffer();
+        printf("\n");
+
+        switch (choice) {
+            case 'y':
+                saveOption = 1;
+                break;
+            case 'n':
+                saveOption = 0;
+                break;
+            default:
+                isInvalidOption = 1;
+        }
+    }
+
+    if (saveOption == 0) {
+        free(chefList);
+        free(chefFile);
+        printf("All unsaved data has been discarded.\n");
+        exit(EXIT_SUCCESS);
+    }
+
+    int saveResult = saveFileWrapper(fileName, chefList, listLen);
     free(chefList);
     free(chefFile);
+
+    if (saveResult == WRITE_FILE_FAIL) {
+        printf("Failed to save data to fallback location.\n");
+        printf("All unsaved data has been discarded.\n");
+        exit(EXIT_FAILURE);
+    }
 
     exit(EXIT_SUCCESS);
 }

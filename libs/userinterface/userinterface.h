@@ -29,6 +29,7 @@
 
 #define STANDARD_PROMPT "Enter your choice: "
 #define INVALID_PROMPT "Invalid option. Please try again: "
+#define INVALID_YESNO_PROMPT "Invalid option. Please try again [y/n]: "
 
 typedef struct {
     short int maxNameLen;
