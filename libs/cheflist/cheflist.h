@@ -29,6 +29,7 @@ int initializeChefList(chefObj** chefList, int listLen);
 chefObj ** newChefList(int listLen);
 chefObj* newChef(void);
 chefObj* copyChef(chefObj* chefPtr);
+void deleteChef(chefObj ** chefPtrPtr);
 
 int checkChefListStatus(chefObj ** chefList, int listLen);
 int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr);

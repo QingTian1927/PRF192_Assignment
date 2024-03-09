@@ -50,6 +50,16 @@ chefObj* copyChef(chefObj* chefPtr) {
     return copiedChef;
 }
 
+void deleteChef(chefObj ** chefPtrPtr) {
+    chefObj* chefPtr = *chefPtrPtr;
+    if (chefPtr == NULL || chefPtrPtr == NULL) {
+        return;
+    }
+
+    free(chefPtr);
+    *chefPtrPtr = NULL;
+}
+
 int checkChefListStatus(chefObj ** chefList, int listLen) {
     if (chefList == NULL || listLen <= 0) { return CHEFLIST_ERRO; }
 
