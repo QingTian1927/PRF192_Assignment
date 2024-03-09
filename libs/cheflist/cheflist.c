@@ -71,7 +71,7 @@ int checkChefListStatus(chefObj ** chefList, int listLen) {
     return CHEFLIST_FULL;
 }
 
-int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr) {
+int insertChefIntoList(chefObj ** chefList, int listLen, chefObj* chefPtr) {
     if (chefList == NULL || chefPtr == NULL || listLen <= 0) {
         return APPEND_CHEF_FAIL;
     }
@@ -288,7 +288,7 @@ chefSearchResult* searchChefByName(chefObj ** chefList, int listLen, char* nameQ
 
         if (matchNameResult != 0) { continue; }
 
-        appendChefToList(matchList, listLen, chefList[i]);
+        insertChefIntoList(matchList, listLen, chefList[i]);
         matches++;
     }
 
@@ -319,7 +319,7 @@ chefSearchResult* searchChefBySalaryRange(
 
         if (isMatchingSalary == 0) { continue; }
 
-        appendChefToList(matchList, listLen, chefList[i]);
+        insertChefIntoList(matchList, listLen, chefList[i]);
         matches++;
     }
 

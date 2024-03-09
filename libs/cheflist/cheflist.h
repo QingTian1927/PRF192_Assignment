@@ -32,7 +32,7 @@ chefObj* copyChef(chefObj* chefPtr);
 void deleteChef(chefObj ** chefPtrPtr);
 
 int checkChefListStatus(chefObj ** chefList, int listLen);
-int appendChefToList(chefObj ** chefList, int listLen, chefObj* chefPtr);
+int insertChefIntoList(chefObj ** chefList, int listLen, chefObj* chefPtr);
 
 long long calculateChefTotalSalary(chefObj ** chefList, int listLen);
 
