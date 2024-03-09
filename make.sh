@@ -12,7 +12,7 @@ mkdirIfNotExist() {
 src="$PWD"
 build="$PWD/build"
 
-binName="Masterchefs Manager.bin"
+binName="MasterchefsManager.bin"
 bin="$build/$binName"
 
 mkdirIfNotExist "$build"
