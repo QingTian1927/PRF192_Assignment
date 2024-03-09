@@ -20,7 +20,7 @@
 #define MARGIN_LEN 1
 #define VERTICAL_DIVIDER_LEN 1
 
-#define MAXLENS_ZEROES 0
+#define MAXLENS_LIST_EMPTY 0
 #define MAXLENS_REGULAR 1
 
 #define DISABLE_PAGER 0
@@ -54,7 +54,7 @@ void printTableHeader(maxLenObj* maxLens);
 
 void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager);
 
-void pressEnterToContinue(void);
+void pressEnterTo(const char* prompt);
 
 void printTitleCard(void);
 void printEditSubmenu(const char* prompt);

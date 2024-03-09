@@ -114,10 +114,10 @@ int handleMaxLens(maxLenObj* maxLens, int listLen) {
     short int maxDobLen = maxLens->maxDobLen;
     short int maxPosLen = maxLens->maxPosLen;
 
-    int allZeroes = (
-        (maxPosLen + maxNameLen + maxRoleLen + maxDobLen + maxSalLen) == 0
+    int listEmpty = (
+        (maxNameLen + maxRoleLen + maxSalLen) == 0
     );
-    if (allZeroes) { return MAXLENS_ZEROES; }
+    if (listEmpty) { return MAXLENS_LIST_EMPTY; }
 
     short int nameLabelLen = strlen(NAME_LABEL);
     short int roleLabelLen = strlen(ROLE_LABEL);
@@ -172,7 +172,7 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
     maxLenObj* maxLens = getPropertiesMaxLen(chefList, listLen);
     int maxLensResult = handleMaxLens(maxLens, listLen);
 
-    if (maxLensResult == MAXLENS_ZEROES) {
+    if (maxLensResult == MAXLENS_LIST_EMPTY) {
         printf("The list is empty ...\n");
         free(maxLens);
         return;
@@ -222,8 +222,8 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
     free(maxLens);
 }
 
-void pressEnterToContinue(void) {
-    printf("\nPress <Enter> to return to the menu: ");
+void pressEnterTo(const char* prompt) {
+    printf("\nPress <Enter> to %s: ", prompt);
     getchar();
 }
 
