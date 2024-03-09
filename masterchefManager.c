@@ -123,9 +123,9 @@ void editChefWrapper() {
         printTitleCard();
 
         if (isInvalidOption == 0) {
-            printEditSubmenu(STANDARD_PROMPT);
+            printEditChefSubmenu(STANDARD_PROMPT);
         } else {
-            printEditSubmenu(INVALID_PROMPT);
+            printEditChefSubmenu(INVALID_PROMPT);
             isInvalidOption = 0;
         }
 
@@ -141,6 +141,41 @@ void editChefWrapper() {
             case '3':
                 break;
             case '4':
+                break;
+            case '0':
+                hasNotExited = 0;
+                break;
+            default:
+                isInvalidOption = 1;
+        }
+    }
+}
+
+void editListWrapper(chefObj ** chefList, int listLen) {
+    int hasNotExited = 1;
+    int isInvalidOption = 0;
+
+    while (hasNotExited) {
+        clearScreen();
+        printTitleCard();
+
+        if (isInvalidOption == 0) {
+            printEditListSubmenu(STANDARD_PROMPT);
+        } else {
+            printEditListSubmenu(INVALID_PROMPT);
+            isInvalidOption = 0;
+        }
+
+        char choice = getchar();
+        flushBuffer();
+        printf("\n");
+
+        switch (choice) {
+            case '1':
+                break;
+            case '2':
+                break;
+            case '3':
                 break;
             case '0':
                 hasNotExited = 0;
@@ -194,10 +229,6 @@ int main() {
             case '3':
                 break;
             case '4':
-                break;
-            case '5':
-                break;
-            case '6':
                 break;
             case '0':
                 hasNotExited = 0;
