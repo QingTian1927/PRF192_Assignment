@@ -46,10 +46,8 @@ int getStringInput(char* strPtr, int maxLen) {
             return strlen(strPtr);
         }
     }
-    printf("\n");
-    printf("getStringInput() fgets() returned NULL.\n");
-    printf("Process terminated unexpectedly.\n\n");
-    exit(1);
+
+    return -1;
 }
 
 void printHorizontalDivider(const char* ch, int maxLineLen) {
