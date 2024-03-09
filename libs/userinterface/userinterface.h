@@ -1,7 +1,7 @@
 /**
- * @file graphics.h
+ * @file userinterface.h
  * @author QingTian
- * @brief header file for graphics.c
+ * @brief header file for userinterface.c
  */
 
 #ifndef _GRAPHICS_H_

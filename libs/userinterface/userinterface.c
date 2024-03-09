@@ -1,7 +1,7 @@
 /**
- * @file graphics.c
+ * @file userinterface.c
  * @author QingTian
- * @brief functions that print out some graphical elements
+ * @brief functions relating to the user interface.
  */
 
 #include <stdio.h>
