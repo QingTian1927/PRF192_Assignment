@@ -40,6 +40,7 @@ typedef struct {
 
 void exitOnFatalException(const char* message);
 void flushBuffer(void);
+void clearScreen(void);
 
 int getIntInput(void);
 double getDoubleInput(void);

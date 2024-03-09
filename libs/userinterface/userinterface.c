@@ -20,6 +20,10 @@ void flushBuffer(void) {
     while (getchar() != '\n');
 }
 
+void clearScreen(void) {
+    printf("\e[1;1H\e[2J");
+}
+
 int getIntInput(void) {
     int num;
     while (scanf(" %d", &num) != 1) {
