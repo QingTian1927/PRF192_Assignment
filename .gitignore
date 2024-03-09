@@ -2,7 +2,7 @@
 .vscode/
 
 # Ignore temp directories
-temp/
+temp/*
 
 # Ignore temp files
 temp.*
@@ -12,3 +12,6 @@ test/
 
 # Ignore test files
 test.*
+
+# Ignore build directories
+build/*
