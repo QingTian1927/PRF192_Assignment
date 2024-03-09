@@ -11,6 +11,8 @@
 #include "../cheflist/cheflist.h"
 
 #define DEFAULT_EXTENSION ".chefs"
+#define MAX_PATH_LEN 100
+
 #define WRITE_FILE_FAIL 0
 #define WRITE_FILE_OKAY 1
 
