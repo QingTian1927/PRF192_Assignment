@@ -55,4 +55,6 @@ chefSearchResult* searchChefBySalaryRange(
     long maxSalary
 );
 
+void freeSearchResult(chefSearchResult* searchResult);
+
 #endif

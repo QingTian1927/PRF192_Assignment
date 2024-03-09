@@ -219,6 +219,11 @@ chefObj ** orderByName(chefObj ** chefList, int listLen) {
     return sortedList;
 }
 
+void freeSearchResult(chefSearchResult* searchResult) {
+    free(searchResult->resultList);
+    free(searchResult);
+}
+
 int setSearchProperties(
     chefSearchResult* searchResult,
     chefObj ** chefList,
