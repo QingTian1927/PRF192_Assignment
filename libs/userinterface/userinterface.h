@@ -53,4 +53,8 @@ void printTableHeader(maxLenObj* maxLens);
 
 void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager);
 
+void printTitleCard(void);
+void printEditSubmenu(const char* prompt);
+void printMainMenu(const char* prompt);
+
 #endif
