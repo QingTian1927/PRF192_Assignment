@@ -255,6 +255,7 @@ void printMainMenu(const char* prompt) {
     printf("2) Search for specific chefs\n");
     printf("3) Edit the list of chefs\n");
     printf("4) Calculate the total salary of all chefs\n");
+    printf("5) Save the current chef list\n");
     printf("0) Exit\n\n");
     printf("%s", prompt);
 }
