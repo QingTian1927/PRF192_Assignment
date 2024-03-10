@@ -93,14 +93,16 @@ int checkChefListStatus(chefObj ** chefList, int listLen) {
     return CHEFLIST_FULL;
 }
 
-int checkListEmpty(chefObj ** chefList, int listLen) {
+int countChefsInList(chefObj ** chefList, int listLen) {
     if (chefList == NULL || listLen <= 0) { return CHEFLIST_ERRO; }
 
+    int count = 0;
     int i;
+
     for (i = 0; i < listLen; i++) {
-        if (chefList[i] != NULL) { return CHEFLIST_NOTEMPTY; }
+        if (chefList[i] != NULL) { count++; }
     }
-    return CHEFLIST_EMPTY;
+    return count;
 }
 
 int insertChefIntoList(chefObj ** chefList, int listLen, chefObj* chefPtr) {

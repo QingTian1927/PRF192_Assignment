@@ -41,6 +41,7 @@ void displayChefsWrapper(chefObj ** chefList, int listLen);
 
 void editListWrapper(chefObj *** chefListPtr, int* listLenPtr);
 void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr);
+void removeChefWrapper(chefObj ** chefList, int listLen);
 
 void editChefWrapper(chefObj ** chefList, int* listLenPtr) {
     int hasNotExited = 1;
@@ -77,46 +78,6 @@ void editChefWrapper(chefObj ** chefList, int* listLenPtr) {
                 isInvalidOption = 1;
         }
     }
-}
-
-void removeChefWrapper(chefObj ** chefList, int listLen) {
-    clearScreen();
-    printTitleCard();
-
-    int listStatus = checkListEmpty(chefList, listLen);
-    if (listStatus == CHEFLIST_EMPTY) {
-        printf("Cannot remove any chef as the list is empty\n");
-        pressEnterTo("return to the menu");
-        return;
-    }
-
-    printf("Please find the number of the chef to be removed from the list:\n\n");
-    printUnsortedChefList(chefList, listLen, ENABLE_PAGER);
-    printf("\n");
-
-    int position = 0;
-    while (position <= 0) {
-        if (position == -1) {
-            printf("> You've entered an invalid value!\n\n");
-            position = 0;
-        }
-        printf("Enter the number of the chef to be removed [1 -> %d]:\n", listLen);
-        printf("> ");
-
-        position = getLongInput();
-        flushBuffer();
-        printf("\n");
-
-        if (position < 1 || position > listLen) { position = -1; }
-    }
-
-    int index = position - 1;
-    deleteChef(&chefList[index]);
-
-    shiftListLeft(chefList, listLen, index, 1);
-
-    printf("> Removed chef number %d from the list\n", position);
-    pressEnterTo("return to continue");
 }
 
 void editListWrapper(chefObj *** chefListPtr, int* listLenPtr) {
@@ -630,4 +591,44 @@ void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
         free(chef);
         return;
     }
+}
+
+void removeChefWrapper(chefObj ** chefList, int listLen) {
+    clearScreen();
+    printTitleCard();
+
+    int chefCount = countChefsInList(chefList, listLen);
+    if (chefCount == 0) {
+        printf("Cannot remove any chef as the list is empty\n");
+        pressEnterTo("return to the menu");
+        return;
+    }
+
+    printf("Please find the number of the chef to be removed from the list:\n\n");
+    printUnsortedChefList(chefList, listLen, ENABLE_PAGER);
+    printf("\n");
+
+    int position = 0;
+    while (position <= 0) {
+        if (position == -1) {
+            printf("> You've entered an invalid value!\n\n");
+            position = 0;
+        }
+        printf("Enter the number of the chef to be removed [1 -> %d]:\n", listLen);
+        printf("> ");
+
+        position = getLongInput();
+        flushBuffer();
+        printf("\n");
+
+        if (position < 1 || position > listLen) { position = -1; }
+    }
+
+    int index = position - 1;
+    deleteChef(&chefList[index]);
+
+    shiftListLeft(chefList, listLen, index, 1);
+
+    printf("> Removed chef number %d from the list\n", position);
+    pressEnterTo("return to continue");
 }
