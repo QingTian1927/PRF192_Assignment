@@ -264,26 +264,26 @@ chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option) {
     printf("\n");
 
     if (result == -1) {
-        printf("> Failed to register the file path\n");
+        printf("-> Failed to register the file path\n");
         pressEnterTo("continue to the main program");
         return NULL;
     }
 
     int checkFileResult = doesFileExist(fileNameSavePtr);
     if (checkFileResult == FILE_NOTFOUND) {
-        printf("> The specified file could not be located\n");
+        printf("-> The specified file could not be located\n");
         pressEnterTo("continue to the main program");
         return NULL;
     }
 
     chefFileObj* chefFile = readChefsFile(fileNameSavePtr);
     if (chefFile == NULL) {
-        printf("> Experienced an error while trying to read from the specified file\n");
+        printf("-> Experienced an error while trying to read from the specified file\n");
         pressEnterTo("continue to the main program");
         return NULL;
     }
 
-    printf("> Successfully loaded a chef list from the specified file\n");
+    printf("-> Successfully loaded a chef list from the specified file\n");
     pressEnterTo("continue to the main program");
 
     return chefFile;
@@ -333,7 +333,7 @@ int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
         int result = 0;
         while (result <= 0) {
             if (result == -1) {
-                printf("> Failed to register the file path\n\n");
+                printf("-> Failed to register the file path\n\n");
                 result = 0;
             }
             printf("Enter the path to the new chef file [max %d characters]:\n", MAX_PATH_LEN);
@@ -351,20 +351,20 @@ int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
         int writeResult = writeChefsFile(fileName, chefList, listLen);
 
         if (writeResult == WRITE_FILE_OKAY) {
-            printf("Successfully saved the chef list to %s\n", fileName);
+            printf("\n-> Successfully saved the chef list to %s\n", fileName);
             return WRITE_FILE_OKAY;
         }
         printf("Attempt [%d] to write to %s failed!\n", attemptNo, fileName);
     }
 
-    printf("\nFailed to write to %s after %d retries!\n", fileName, MAX_SAVE_RETRIES);
+    printf("\n-> Failed to write to %s after %d retries!\n\n", fileName, MAX_SAVE_RETRIES);
     printf("Attempting to save to fallback location ...\n");
 
     for (attemptNo = 1; attemptNo <= MAX_SAVE_RETRIES; attemptNo++) {
         int writeResult = writeChefsFile(FALLBACK_SAVE_FILE, chefList, listLen);
 
         if (writeResult == WRITE_FILE_OKAY) {
-            printf("\nSuccessfully saved the chef list to %s\n", FALLBACK_SAVE_FILE);
+            printf("\n-> Successfully saved the chef list to %s\n", FALLBACK_SAVE_FILE);
             return WRITE_FILE_OKAY;
         }
         printf("Attempt [%d] to write to %s failed!\n", attemptNo, FALLBACK_SAVE_FILE);
@@ -779,7 +779,6 @@ void handleSearchResult(
     if (searchResult == NULL) {
         printf("Experienced an error while trying to initiate search\n");
         printf("Please try again or restart the program\n");
-        pressEnterTo("return to the menu");
         return;
     }
 
@@ -787,8 +786,7 @@ void handleSearchResult(
     int resultLen = searchResult->resultLen;
 
     if (resultList == NULL || resultLen <= 0) {
-        printf("Could not find any chefs with matching information.\n");
-        pressEnterTo("continue");
+        printf("-> Could not find any chefs with matching information.\n");
         free(resultList);
         free(searchResult);
         return;
