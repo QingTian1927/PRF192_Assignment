@@ -44,13 +44,133 @@ void editListWrapper(chefObj *** chefListPtr, int* listLenPtr);
 void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr);
 void removeChefWrapper(chefObj ** chefList, int listLen);
 
-void editChefWrapper(chefObj ** chefList, int* listLenPtr) {
+void editNameWrapper(chefObj* chefPtr) {
+    int inputResult = 0;
+    int propertyResult = -1;
+    char name[MAX_NAME_LEN + 1];
+
+    while (inputResult <= 0 && propertyResult <= 0) {
+        if (inputResult == -1) {
+            printf("> Failed to register the chef's name!\n\n");
+            inputResult = 0;
+        }
+        else if (propertyResult == SET_PROPERTY_FAIL) {
+            printf("> You've entered an invalid name!\n\n");
+            propertyResult = -1;
+        }
+
+        printf("Enter the new name for the chef [max %d characters]:\n", MAX_NAME_LEN);
+        printf("> ");
+
+        inputResult = getStringInput(name, MAX_NAME_LEN + 1);
+        propertyResult = setName(chefPtr, name);
+        printf("\n");
+    }
+}
+
+void editRoleWrapper(chefObj* chefPtr) {
+    int propertyResult = -1;
+
+    while (propertyResult <= 0) {
+        if (propertyResult == SET_PROPERTY_FAIL) {
+            printf("> Failed to register the chef's role\n\n");
+            propertyResult = -1;
+        }
+
+        char* ROLES_TABLE[] = {
+            "APPRENTICE COOK",
+            "JUNIOR CHEF",
+            "SEASONED CHEF",
+            "MASTER CHEF"
+        };
+
+        printf("Assign the new chef one of the following roles:\n\n");
+        printf("1) %s\n", ROLES_TABLE[0]);
+        printf("2) %s\n", ROLES_TABLE[1]);
+        printf("3) %s\n", ROLES_TABLE[2]);
+        printf("4) %s\n\n", ROLES_TABLE[3]);
+
+        printf("Enter your choice: ");
+        char choice = getchar();
+        flushBuffer();
+        printf("\n");
+
+        switch (choice) {
+            case '1':
+                propertyResult = setRole(chefPtr, ROLES_TABLE[0]);
+                break;
+            case '2':
+                propertyResult = setRole(chefPtr, ROLES_TABLE[1]);
+                break;
+            case '3':
+                propertyResult = setRole(chefPtr, ROLES_TABLE[2]);
+                break;
+            case '4':
+                propertyResult = setRole(chefPtr, ROLES_TABLE[3]);
+                break;
+            default:
+                printf("> Please enter a valid option\n\n");
+        }
+    }
+}
+
+void editChefWrapper(chefObj ** chefList, int listLen) {
+    clearScreen();
+    printTitleCard();
+
+    int chefCount = countChefsInList(chefList, listLen);
+    if (chefCount == 0) {
+        printf("Cannot edit any chef as the list is empty ...\n");
+        pressEnterTo("return to the menu");
+        return;
+    }
+
+    printf("Please find the number of the chef to be edited:\n\n");
+
+    if (listLen <= DEFAULT_CHEFLIST_SIZE) {
+        printUnsortedChefList(chefList, listLen, DISABLE_PAGER);
+    } else {
+        printUnsortedChefList(chefList, listLen, ENABLE_PAGER);
+    }
+    printf("\n");
+
+    int position = 0;
+    while (position <= 0) {
+        if (position == -1) {
+            printf("> You've entered an invalid value!\n\n");
+            position = 0;
+        }
+        printf("Enter the number of the chef to be edited [1 -> %d]:\n", listLen);
+        printf("> ");
+
+        position = getLongInput();
+        flushBuffer();
+        printf("\n");
+
+        if (position < 1 || position > listLen) { position = -1; }
+    }
+
+    int index = position - 1;
+    chefObj* selectedChef = chefList[index];
+
     int hasNotExited = 1;
     int isInvalidOption = 0;
 
     while (hasNotExited) {
         clearScreen();
         printTitleCard();
+
+        printf("Selected chef:\n\n");
+        printf("> ");
+
+        printf(
+            "%0*d | %s | %s | %s | %ld\n\n",
+            getNumLen(listLen), position,
+            getName(selectedChef),
+            getRole(selectedChef),
+            getDateOfBirth(selectedChef),
+            getSalary(selectedChef)
+        );
 
         if (isInvalidOption == 0) {
             printEditChefSubmenu(STANDARD_PROMPT);
@@ -65,8 +185,10 @@ void editChefWrapper(chefObj ** chefList, int* listLenPtr) {
 
         switch (choice) {
             case EDIT_NAME:
+                editNameWrapper(selectedChef);
                 break;
             case EDIT_ROLE:
+                editRoleWrapper(selectedChef);
                 break;
             case EDIT_DOB:
                 break;
@@ -108,6 +230,7 @@ void editListWrapper(chefObj *** chefListPtr, int* listLenPtr) {
                 addChefWrapper(chefListPtr, listLenPtr);
                 break;
             case EDIT_CHEF:
+                editChefWrapper(chefList, listLen);
                 break;
             case REMOVE_CHEF:
                 removeChefWrapper(chefList, listLen);
