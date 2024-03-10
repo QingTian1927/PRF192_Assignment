@@ -19,6 +19,9 @@
 #define CHEFLIST_ERRO -2
 #define CHEFLIST_FULL -1
 
+#define CHEFLIST_NOTEMPTY 0
+#define CHEFLIST_EMPTY 1
+
 typedef struct {
     int resultLen;
     chefObj ** resultList;
@@ -32,6 +35,7 @@ chefObj* copyChef(chefObj* chefPtr);
 void deleteChef(chefObj ** chefPtrPtr);
 
 int checkChefListStatus(chefObj ** chefList, int listLen);
+int checkListEmpty(chefObj ** chefList, int listLen);
 int insertChefIntoList(chefObj ** chefList, int listLen, chefObj* chefPtr);
 
 long long calculateChefTotalSalary(chefObj ** chefList, int listLen);
