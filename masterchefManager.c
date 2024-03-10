@@ -650,8 +650,6 @@ void editChefWrapper(chefObj ** chefList, int listLen) {
         return;
     }
 
-    printf("%p - %d\n", chefList, listLen);
-
     printf("Please find the number of the chef to be edited:\n\n");
 
     if (listLen <= DEFAULT_CHEFLIST_SIZE) {
@@ -841,6 +839,16 @@ void handleSearchResult(
 }
 
 void searchSalaryWrapper(chefObj ** chefList, int listLen) {
+    clearScreen();
+    printTitleCard();
+
+    int chefCount = countChefsInList(chefList, listLen);
+    if (chefCount == 0) {
+        printf("The list is currently empty ...\n");
+        pressEnterTo("return to the menu");
+        return;
+    }
+
     long minSalary = -1;
     long maxSalary = -1;
 
@@ -881,9 +889,19 @@ void searchSalaryWrapper(chefObj ** chefList, int listLen) {
 }
 
 void searchNameWrapper(chefObj ** chefList, int listLen) {
-    char query[ACTUAL_MAX_NAME_LEN];
+    clearScreen();
+    printTitleCard();
 
+    int chefCount = countChefsInList(chefList, listLen);
+    if (chefCount == 0) {
+        printf("The list is currently empty ...\n");
+        pressEnterTo("return to the menu");
+        return;
+    }
+
+    char query[ACTUAL_MAX_NAME_LEN];
     int inputResult = 0;
+
     while (inputResult <= 0) {
         if (inputResult == -1) {
             printf("-> Failed to register the query!\n\n");
