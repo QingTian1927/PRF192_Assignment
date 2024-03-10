@@ -114,6 +114,55 @@ void editRoleWrapper(chefObj* chefPtr) {
     }
 }
 
+void editDateWrapper(chefObj* chefPtr) {
+    int inputResult = 0;
+    int propertyResult = -1;
+    char dob[MAX_DATE_LEN + 1];
+
+    while (inputResult <= 0 && propertyResult <= 0) {
+        if (inputResult == -1) {
+            printf("> Failed to register the chef's date of birth!\n\n");
+            inputResult = 0;
+        }
+        else if (propertyResult == SET_PROPERTY_FAIL) {
+            printf("> You've entered an invalid date!\n\n");
+            propertyResult = -1;
+        }
+
+        printf("Enter the date of birth of the new chef [YYYY-MM-DD]:\n");
+        printf("> ");
+
+        inputResult = getStringInput(dob, MAX_DATE_LEN + 1);
+        if (strlen(dob) != MAX_DATE_LEN) {
+            inputResult = -1;
+        }
+
+        propertyResult = setDateOfBirth(chefPtr, dob);
+        printf("\n");
+    }
+    flushBuffer();
+}
+
+void editSalaryWrapper(chefObj* chefPtr) {
+    int propertyResult = -1;
+    long salary;
+
+    while (propertyResult <= 0) {
+        if (propertyResult == SET_PROPERTY_FAIL) {
+            printf("> You've entered an invalid value!\n\n");
+            propertyResult = -1;
+        }
+        printf("Enter the salary of the new chef [max %d]:\n", MAX_SALARY);
+        printf("> ");
+
+        salary = getLongInput();
+        flushBuffer();
+
+        propertyResult = setSalary(chefPtr, salary);
+        printf("\n");
+    }
+}
+
 void editChefWrapper(chefObj ** chefList, int listLen) {
     clearScreen();
     printTitleCard();
@@ -191,8 +240,10 @@ void editChefWrapper(chefObj ** chefList, int listLen) {
                 editRoleWrapper(selectedChef);
                 break;
             case EDIT_DOB:
+                editDateWrapper(selectedChef);
                 break;
             case EDIT_SAL:
+                editSalaryWrapper(selectedChef);
                 break;
             case EXIT_MENU:
                 hasNotExited = 0;
@@ -242,6 +293,26 @@ void editListWrapper(chefObj *** chefListPtr, int* listLenPtr) {
                 isInvalidOption = 1;
         }
     }
+}
+
+void manualSaveHandler(
+    char* fileName,
+    chefObj ** chefList,
+    int listLen,
+    int* modStatusPtr
+) {
+    int saveResult = saveFileWrapper(fileName, chefList, listLen);
+    if (saveResult == WRITE_FILE_OKAY) {
+        if (*modStatusPtr == 1) {
+            *modStatusPtr = 0;
+        }
+        pressEnterTo("continue");
+        return;
+    }
+
+    printf("Failed to write to specified file and fallback file!\n");
+    printf("Please check your working directory and try again.\n");
+    pressEnterTo("continue");
 }
 
 int main() {
@@ -297,12 +368,12 @@ int main() {
                 totalSalaryWrapper(chefList, listLen);
                 break;
             case MANUAL_SAVE:
-                saveResult = saveFileWrapper(fileName, chefList, listLen);
-                if (saveResult == WRITE_FILE_FAIL) {
-                    printf("Failed to write to specified file and fallback file!\n");
-                    printf("Please check you working directory and try again.\n");
-                }
-                pressEnterTo("continue");
+                manualSaveHandler(
+                    fileName,
+                    chefList,
+                    listLen,
+                    &hasModifiedList
+                );
                 break;
             case EXIT_MENU:
                 hasNotExited = 0;
