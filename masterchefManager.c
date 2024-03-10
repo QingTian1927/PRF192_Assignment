@@ -26,6 +26,7 @@
 #define EDIT_ROLE '2'
 #define EDIT_DOB '3'
 #define EDIT_SAL '4'
+#define EDIT_ANOTHER '5'
 
 #define SEARCH_NAME '1'
 #define SEARCH_SALARY '2'
@@ -46,7 +47,7 @@ void totalSalaryWrapper(chefObj ** chefList, int listLen);
 
 void editListWrapper(chefObj *** chefListPtr, int* listLenPtr);
 void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr);
-void editChefWrapper(chefObj ** chefList, int listLen);
+char editChefWrapper(chefObj ** chefList, int listLen);
 void removeChefWrapper(chefObj ** chefList, int listLen);
 
 void editNameWrapper(chefObj* chefPtr);
@@ -639,7 +640,7 @@ void editSalaryWrapper(chefObj* chefPtr) {
     }
 }
 
-void editChefWrapper(chefObj ** chefList, int listLen) {
+char editChefWrapper(chefObj ** chefList, int listLen) {
     clearScreen();
     printTitleCard();
 
@@ -647,7 +648,7 @@ void editChefWrapper(chefObj ** chefList, int listLen) {
     if (chefCount == 0) {
         printf("Cannot edit any chef as the list is empty ...\n");
         pressEnterTo("return to the menu");
-        return;
+        return EXIT_MENU;
     }
 
     printf("Please find the number of the chef to be edited:\n\n");
@@ -721,6 +722,8 @@ void editChefWrapper(chefObj ** chefList, int listLen) {
             case EDIT_SAL:
                 editSalaryWrapper(selectedChef);
                 break;
+            case EDIT_ANOTHER:
+                return EDIT_ANOTHER;
             case EXIT_MENU:
                 hasNotExited = 0;
                 break;
@@ -728,11 +731,14 @@ void editChefWrapper(chefObj ** chefList, int listLen) {
                 isInvalidOption = 1;
         }
     }
+    return EXIT_MENU;
 }
 
 void editListWrapper(chefObj *** chefListPtr, int* listLenPtr) {
     int hasNotExited = 1;
     int isInvalidOption = 0;
+
+    char editChefStatus = EDIT_ANOTHER;
 
     while (hasNotExited) {
         chefObj ** chefList = *chefListPtr;
@@ -757,7 +763,10 @@ void editListWrapper(chefObj *** chefListPtr, int* listLenPtr) {
                 addChefWrapper(chefListPtr, listLenPtr);
                 break;
             case EDIT_CHEF:
-                editChefWrapper(chefList, listLen);
+                while (editChefStatus == EDIT_ANOTHER) {
+                    editChefStatus = editChefWrapper(chefList, listLen);
+                }
+                // What a bloody hack
                 break;
             case REMOVE_CHEF:
                 removeChefWrapper(chefList, listLen);

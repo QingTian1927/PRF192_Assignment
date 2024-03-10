@@ -253,6 +253,7 @@ void printEditChefSubmenu(const char* prompt) {
     printf("2) Edit the role of the chef\n");
     printf("3) Edit the date of birth of the chef\n");
     printf("4) Edit the salary of the chef\n");
+    printf("5) Edit another chef\n");
     printf("0) Return to main menu\n\n");
     printf("%s", prompt);
 }
