@@ -54,27 +54,11 @@ void editRoleWrapper(chefObj* chefPtr);
 void editDateWrapper(chefObj* chefPtr);
 void editSalaryWrapper(chefObj* chefPtr);
 
-void searchNameWrapper(chefObj ** chefList, int listLen) {
-    char query[ACTUAL_MAX_NAME_LEN];
-
-    int inputResult = 0;
-    while (inputResult <= 0) {
-        if (inputResult == -1) {
-            printf("> Failed to register the query!\n\n");
-            inputResult = 0;
-        }
-
-        printf("Enter the name of the chef to be searched [max %d characters]:\n", MAX_NAME_LEN);
-        printf("> ");
-
-        inputResult = getStringInput(query, ACTUAL_MAX_NAME_LEN);
-        if (strlen(query) >= MAX_NAME_LEN || inputResult == -1) {
-            flushBuffer();
-        }
-        printf("\n");
-    }
-
-    chefSearchResult* searchResult = searchChefByName(chefList, listLen, query);
+void handleSearchResult(
+    chefSearchResult* searchResult,
+    chefObj ** chefList,
+    int listLen
+) {
     if (searchResult == NULL) {
         printf("Experienced an error while trying to initiate search\n");
         printf("Please try again or restart the program\n");
@@ -86,7 +70,7 @@ void searchNameWrapper(chefObj ** chefList, int listLen) {
     int resultLen = searchResult->resultLen;
 
     if (resultList == NULL || resultLen <= 0) {
-        printf("Could not find any chefs with the matching name.\n");
+        printf("Could not find any chefs with matching information.\n");
         pressEnterTo("continue");
         free(resultList);
         free(searchResult);
@@ -135,6 +119,29 @@ void searchNameWrapper(chefObj ** chefList, int listLen) {
     free(maxLens);
     free(resultList);
     free(searchResult);
+}
+
+void searchNameWrapper(chefObj ** chefList, int listLen) {
+    char query[ACTUAL_MAX_NAME_LEN];
+
+    int inputResult = 0;
+    while (inputResult <= 0) {
+        if (inputResult == -1) {
+            printf("> Failed to register the query!\n\n");
+            inputResult = 0;
+        }
+
+        printf("Enter the name of the chef to be searched [max %d characters]:\n", MAX_NAME_LEN);
+        printf("> ");
+
+        inputResult = getStringInput(query, ACTUAL_MAX_NAME_LEN);
+        if (strlen(query) >= MAX_NAME_LEN || inputResult == -1) {
+            flushBuffer();
+        }
+        printf("\n");
+    }
+    chefSearchResult* searchResult = searchChefByName(chefList, listLen, query);
+    handleSearchResult(searchResult, chefList, listLen);
 
     pressEnterTo("return to the menu");
 }

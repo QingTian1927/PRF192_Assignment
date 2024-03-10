@@ -269,7 +269,7 @@ int setSearchProperties(
 }
 
 #include<stdio.h>
-chefSearchResult* handleSearchResult(
+chefSearchResult* processSearchResult(
     chefObj ** matchList,
     int matches,
     int queriedListLen
@@ -325,7 +325,7 @@ chefSearchResult* searchChefByName(chefObj ** chefList, int listLen, char* nameQ
         matches++;
     }
 
-    return handleSearchResult(matchList, matches, listLen);
+    return processSearchResult(matchList, matches, listLen);
 }
 
 chefSearchResult* searchChefBySalaryRange(
@@ -356,7 +356,7 @@ chefSearchResult* searchChefBySalaryRange(
         matches++;
     }
 
-    return handleSearchResult(matchList, matches, listLen);
+    return processSearchResult(matchList, matches, listLen);
 }
 
 int findChefOriginalIndex(chefObj ** chefList, int listLen, chefObj* queriedChef) {
