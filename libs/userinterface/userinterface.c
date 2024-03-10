@@ -58,8 +58,8 @@ int getStringInput(char* strPtr, int maxLen) {
             strPtr[len - 1] = '\0';
             return strlen(strPtr);
         }
+        return len;
     }
-
     return -1;
 }
 

@@ -44,7 +44,7 @@ int setName(chefObj* chefPtr, char* namePtr) {
     if (isInvalidString(namePtr, MAX_NAME_LEN)) { return SET_PROPERTY_FAIL; }
 
     formatName(namePtr);
-    strncpy(chefPtr->name, namePtr, MAX_NAME_LEN);
+    strncpy(chefPtr->name, namePtr, ACTUAL_MAX_NAME_LEN);
 
     return SET_PROPERTY_OKAY;
 }
@@ -60,7 +60,7 @@ int setRole(chefObj* chefPtr, char* rolePtr) {
 
     if (!isValidRole(rolePtr)) { return SET_PROPERTY_FAIL; }
 
-    strncpy(chefPtr->role, rolePtr, MAX_ROLE_LEN);
+    strncpy(chefPtr->role, rolePtr, ACTUAL_MAX_ROLE_LEN);
 
     return SET_PROPERTY_OKAY;
 }
@@ -83,7 +83,7 @@ int setDateOfBirth(chefObj* chefPtr, char* dateOfBirth) {
         return SET_PROPERTY_FAIL;
     }
 
-    strncpy(chefPtr->dateOfBirth, dateOfBirth, MAX_DATE_LEN);
+    strncpy(chefPtr->dateOfBirth, dateOfBirth, ACTUAL_MAX_DATE_LEN);
 
     return SET_PROPERTY_OKAY;
 }

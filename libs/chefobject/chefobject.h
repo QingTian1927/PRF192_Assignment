@@ -13,17 +13,22 @@
 // Not including null terminator
 #define MAX_NAME_LEN 30
 #define MAX_DATE_LEN 10
-#define MAX_ROLE_LEN 20
+#define MAX_ROLE_LEN 15
 #define MAX_SALARY 2000000000
 #define MAX_SALARY_LEN 10
+
+#define ACTUAL_MAX_NAME_LEN 31
+#define ACTUAL_MAX_DATE_LEN 11
+#define ACTUAL_MAX_ROLE_LEN 16
+#define ACTUAL_MAX_SALARY_LEN 11
 
 #define SET_PROPERTY_FAIL 0
 #define SET_PROPERTY_OKAY 1
 
 typedef struct {
-    char name[MAX_NAME_LEN];
-    char role[MAX_ROLE_LEN];
-    char dateOfBirth[MAX_DATE_LEN];
+    char name[ACTUAL_MAX_NAME_LEN];
+    char role[ACTUAL_MAX_ROLE_LEN];
+    char dateOfBirth[ACTUAL_MAX_DATE_LEN];
     long salary;
 } chefObj;
 

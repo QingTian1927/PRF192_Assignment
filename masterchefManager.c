@@ -274,6 +274,8 @@ chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option) {
         return NULL;
     }
 
+    printf("%p - %d\n", chefFile->chefList, chefFile->listLen);
+
     printf("> Successfully loaded a chef list from the specified file\n");
     pressEnterTo("continue to the main program");
 
@@ -399,116 +401,17 @@ void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
         return;
     }
 
-    int inputResult = 0;
-    int propertyResult = -1;
-    char name[MAX_NAME_LEN + 1];
+    editNameWrapper(chef);
+    printf("> NAME: %s\n\n", getName(chef));
 
-    while (inputResult <= 0 && propertyResult <= 0) {
-        if (inputResult == -1) {
-            printf("> Failed to register the chef's name!\n\n");
-            inputResult = 0;
-        }
-        else if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> You've entered an invalid name!\n\n");
-            propertyResult = -1;
-        }
+    editRoleWrapper(chef);
+    printf("> ROLE: %s\n\n", getRole(chef));
 
-        printf("Enter the name of the new chef [max %d characters]:\n", MAX_NAME_LEN);
-        printf("> ");
+    editDateWrapper(chef);
+    printf("> D.O.B: %s\n\n", getDateOfBirth(chef));
 
-        inputResult = getStringInput(name, MAX_NAME_LEN + 1);
-        propertyResult = setName(chef, name);
-        printf("\n");
-    }
-
-    propertyResult = -1;
-
-    while (propertyResult <= 0) {
-        if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> Failed to register the chef's role\n\n");
-            propertyResult = -1;
-        }
-
-        char* ROLES_TABLE[] = {
-            "APPRENTICE COOK",
-            "JUNIOR CHEF",
-            "SEASONED CHEF",
-            "MASTER CHEF"
-        };
-
-        printf("Assign the new chef one of the following roles:\n\n");
-        printf("1) %s\n", ROLES_TABLE[0]);
-        printf("2) %s\n", ROLES_TABLE[1]);
-        printf("3) %s\n", ROLES_TABLE[2]);
-        printf("4) %s\n\n", ROLES_TABLE[3]);
-
-        printf("Enter your choice:\n");
-        printf("> ");
-        char choice = getchar();
-        flushBuffer();
-        printf("\n");
-
-        switch (choice) {
-            case '1':
-                propertyResult = setRole(chef, ROLES_TABLE[0]);
-                break;
-            case '2':
-                propertyResult = setRole(chef, ROLES_TABLE[1]);
-                break;
-            case '3':
-                propertyResult = setRole(chef, ROLES_TABLE[2]);
-                break;
-            case '4':
-                propertyResult = setRole(chef, ROLES_TABLE[3]);
-                break;
-            default:
-                printf("> Please enter a valid option\n\n");
-        }
-    }
-
-    inputResult = 0;
-    propertyResult = -1;
-    char dob[MAX_DATE_LEN + 1];
-
-    while (inputResult <= 0 && propertyResult <= 0) {
-        if (inputResult == -1) {
-            printf("> Failed to register the chef's date of birth!\n\n");
-            inputResult = 0;
-        }
-        else if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> You've entered an invalid date!\n\n");
-            propertyResult = -1;
-        }
-
-        printf("Enter the date of birth of the new chef [YYYY-MM-DD]:\n");
-        printf("> ");
-
-        inputResult = getStringInput(dob, MAX_DATE_LEN + 1);
-        if (strlen(dob) != MAX_DATE_LEN) {
-            inputResult = -1;
-        }
-
-        propertyResult = setDateOfBirth(chef, dob);
-        printf("\n");
-    }
-
-    propertyResult = -1;
-    long salary;
-
-    while (propertyResult <= 0) {
-        if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> You've entered an invalid value!\n\n");
-            propertyResult = -1;
-        }
-        printf("Enter the salary of the new chef [max %d]:\n", MAX_SALARY);
-        printf("> ");
-
-        salary = getLongInput();
-        flushBuffer();
-
-        propertyResult = setSalary(chef, salary);
-        printf("\n");
-    }
+    editSalaryWrapper(chef);
+    printf("> SALARY: %ld\n\n", getSalary(chef));
 
     int listStatus = checkChefListStatus(chefList, listLen);
     if (listStatus == CHEFLIST_FULL) {
@@ -610,9 +513,9 @@ void totalSalaryWrapper(chefObj ** chefList, int listLen) {
 void editNameWrapper(chefObj* chefPtr) {
     int inputResult = 0;
     int propertyResult = -1;
-    char name[MAX_NAME_LEN + 1];
+    char name[ACTUAL_MAX_NAME_LEN];
 
-    while (inputResult <= 0 && propertyResult <= 0) {
+    while (propertyResult <= 0) {
         if (inputResult == -1) {
             printf("> Failed to register the chef's name!\n\n");
             inputResult = 0;
@@ -622,10 +525,14 @@ void editNameWrapper(chefObj* chefPtr) {
             propertyResult = -1;
         }
 
-        printf("Enter the new name for the chef [max %d characters]:\n", MAX_NAME_LEN);
+        printf("Enter the name of the chef [max %d characters]:\n", MAX_NAME_LEN);
         printf("> ");
 
-        inputResult = getStringInput(name, MAX_NAME_LEN + 1);
+        inputResult = getStringInput(name, ACTUAL_MAX_NAME_LEN);
+        if (strlen(name) >= MAX_NAME_LEN || inputResult == -1) {
+            flushBuffer();
+        }
+
         propertyResult = setName(chefPtr, name);
         printf("\n");
     }
@@ -647,7 +554,7 @@ void editRoleWrapper(chefObj* chefPtr) {
             "MASTER CHEF"
         };
 
-        printf("Assign the new chef one of the following roles:\n\n");
+        printf("Assign the chef one of the following roles:\n\n");
         printf("1) %s\n", ROLES_TABLE[0]);
         printf("2) %s\n", ROLES_TABLE[1]);
         printf("3) %s\n", ROLES_TABLE[2]);
@@ -680,9 +587,9 @@ void editRoleWrapper(chefObj* chefPtr) {
 void editDateWrapper(chefObj* chefPtr) {
     int inputResult = 0;
     int propertyResult = -1;
-    char dob[MAX_DATE_LEN + 1];
+    char dob[ACTUAL_MAX_DATE_LEN];
 
-    while (inputResult <= 0 && propertyResult <= 0) {
+    while (propertyResult <= 0) {
         if (inputResult == -1) {
             printf("> Failed to register the chef's date of birth!\n\n");
             inputResult = 0;
@@ -692,18 +599,17 @@ void editDateWrapper(chefObj* chefPtr) {
             propertyResult = -1;
         }
 
-        printf("Enter the date of birth of the new chef [YYYY-MM-DD]:\n");
+        printf("Enter the date of birth of the chef [YYYY-MM-DD]:\n");
         printf("> ");
 
-        inputResult = getStringInput(dob, MAX_DATE_LEN + 1);
-        if (strlen(dob) != MAX_DATE_LEN) {
-            inputResult = -1;
+        inputResult = getStringInput(dob, ACTUAL_MAX_DATE_LEN);
+        if (strlen(dob) >= MAX_DATE_LEN || inputResult == -1) {
+            flushBuffer();
         }
 
         propertyResult = setDateOfBirth(chefPtr, dob);
         printf("\n");
     }
-    flushBuffer();
 }
 
 void editSalaryWrapper(chefObj* chefPtr) {
@@ -715,7 +621,7 @@ void editSalaryWrapper(chefObj* chefPtr) {
             printf("> You've entered an invalid value!\n\n");
             propertyResult = -1;
         }
-        printf("Enter the salary of the new chef [max %d]:\n", MAX_SALARY);
+        printf("Enter the salary of the chef [max %d]:\n", MAX_SALARY);
         printf("> ");
 
         salary = getLongInput();
