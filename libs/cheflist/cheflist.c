@@ -178,7 +178,10 @@ chefObj ** copyChefList(chefObj ** sourcedList, int listLen) {
     int i;
     for (i = 0; i < listLen; i++) {
         chefObj* originalChef = sourcedList[i];
-        if (originalChef == NULL) { continue; }
+        if (originalChef == NULL) {
+            copiedList[i] = NULL;
+            continue;
+        }
 
         chefObj* copiedChef = newChef();
         if (copiedChef == NULL) {
@@ -212,8 +215,12 @@ chefObj ** orderBySalary(chefObj ** chefList, int listLen) {
     // Reverse selection sort.
     int i, j;
     for (i = 0; i < listLen; i++) {
+        if (sortedList[i] == NULL) { continue; }
         int maxIndex = i;
+
         for (j = i + 1; j < listLen; j++) {
+            if (sortedList[j] == NULL) { continue; }
+
             long comparedSalary = getSalary(sortedList[maxIndex]);
             long currentSalary = getSalary(sortedList[j]);
 
@@ -235,8 +242,12 @@ chefObj ** orderByName(chefObj ** chefList, int listLen) {
     // Selection sort.
     int i, j;
     for (i = 0; i < listLen; i++) {
+        if (sortedList[i] == NULL) { continue; }
         int minIndex = i;
+
         for (j = i + 1; j < listLen; j++) {
+            if (sortedList[j] == NULL) { continue; }
+
             char* comparedName = getName(sortedList[minIndex]);
             char* currentName = getName(sortedList[j]);
 
@@ -268,7 +279,6 @@ int setSearchProperties(
     return SET_PROPERTY_OKAY;
 }
 
-#include<stdio.h>
 chefSearchResult* processSearchResult(
     chefObj ** matchList,
     int matches,
