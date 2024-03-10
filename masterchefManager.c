@@ -283,8 +283,6 @@ chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option) {
         return NULL;
     }
 
-    printf("%p - %d\n", chefFile->chefList, chefFile->listLen);
-
     printf("> Successfully loaded a chef list from the specified file\n");
     pressEnterTo("continue to the main program");
 
@@ -411,16 +409,16 @@ void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
     }
 
     editNameWrapper(chef);
-    printf("> NAME: %s\n\n", getName(chef));
+    printf("-> NAME: %s\n\n", getName(chef));
 
     editRoleWrapper(chef);
-    printf("> ROLE: %s\n\n", getRole(chef));
+    printf("-> ROLE: %s\n\n", getRole(chef));
 
     editDateWrapper(chef);
-    printf("> D.O.B: %s\n\n", getDateOfBirth(chef));
+    printf("-> D.O.B: %s\n\n", getDateOfBirth(chef));
 
     editSalaryWrapper(chef);
-    printf("> SALARY: %ld\n\n", getSalary(chef));
+    printf("-> SALARY: %ld\n\n", getSalary(chef));
 
     int listStatus = checkChefListStatus(chefList, listLen);
     if (listStatus == CHEFLIST_FULL) {
@@ -428,7 +426,7 @@ void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
         chefObj ** resizedList = resizeChefList(chefList, listLen, newLen);
 
         if (resizedList == NULL) {
-            printf("Failed to resize the chef list for the new chef\n");
+            printf("Failed to resize the chef list for the new chef!\n");
             printf("Please try again later or restart the program.\n");
             pressEnterTo("return to the menu");
             free(chef);
@@ -436,20 +434,20 @@ void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
         }
 
         listLen = newLen;
-        *listLenPtr = listLen;
         chefList = resizedList;
-        *chefListPtr = chefList;
+        *listLenPtr = newLen;
+        *chefListPtr = resizedList;
     }
 
     int insertionResult = insertChefIntoList(chefList, listLen, chef);
     if (insertionResult == APPEND_CHEF_OKAY) {
-        printf("Successfully added the new chef to the list\n");
+        printf("Successfully added the new chef to the list!\n");
         pressEnterTo("return to the menu");
         return;
     }
 
     if (insertionResult == APPEND_CHEF_FAIL) {
-        printf("Failed to add the new chef to the list\n");
+        printf("Failed to add the new chef to the list!\n");
         printf("Please try again later or restart the program.\n");
         pressEnterTo("return to the menu");
         free(chef);
@@ -480,7 +478,7 @@ void removeChefWrapper(chefObj ** chefList, int listLen) {
     int position = 0;
     while (position <= 0) {
         if (position == -1) {
-            printf("> You've entered an invalid value!\n\n");
+            printf("-> You've entered an invalid value!\n\n");
             position = 0;
         }
         printf("Enter the number of the chef to be removed [1 -> %d]:\n", listLen);
@@ -498,7 +496,7 @@ void removeChefWrapper(chefObj ** chefList, int listLen) {
 
     shiftListLeft(chefList, listLen, index, 1);
 
-    printf("> Removed chef number %d from the list\n", position);
+    printf("-> Removed chef number %d from the list\n", position);
     pressEnterTo("return to continue");
 }
 
@@ -515,7 +513,7 @@ void totalSalaryWrapper(chefObj ** chefList, int listLen) {
     long long total = calculateChefTotalSalary(chefList, listLen);
 
     printf("The total salary of %d chef(s) is:\n\n", chefCount);
-    printf("> %lld\n", total);
+    printf("-> %lld\n", total);
     pressEnterTo("return to the menu");
 }
 
@@ -526,11 +524,11 @@ void editNameWrapper(chefObj* chefPtr) {
 
     while (propertyResult <= 0) {
         if (inputResult == -1) {
-            printf("> Failed to register the chef's name!\n\n");
+            printf("-> Failed to register the chef's name!\n\n");
             inputResult = 0;
         }
         else if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> You've entered an invalid name!\n\n");
+            printf("-> You've entered an invalid name!\n\n");
             propertyResult = -1;
         }
 
@@ -552,7 +550,7 @@ void editRoleWrapper(chefObj* chefPtr) {
 
     while (propertyResult <= 0) {
         if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> Failed to register the chef's role\n\n");
+            printf("-> Failed to register the chef's role\n\n");
             propertyResult = -1;
         }
 
@@ -588,7 +586,7 @@ void editRoleWrapper(chefObj* chefPtr) {
                 propertyResult = setRole(chefPtr, ROLES_TABLE[3]);
                 break;
             default:
-                printf("> Please enter a valid option\n\n");
+                printf("-> Please enter a valid option\n\n");
         }
     }
 }
@@ -600,11 +598,11 @@ void editDateWrapper(chefObj* chefPtr) {
 
     while (propertyResult <= 0) {
         if (inputResult == -1) {
-            printf("> Failed to register the chef's date of birth!\n\n");
+            printf("-> Failed to register the chef's date of birth!\n\n");
             inputResult = 0;
         }
         else if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> You've entered an invalid date!\n\n");
+            printf("-> You've entered an invalid date!\n\n");
             propertyResult = -1;
         }
 
@@ -627,7 +625,7 @@ void editSalaryWrapper(chefObj* chefPtr) {
 
     while (propertyResult <= 0) {
         if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> You've entered an invalid value!\n\n");
+            printf("-> You've entered an invalid value!\n\n");
             propertyResult = -1;
         }
         printf("Enter the salary of the chef [max %d]:\n", MAX_SALARY);
@@ -652,6 +650,8 @@ void editChefWrapper(chefObj ** chefList, int listLen) {
         return;
     }
 
+    printf("%p - %d\n", chefList, listLen);
+
     printf("Please find the number of the chef to be edited:\n\n");
 
     if (listLen <= DEFAULT_CHEFLIST_SIZE) {
@@ -664,7 +664,7 @@ void editChefWrapper(chefObj ** chefList, int listLen) {
     int position = 0;
     while (position <= 0) {
         if (position == -1) {
-            printf("> You've entered an invalid value!\n\n");
+            printf("-> You've entered an invalid value!\n\n");
             position = 0;
         }
         printf("Enter the number of the chef to be edited [1 -> %d]:\n", listLen);
@@ -733,13 +733,13 @@ void editChefWrapper(chefObj ** chefList, int listLen) {
 }
 
 void editListWrapper(chefObj *** chefListPtr, int* listLenPtr) {
-    chefObj ** chefList = *chefListPtr;
-    int listLen = *listLenPtr;
-
     int hasNotExited = 1;
     int isInvalidOption = 0;
 
     while (hasNotExited) {
+        chefObj ** chefList = *chefListPtr;
+        int listLen = *listLenPtr;
+
         clearScreen();
         printTitleCard();
 
@@ -833,7 +833,7 @@ void handleSearchResult(
         );
     }
     printf("\n");
-    printf("> Found a total of %d matching chef(s)\n", resultLen);
+    printf("-> Found a total of %d matching chef(s)\n", resultLen);
 
     free(maxLens);
     free(resultList);
@@ -850,9 +850,10 @@ void searchSalaryWrapper(chefObj ** chefList, int listLen) {
 
         minSalary = getLongInput();
         flushBuffer();
+        printf("\n");
 
         if (minSalary < 0 || minSalary > MAX_SALARY) {
-            printf("> You've entered an invalid value!\n\n");
+            printf("-> You've entered an invalid value!\n\n");
             minSalary = -1;
         }
     }
@@ -863,9 +864,10 @@ void searchSalaryWrapper(chefObj ** chefList, int listLen) {
 
         maxSalary = getLongInput();
         flushBuffer();
+        printf("\n");
 
         if (maxSalary < 0 || maxSalary > MAX_SALARY) {
-            printf("> You've entered an invalid value!\n\n");
+            printf("-> You've entered an invalid value!\n\n");
             maxSalary = -1;
         }
     }
@@ -884,7 +886,7 @@ void searchNameWrapper(chefObj ** chefList, int listLen) {
     int inputResult = 0;
     while (inputResult <= 0) {
         if (inputResult == -1) {
-            printf("> Failed to register the query!\n\n");
+            printf("-> Failed to register the query!\n\n");
             inputResult = 0;
         }
 
