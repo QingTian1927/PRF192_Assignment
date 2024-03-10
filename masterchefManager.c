@@ -79,6 +79,10 @@ void editChefWrapper(chefObj ** chefList, int* listLenPtr) {
     }
 }
 
+void removeChefWrapper(chefObj ** chefList, int listLen) {
+
+}
+
 void editListWrapper(chefObj *** chefListPtr, int* listLenPtr) {
     chefObj ** chefList = *chefListPtr;
     int listLen = *listLenPtr;
@@ -431,6 +435,9 @@ int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
 }
 
 void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
+    clearScreen();
+    printTitleCard();
+
     chefObj ** chefList = *chefListPtr;
     int listLen = *listLenPtr;
 
@@ -485,7 +492,8 @@ void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
         printf("3) %s\n", ROLES_TABLE[2]);
         printf("4) %s\n\n", ROLES_TABLE[3]);
 
-        printf("Enter your choice: ");
+        printf("Enter your choice:\n");
+        printf("> ");
         char choice = getchar();
         flushBuffer();
         printf("\n");
@@ -501,7 +509,7 @@ void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
                 propertyResult = setRole(chef, ROLES_TABLE[2]);
                 break;
             case '4':
-                propertyResult = setRole(chef, ROLES_TABLE[0]);
+                propertyResult = setRole(chef, ROLES_TABLE[3]);
                 break;
             default:
                 printf("> Please enter a valid option\n\n");
@@ -526,6 +534,10 @@ void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
         printf("> ");
 
         inputResult = getStringInput(dob, MAX_DATE_LEN + 1);
+        if (strlen(dob) != MAX_DATE_LEN) {
+            inputResult = -1;
+        }
+
         propertyResult = setDateOfBirth(chef, dob);
         printf("\n");
     }
@@ -535,7 +547,7 @@ void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
 
     while (propertyResult <= 0) {
         if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> You've entered an invalid date!\n\n");
+            printf("> You've entered an invalid value!\n\n");
             propertyResult = -1;
         }
         printf("Enter the salary of the new chef [max %d]:\n", MAX_SALARY);
