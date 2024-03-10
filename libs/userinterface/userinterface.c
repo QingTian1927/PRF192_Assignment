@@ -221,7 +221,10 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
             printf("\nPress <ENTER> to continue or type 'q' to exit the pager: ");
 
             char choice = lower(getchar());
-            if (choice == 'q') { break; }
+            if (choice == 'q') {
+                flushBuffer();
+                break;
+            }
             else if (choice != '\n') { flushBuffer(); }
 
             printf("\n");
