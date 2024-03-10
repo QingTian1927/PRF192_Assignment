@@ -27,6 +27,9 @@
 #define ENABLE_PAGER 1
 #define DEFAULT_PAGE_SIZE 10
 
+#define KEY_NAME 'n'
+#define KEY_SALARY 's'
+
 #define STANDARD_PROMPT "Enter your choice: "
 #define INVALID_PROMPT "Invalid option. Please try again: "
 #define INVALID_YESNO_PROMPT "Invalid option. Please try again [y/n]: "
@@ -57,10 +60,12 @@ void printHorizontalDivider(const char* ch, int maxLineLen);
 void printTableHeader(maxLenObj* maxLens);
 
 void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager);
+void printSortedChefList(chefObj ** chefList, int listLen, int enablePager, char sortKey);
 
 void pressEnterTo(const char* prompt);
-
 void printTitleCard(void);
+
+void printDisplaySubmenu(const char* prompt);
 
 void printEditChefSubmenu(const char* prompt);
 void printEditListSubmenu(const char* prompt);

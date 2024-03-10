@@ -147,26 +147,47 @@ short int getMaxLineLen(maxLenObj* maxLens) {
     if (maxLens == NULL) { return 0; }
 
     short int extraSpace = MARGIN_LEN + VERTICAL_DIVIDER_LEN + MARGIN_LEN;
-    short int result = (
-        maxLens->maxPosLen + extraSpace +
-        maxLens->maxNameLen + extraSpace +
-        maxLens->maxRoleLen + extraSpace +
-        maxLens->maxDobLen + extraSpace +
-        maxLens->maxSalLen - 1
-    );
+    short int result;
+
+    if (maxLens->maxPosLen > 0) {
+        result = (
+            maxLens->maxPosLen + extraSpace +
+            maxLens->maxNameLen + extraSpace +
+            maxLens->maxRoleLen + extraSpace +
+            maxLens->maxDobLen + extraSpace +
+            maxLens->maxSalLen - 1
+        );
+    } else {
+        result = (
+            maxLens->maxNameLen + extraSpace +
+            maxLens->maxRoleLen + extraSpace +
+            maxLens->maxDobLen + extraSpace +
+            maxLens->maxSalLen - 1
+        );
+    }
 
     return result;
 }
 
 void printTableHeader(maxLenObj* maxLens) {
-    printf(
-        "%-*s | %-*s | %-*s | %-*s | %-*s\n",
-        maxLens->maxPosLen, POS_LABEL,
-        maxLens->maxNameLen, NAME_LABEL,
-        maxLens->maxRoleLen, ROLE_LABEL,
-        maxLens->maxDobLen, DOB_LABEL,
-        maxLens->maxSalLen, SAL_LABEL
-    );
+    if (maxLens->maxPosLen > 0) {
+        printf(
+            "%-*s | %-*s | %-*s | %-*s | %-*s\n",
+            maxLens->maxPosLen, POS_LABEL,
+            maxLens->maxNameLen, NAME_LABEL,
+            maxLens->maxRoleLen, ROLE_LABEL,
+            maxLens->maxDobLen, DOB_LABEL,
+            maxLens->maxSalLen, SAL_LABEL
+        );
+    } else {
+        printf(
+            "%-*s | %-*s | %-*s | %-*s\n",
+            maxLens->maxNameLen, NAME_LABEL,
+            maxLens->maxRoleLen, ROLE_LABEL,
+            maxLens->maxDobLen, DOB_LABEL,
+            maxLens->maxSalLen, SAL_LABEL
+        );
+    }
 }
 
 void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
@@ -237,6 +258,97 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
     free(maxLens);
 }
 
+void printSortedChefList(
+    chefObj ** chefList,
+    int listLen,
+    int enablePager,
+    char sortKey
+) {
+    if (chefList == NULL || listLen <= 0) {
+        printf("Encountered an error while trying to display chef list.\n");
+        printf("Please try again.\n");
+        return;
+    }
+
+    chefObj ** workList = NULL;
+
+    switch (sortKey) {
+        case KEY_NAME:
+            workList = orderByName(chefList, listLen);
+            break;
+        case KEY_SALARY:
+            workList = orderBySalary(chefList, listLen);
+            break;
+        default:
+            workList = chefList;
+    }
+
+    if (workList == NULL) {
+        printf("Encountered an error while trying to display chef list.\n");
+        printf("Please try again.\n");
+        return;
+    }
+
+    short int maxNameLen, maxRoleLen, maxSalLen, maxDobLen;
+
+    maxLenObj* maxLens = getPropertiesMaxLen(workList, listLen);
+    int maxLensResult = handleMaxLens(maxLens, listLen);
+
+    if (maxLensResult == MAXLENS_LIST_EMPTY) {
+        printf("The list is empty ...\n");
+        free(maxLens);
+        return;
+    }
+
+    maxNameLen = maxLens->maxNameLen;
+    maxRoleLen = maxLens->maxRoleLen;
+    maxSalLen = maxLens->maxSalLen;
+    maxDobLen = maxLens->maxDobLen;
+    maxLens->maxPosLen = 0;
+
+    short int maxLineLen = getMaxLineLen(maxLens);
+
+    printTableHeader(maxLens);
+    printHorizontalDivider("-", maxLineLen);
+
+    int i;
+    for (i = 0; i < listLen; i++) {
+        if (workList[i] == NULL) { continue; }
+
+        char* name = getName(workList[i]);
+        char* role = getRole(workList[i]);
+        char* dob = getDateOfBirth(workList[i]);
+        long sal = getSalary(workList[i]);
+
+        printf(
+            "%-*s | %-*s | %*s | %*ld\n",
+            maxNameLen, name,
+            maxRoleLen, role,
+            maxDobLen, dob,
+            maxSalLen, sal
+        );
+
+        if (enablePager && (i % DEFAULT_PAGE_SIZE == 0 && i > 0)) {
+            printf("\nPress <ENTER> to continue or type 'q' to exit the pager: ");
+
+            char choice = lower(getchar());
+            if (choice == 'q') {
+                flushBuffer();
+                break;
+            }
+            else if (choice != '\n') { flushBuffer(); }
+
+            printf("\n");
+
+            printTableHeader(maxLens);
+            printHorizontalDivider("-", maxLineLen);
+        }
+    }
+
+    if (workList != chefList) { free(workList); }
+    free(maxLens);
+}
+
 void pressEnterTo(const char* prompt) {
     printf("\nPress <Enter> to %s: ", prompt);
     getchar();
@@ -246,6 +358,14 @@ void printTitleCard(void) {
     printf("--------------------------------------------\n");
     printf("***** MASTERCHEFS MANAGEMENT SOFTWARE ******\n");
     printf("--------------------------------------------\n\n");
+}
+
+void printDisplaySubmenu(const char* prompt) {
+    printf("1) Display actual chef list\n");
+    printf("2) Display chef list alphabetically\n");
+    printf("3) Display chef list based on salary\n");
+    printf("0) Return to main menu\n\n");
+    printf("%s", prompt);
 }
 
 void printEditChefSubmenu(const char* prompt) {

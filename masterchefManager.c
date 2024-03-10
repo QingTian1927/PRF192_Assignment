@@ -31,6 +31,10 @@
 #define SEARCH_NAME '1'
 #define SEARCH_SALARY '2'
 
+#define DISPLAY_ACTUAL '1'
+#define DISPLAY_NAME '2'
+#define DISPLAY_SALARY '3'
+
 #define LOAD_FILE_MANUAL 0
 #define LOAD_FILE_STARTUP 1
 
@@ -42,7 +46,6 @@ chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option);
 int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen);
 void manualSaveHandler(char* fileName, chefObj ** chefList, int listLen, int* modStatusPtr);
 
-void displayChefsWrapper(chefObj ** chefList, int listLen);
 void totalSalaryWrapper(chefObj ** chefList, int listLen);
 
 void editListWrapper(chefObj *** chefListPtr, int* listLenPtr);
@@ -59,6 +62,10 @@ void searchChefsWrapper(chefObj ** chefList, int listLen);
 void searchNameWrapper(chefObj ** chefList, int listLen);
 void searchSalaryWrapper(chefObj ** chefList, int listLen);
 void handleSearchResult(chefSearchResult* searchResult, chefObj ** chefList, int listLen);
+
+void displayChefsWrapper(chefObj ** chefList, int listLen);
+void displayActualWrapper(chefObj ** chefList, int listLen);
+void displaySortedWrapper(chefObj ** chefList, int listLen, char sortKey);
 
 int main() {
     chefObj ** chefList = NULL;
@@ -184,46 +191,6 @@ int main() {
     }
 
     exit(EXIT_SUCCESS);
-}
-
-void displayChefsWrapper(chefObj ** chefList, int listLen) {
-    int isInvalidOption = 0;
-    int pagerOption = -1;
-
-    if (listLen <= DEFAULT_PAGE_SIZE) {
-        pagerOption = DISABLE_PAGER;
-        clearScreen();
-        printTitleCard();
-    }
-
-    while (pagerOption == -1) {
-        clearScreen();
-        printTitleCard();
-
-        if (isInvalidOption == 0) {
-            printf("Do you wish to view the entire chef list at once? [y/n]: ");
-        } else {
-            printf("%s", INVALID_YESNO_PROMPT);
-            isInvalidOption = 0;
-        }
-        char choice = lower(getchar());
-        flushBuffer();
-
-        switch (choice) {
-            case 'y':
-                pagerOption = DISABLE_PAGER;
-                break;
-            case 'n':
-                pagerOption = ENABLE_PAGER;
-                break;
-            default:
-                isInvalidOption = 1;
-        }
-    }
-    if (listLen > DEFAULT_PAGE_SIZE) { printf("\n"); }
-
-    printUnsortedChefList(chefList, listLen, pagerOption);
-    pressEnterTo("continue to the main program");
 }
 
 chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option) {
@@ -955,6 +922,124 @@ void searchChefsWrapper(chefObj ** chefList, int listLen) {
                 break;
             case SEARCH_SALARY:
                 searchSalaryWrapper(chefList, listLen);
+                break;
+            case EXIT_MENU:
+                hasNotExited = 0;
+                break;
+            default:
+                isInvalidOption = 1;
+        }
+    }
+}
+
+void displayActualWrapper(chefObj ** chefList, int listLen) {
+    int isInvalidOption = 0;
+    int pagerOption = -1;
+
+    if (listLen <= DEFAULT_PAGE_SIZE) {
+        pagerOption = DISABLE_PAGER;
+        clearScreen();
+        printTitleCard();
+    }
+
+    while (pagerOption == -1) {
+        clearScreen();
+        printTitleCard();
+
+        if (isInvalidOption == 0) {
+            printf("Do you wish to view the entire chef list at once? [y/n]: ");
+        } else {
+            printf("%s", INVALID_YESNO_PROMPT);
+            isInvalidOption = 0;
+        }
+        char choice = lower(getchar());
+        flushBuffer();
+
+        switch (choice) {
+            case 'y':
+                pagerOption = DISABLE_PAGER;
+                break;
+            case 'n':
+                pagerOption = ENABLE_PAGER;
+                break;
+            default:
+                isInvalidOption = 1;
+        }
+    }
+    if (listLen > DEFAULT_PAGE_SIZE) { printf("\n"); }
+
+    printUnsortedChefList(chefList, listLen, pagerOption);
+    pressEnterTo("continue to the main program");
+}
+
+void displaySortedWrapper(chefObj ** chefList, int listLen, char sortKey) {
+    int isInvalidOption = 0;
+    int pagerOption = -1;
+
+    if (listLen <= DEFAULT_PAGE_SIZE) {
+        pagerOption = DISABLE_PAGER;
+        clearScreen();
+        printTitleCard();
+    }
+
+    while (pagerOption == -1) {
+        clearScreen();
+        printTitleCard();
+
+        if (isInvalidOption == 0) {
+            printf("Do you wish to view the entire chef list at once? [y/n]: ");
+        } else {
+            printf("%s", INVALID_YESNO_PROMPT);
+            isInvalidOption = 0;
+        }
+        char choice = lower(getchar());
+        flushBuffer();
+
+        switch (choice) {
+            case 'y':
+                pagerOption = DISABLE_PAGER;
+                break;
+            case 'n':
+                pagerOption = ENABLE_PAGER;
+                break;
+            default:
+                isInvalidOption = 1;
+        }
+    }
+    if (listLen > DEFAULT_PAGE_SIZE) { printf("\n"); }
+
+    printSortedChefList(chefList, listLen, pagerOption, sortKey);
+    pressEnterTo("continue to the main program");
+}
+
+void displayChefsWrapper(chefObj ** chefList, int listLen) {
+    int hasNotExited = 1;
+    int isInvalidOption = 0;
+
+    while (hasNotExited) {
+        clearScreen();
+        printTitleCard();
+
+        if (isInvalidOption == 0) {
+            printDisplaySubmenu(STANDARD_PROMPT);
+        } else {
+            printDisplaySubmenu(INVALID_PROMPT);
+            isInvalidOption = 0;
+        }
+
+        char choice = getchar();
+        flushBuffer();
+        printf("\n");
+
+        switch (choice) {
+            case DISPLAY_ACTUAL:
+                displayActualWrapper(chefList, listLen);
+                break;
+            case DISPLAY_NAME:
+                displaySortedWrapper(chefList, listLen, KEY_NAME);
+                break;
+            case DISPLAY_SALARY:
+                displaySortedWrapper(chefList, listLen, KEY_SALARY);
                 break;
             case EXIT_MENU:
                 hasNotExited = 0;
