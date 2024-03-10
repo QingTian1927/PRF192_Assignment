@@ -38,6 +38,7 @@ chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option);
 int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen);
 
 void displayChefsWrapper(chefObj ** chefList, int listLen);
+void totalSalaryWrapper(chefObj ** chefList, int listLen);
 
 void editListWrapper(chefObj *** chefListPtr, int* listLenPtr);
 void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr);
@@ -170,6 +171,7 @@ int main() {
                 hasModifiedList = 1;
                 break;
             case RUN_CALCULATIONS:
+                totalSalaryWrapper(chefList, listLen);
                 break;
             case MANUAL_SAVE:
                 saveResult = saveFileWrapper(fileName, chefList, listLen);
@@ -599,7 +601,7 @@ void removeChefWrapper(chefObj ** chefList, int listLen) {
 
     int chefCount = countChefsInList(chefList, listLen);
     if (chefCount == 0) {
-        printf("Cannot remove any chef as the list is empty\n");
+        printf("Cannot remove any chef as the list is empty ...\n");
         pressEnterTo("return to the menu");
         return;
     }
@@ -631,4 +633,21 @@ void removeChefWrapper(chefObj ** chefList, int listLen) {
 
     printf("> Removed chef number %d from the list\n", position);
     pressEnterTo("return to continue");
+}
+
+void totalSalaryWrapper(chefObj ** chefList, int listLen) {
+    clearScreen();
+    printTitleCard();
+
+    int chefCount = countChefsInList(chefList, listLen);
+    if (chefCount == 0) {
+        printf("Cannot perform calculation as the list is empty ...\n");
+        pressEnterTo("return to the menu");
+        return;
+    }
+    long long total = calculateChefTotalSalary(chefList, listLen);
+
+    printf("The total salary of %d chef(s) is:\n\n", chefCount);
+    printf("> %lld\n", total);
+    pressEnterTo("return to the menu");
 }
