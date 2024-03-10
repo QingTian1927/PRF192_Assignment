@@ -265,6 +265,13 @@ void printEditListSubmenu(const char* prompt) {
     printf("%s", prompt);
 }
 
+void printSearchSubmenu(const char* prompt) {
+    printf("1) Search for chefs by name\n");
+    printf("2) Search for chefs by salary range\n");
+    printf("0) Return to main menu\n\n");
+    printf("%s", prompt);
+}
+
 void printMainMenu(const char* prompt) {
     printf("1) Display the list of chefs\n");
     printf("2) Search for specific chefs\n");

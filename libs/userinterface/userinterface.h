@@ -63,6 +63,7 @@ void printTitleCard(void);
 
 void printEditChefSubmenu(const char* prompt);
 void printEditListSubmenu(const char* prompt);
+void printSearchSubmenu(const char* prompt);
 
 void printMainMenu(const char* prompt);
 
