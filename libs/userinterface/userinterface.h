@@ -44,6 +44,8 @@ void flushBuffer(void);
 void clearScreen(void);
 
 int getIntInput(void);
+long getLongInput(void);
+
 double getDoubleInput(void);
 int getStringInput(char* strPtr, int maxLen);
 

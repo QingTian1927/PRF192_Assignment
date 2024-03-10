@@ -33,6 +33,15 @@ int getIntInput(void) {
     return num;
 }
 
+long getLongInput(void) {
+    long num;
+    while (scanf(" %ld", &num) != 1) {
+        printf("Invalid input. Please try again: ");
+        flushBuffer();
+    }
+    return num;
+}
+
 double getDoubleInput(void) {
     double num;
     while (scanf(" %lf", &num) != 1) {
