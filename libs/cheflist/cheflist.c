@@ -318,8 +318,8 @@ chefSearchResult* searchChefByName(chefObj ** chefList, int listLen, char* nameQ
         strncpy(currentName, getName(chefList[i]), ACTUAL_MAX_NAME_LEN);
         lowerStr(currentName, strlen(currentName));
 
-        int matchNameResult = strncmp(currentName, nameQuery, MAX_NAME_LEN);
-        if (matchNameResult != 0) { continue; }
+        char* matchNameResult = strstr(currentName, nameQuery);
+        if (matchNameResult == NULL) { continue; }
 
         insertChefIntoList(matchList, listLen, chefList[i]);
         matches++;
@@ -348,8 +348,8 @@ chefSearchResult* searchChefBySalaryRange(
         if (chefList[i] == NULL) { continue; }
 
         long currentSalary = getSalary(chefList[i]);
-        int isMatchingSalary = currentSalary >= minSalary && currentSalary <= maxSalary;
 
+        int isMatchingSalary = currentSalary >= minSalary && currentSalary <= maxSalary;
         if (isMatchingSalary == 0) { continue; }
 
         insertChefIntoList(matchList, listLen, chefList[i]);

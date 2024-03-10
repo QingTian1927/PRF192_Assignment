@@ -117,7 +117,8 @@ void searchNameWrapper(chefObj ** chefList, int listLen) {
         char* role = getRole(currentChef);
         char* dob = getDateOfBirth(currentChef);
         long sal = getSalary(currentChef);
-        int pos = findChefOriginalIndex(chefList, listLen, currentChef);
+        int idx = findChefOriginalIndex(chefList, listLen, currentChef);
+        int pos = idx + 1;
 
         printf(
             "%0*d | %-*s | %-*s | %*s | %*ld\n",
