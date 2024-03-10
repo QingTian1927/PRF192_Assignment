@@ -54,131 +54,10 @@ void editRoleWrapper(chefObj* chefPtr);
 void editDateWrapper(chefObj* chefPtr);
 void editSalaryWrapper(chefObj* chefPtr);
 
-void handleSearchResult(
-    chefSearchResult* searchResult,
-    chefObj ** chefList,
-    int listLen
-) {
-    if (searchResult == NULL) {
-        printf("Experienced an error while trying to initiate search\n");
-        printf("Please try again or restart the program\n");
-        pressEnterTo("return to the menu");
-        return;
-    }
-
-    chefObj ** resultList = searchResult->resultList;
-    int resultLen = searchResult->resultLen;
-
-    if (resultList == NULL || resultLen <= 0) {
-        printf("Could not find any chefs with matching information.\n");
-        pressEnterTo("continue");
-        free(resultList);
-        free(searchResult);
-        return;
-    }
-
-    short int maxNameLen, maxRoleLen, maxSalLen, maxDobLen, maxPosLen;
-
-    maxLenObj* maxLens = getPropertiesMaxLen(resultList, resultLen);
-    handleMaxLens(maxLens, resultLen);
-
-    maxNameLen = maxLens->maxNameLen;
-    maxRoleLen = maxLens->maxRoleLen;
-    maxSalLen = maxLens->maxSalLen;
-    maxDobLen = maxLens->maxDobLen;
-    maxPosLen = maxLens->maxPosLen;
-
-    short int maxLineLen = getMaxLineLen(maxLens);
-
-    printTableHeader(maxLens);
-    printHorizontalDivider("-", maxLineLen);
-
-    int i;
-    for (i = 0; i < resultLen; i++) {
-        chefObj* currentChef = resultList[i];
-
-        char* name = getName(currentChef);
-        char* role = getRole(currentChef);
-        char* dob = getDateOfBirth(currentChef);
-        long sal = getSalary(currentChef);
-        int idx = findChefOriginalIndex(chefList, listLen, currentChef);
-        int pos = idx + 1;
-
-        printf(
-            "%0*d | %-*s | %-*s | %*s | %*ld\n",
-            maxPosLen, pos,
-            maxNameLen, name,
-            maxRoleLen, role,
-            maxDobLen, dob,
-            maxSalLen, sal
-        );
-    }
-    printf("\n");
-    printf("> Found a total of %d matching chef(s)\n", resultLen);
-
-    free(maxLens);
-    free(resultList);
-    free(searchResult);
-}
-
-void searchNameWrapper(chefObj ** chefList, int listLen) {
-    char query[ACTUAL_MAX_NAME_LEN];
-
-    int inputResult = 0;
-    while (inputResult <= 0) {
-        if (inputResult == -1) {
-            printf("> Failed to register the query!\n\n");
-            inputResult = 0;
-        }
-
-        printf("Enter the name of the chef to be searched [max %d characters]:\n", MAX_NAME_LEN);
-        printf("> ");
-
-        inputResult = getStringInput(query, ACTUAL_MAX_NAME_LEN);
-        if (strlen(query) >= MAX_NAME_LEN || inputResult == -1) {
-            flushBuffer();
-        }
-        printf("\n");
-    }
-    chefSearchResult* searchResult = searchChefByName(chefList, listLen, query);
-    handleSearchResult(searchResult, chefList, listLen);
-
-    pressEnterTo("return to the menu");
-}
-
-void searchChefsWrapper(chefObj ** chefList, int listLen) {
-    int hasNotExited = 1;
-    int isInvalidOption = 0;
-
-    while (hasNotExited) {
-        clearScreen();
-        printTitleCard();
-
-        if (isInvalidOption == 0) {
-            printSearchSubmenu(STANDARD_PROMPT);
-        } else {
-            printSearchSubmenu(INVALID_PROMPT);
-            isInvalidOption = 0;
-        }
-
-        char choice = getchar();
-        flushBuffer();
-        printf("\n");
-
-        switch (choice) {
-            case SEARCH_NAME:
-                searchNameWrapper(chefList, listLen);
-                break;
-            case SEARCH_SALARY:
-                break;
-            case EXIT_MENU:
-                hasNotExited = 0;
-                break;
-            default:
-                isInvalidOption = 1;
-        }
-    }
-}
+void searchChefsWrapper(chefObj ** chefList, int listLen);
+void searchNameWrapper(chefObj ** chefList, int listLen);
+void searchSalaryWrapper(chefObj ** chefList, int listLen);
+void handleSearchResult(chefSearchResult* searchResult, chefObj ** chefList, int listLen);
 
 int main() {
     chefObj ** chefList = NULL;
@@ -884,6 +763,171 @@ void editListWrapper(chefObj *** chefListPtr, int* listLenPtr) {
                 break;
             case REMOVE_CHEF:
                 removeChefWrapper(chefList, listLen);
+                break;
+            case EXIT_MENU:
+                hasNotExited = 0;
+                break;
+            default:
+                isInvalidOption = 1;
+        }
+    }
+}
+
+void handleSearchResult(
+    chefSearchResult* searchResult,
+    chefObj ** chefList,
+    int listLen
+) {
+    if (searchResult == NULL) {
+        printf("Experienced an error while trying to initiate search\n");
+        printf("Please try again or restart the program\n");
+        pressEnterTo("return to the menu");
+        return;
+    }
+
+    chefObj ** resultList = searchResult->resultList;
+    int resultLen = searchResult->resultLen;
+
+    if (resultList == NULL || resultLen <= 0) {
+        printf("Could not find any chefs with matching information.\n");
+        pressEnterTo("continue");
+        free(resultList);
+        free(searchResult);
+        return;
+    }
+
+    short int maxNameLen, maxRoleLen, maxSalLen, maxDobLen, maxPosLen;
+
+    maxLenObj* maxLens = getPropertiesMaxLen(resultList, resultLen);
+    handleMaxLens(maxLens, resultLen);
+
+    maxNameLen = maxLens->maxNameLen;
+    maxRoleLen = maxLens->maxRoleLen;
+    maxSalLen = maxLens->maxSalLen;
+    maxDobLen = maxLens->maxDobLen;
+    maxPosLen = maxLens->maxPosLen;
+
+    short int maxLineLen = getMaxLineLen(maxLens);
+
+    printTableHeader(maxLens);
+    printHorizontalDivider("-", maxLineLen);
+
+    int i;
+    for (i = 0; i < resultLen; i++) {
+        chefObj* currentChef = resultList[i];
+
+        char* name = getName(currentChef);
+        char* role = getRole(currentChef);
+        char* dob = getDateOfBirth(currentChef);
+        long sal = getSalary(currentChef);
+        int idx = findChefOriginalIndex(chefList, listLen, currentChef);
+        int pos = idx + 1;
+
+        printf(
+            "%0*d | %-*s | %-*s | %*s | %*ld\n",
+            maxPosLen, pos,
+            maxNameLen, name,
+            maxRoleLen, role,
+            maxDobLen, dob,
+            maxSalLen, sal
+        );
+    }
+    printf("\n");
+    printf("> Found a total of %d matching chef(s)\n", resultLen);
+
+    free(maxLens);
+    free(resultList);
+    free(searchResult);
+}
+
+void searchSalaryWrapper(chefObj ** chefList, int listLen) {
+    long minSalary = -1;
+    long maxSalary = -1;
+
+    while (minSalary == -1) {
+        printf("Enter the minimum salary to be searched [max %d]:\n", MAX_SALARY);
+        printf("> ");
+
+        minSalary = getLongInput();
+        flushBuffer();
+
+        if (minSalary < 0 || minSalary > MAX_SALARY) {
+            printf("> You've entered an invalid value!\n\n");
+            minSalary = -1;
+        }
+    }
+
+    while (maxSalary == -1) {
+        printf("Enter the maximum salary to be searched [max %d]:\n", MAX_SALARY);
+        printf("> ");
+
+        maxSalary = getLongInput();
+        flushBuffer();
+
+        if (maxSalary < 0 || maxSalary > MAX_SALARY) {
+            printf("> You've entered an invalid value!\n\n");
+            maxSalary = -1;
+        }
+    }
+
+    chefSearchResult* searchResult = searchChefBySalaryRange(
+        chefList, listLen, minSalary, maxSalary
+    );
+    handleSearchResult(searchResult, chefList, listLen);
+
+    pressEnterTo("return to the menu");
+}
+
+void searchNameWrapper(chefObj ** chefList, int listLen) {
+    char query[ACTUAL_MAX_NAME_LEN];
+
+    int inputResult = 0;
+    while (inputResult <= 0) {
+        if (inputResult == -1) {
+            printf("> Failed to register the query!\n\n");
+            inputResult = 0;
+        }
+
+        printf("Enter the name of the chef to be searched [max %d characters]:\n", MAX_NAME_LEN);
+        printf("> ");
+
+        inputResult = getStringInput(query, ACTUAL_MAX_NAME_LEN);
+        if (strlen(query) >= MAX_NAME_LEN || inputResult == -1) {
+            flushBuffer();
+        }
+        printf("\n");
+    }
+    chefSearchResult* searchResult = searchChefByName(chefList, listLen, query);
+    handleSearchResult(searchResult, chefList, listLen);
+
+    pressEnterTo("return to the menu");
+}
+
+void searchChefsWrapper(chefObj ** chefList, int listLen) {
+    int hasNotExited = 1;
+    int isInvalidOption = 0;
+
+    while (hasNotExited) {
+        clearScreen();
+        printTitleCard();
+
+        if (isInvalidOption == 0) {
+            printSearchSubmenu(STANDARD_PROMPT);
+        } else {
+            printSearchSubmenu(INVALID_PROMPT);
+            isInvalidOption = 0;
+        }
+
+        char choice = getchar();
+        flushBuffer();
+        printf("\n");
+
+        switch (choice) {
+            case SEARCH_NAME:
+                searchNameWrapper(chefList, listLen);
+                break;
+            case SEARCH_SALARY:
+                searchSalaryWrapper(chefList, listLen);
                 break;
             case EXIT_MENU:
                 hasNotExited = 0;
