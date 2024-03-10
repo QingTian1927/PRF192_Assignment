@@ -75,6 +75,11 @@ void shiftListLeft(
     for (i = startIndex; i < listLen - shiftInterval; i++) {
         chefList[i] = chefList[i + shiftInterval];
     }
+
+    // Set duplicates of existing chefs to NULL
+    for (i = listLen - shiftInterval; i < listLen; i++) {
+        chefList[i] = NULL;
+    }
 }
 
 int checkChefListStatus(chefObj ** chefList, int listLen) {
