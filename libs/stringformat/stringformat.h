@@ -13,6 +13,7 @@ char lower(char ch);
 int isWhiteSpace(char ch);
 
 void capitalizeString(char* str, int len);
+void lowerStr(char* str, int len);
 
 int trimLeft(char* str, int len);
 int trimRight(char* str, int len);

@@ -149,6 +149,13 @@ void upper1stltr(char arr[]){
 
 */
 
+void lowerStr(char* str, int len) {
+    int i;
+    for (i = 0; i <= len; i++) {
+        str[i] = lower(str[i]);
+    }
+}
+
 int trimLeft(char* str, int len) {
     if (str == NULL || len == 0) {
         return 0;
