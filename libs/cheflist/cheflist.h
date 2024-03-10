@@ -34,6 +34,13 @@ chefObj* newChef(void);
 chefObj* copyChef(chefObj* chefPtr);
 void deleteChef(chefObj ** chefPtrPtr);
 
+void shiftListLeft(
+    chefObj ** chefList,
+    int listLen,
+    int startIndex,
+    int shiftInterval
+);
+
 int checkChefListStatus(chefObj ** chefList, int listLen);
 int checkListEmpty(chefObj ** chefList, int listLen);
 int insertChefIntoList(chefObj ** chefList, int listLen, chefObj* chefPtr);

@@ -52,12 +52,29 @@ chefObj* copyChef(chefObj* chefPtr) {
 
 void deleteChef(chefObj ** chefPtrPtr) {
     chefObj* chefPtr = *chefPtrPtr;
-    if (chefPtr == NULL || chefPtrPtr == NULL) {
-        return;
-    }
+    if (chefPtr == NULL || chefPtrPtr == NULL) { return; }
 
     free(chefPtr);
     *chefPtrPtr = NULL;
+}
+
+void shiftListLeft(
+    chefObj ** chefList,
+    int listLen,
+    int startIndex,
+    int shiftInterval
+) {
+    int isFailCondition = (
+        chefList == NULL || listLen <= 0 ||
+        startIndex < 0 || startIndex >= listLen ||
+        shiftInterval <= 0
+    );
+    if (isFailCondition) { return; }
+
+    int i;
+    for (i = startIndex; i < listLen - shiftInterval; i++) {
+        chefList[i] = chefList[i + shiftInterval];
+    }
 }
 
 int checkChefListStatus(chefObj ** chefList, int listLen) {
