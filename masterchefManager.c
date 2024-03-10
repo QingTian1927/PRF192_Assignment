@@ -607,7 +607,12 @@ void removeChefWrapper(chefObj ** chefList, int listLen) {
     }
 
     printf("Please find the number of the chef to be removed from the list:\n\n");
-    printUnsortedChefList(chefList, listLen, ENABLE_PAGER);
+
+    if (listLen <= DEFAULT_CHEFLIST_SIZE) {
+        printUnsortedChefList(chefList, listLen, DISABLE_PAGER);
+    } else {
+        printUnsortedChefList(chefList, listLen, ENABLE_PAGER);
+    }
     printf("\n");
 
     int position = 0;
