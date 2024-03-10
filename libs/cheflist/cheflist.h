@@ -8,6 +8,7 @@
 #define _CHEFLIST_H_
 
 #include "../chefobject/chefobject.h"
+#include "../stringformat/stringformat.h"
 
 #define MAX_CHEFS 100
 #define DEFAULT_CHEFLIST_SIZE 10
@@ -62,5 +63,7 @@ chefSearchResult* searchChefBySalaryRange(
     long minSalary,
     long maxSalary
 );
+
+int findChefOriginalIndex(chefObj ** chefList, int listLen, chefObj* queriedChef);
 
 #endif

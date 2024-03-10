@@ -258,7 +258,7 @@ int setSearchProperties(
     chefObj ** chefList,
     int listLen
 ) {
-    if (searchResult == NULL || chefList == NULL || listLen <= 0) {
+    if (searchResult == NULL) {
         return SET_PROPERTY_FAIL;
     }
 
@@ -268,20 +268,15 @@ int setSearchProperties(
     return SET_PROPERTY_OKAY;
 }
 
+#include<stdio.h>
 chefSearchResult* handleSearchResult(
     chefObj ** matchList,
     int matches,
     int queriedListLen
 ) {
-    chefSearchResult* searchResult = malloc(sizeof(chefSearchResult));
-    if (searchResult == NULL) {
+    chefSearchResult* searchResult = calloc(1, sizeof(chefSearchResult));
+    if (searchResult == NULL || matches <= 0) {
         free(matchList);
-        return NULL;
-    }
-
-    if (matches <= 0) {
-        free(matchList);
-        setSearchProperties(searchResult, NULL, 0);
         return searchResult;
     }
 
@@ -312,14 +307,18 @@ chefSearchResult* searchChefByName(chefObj ** chefList, int listLen, char* nameQ
     chefObj ** matchList = newChefList(listLen);
     if (matchList == NULL) { return NULL; }
 
+    lowerStr(nameQuery, strlen(nameQuery));
+
     int matches = 0;
     int i;
     for (i = 0; i < listLen; i++) {
         if (chefList[i] == NULL) { continue; }
 
-        char* currentName = getName(chefList[i]);
-        int matchNameResult = strncmp(currentName, nameQuery, MAX_NAME_LEN);
+        char currentName[ACTUAL_MAX_NAME_LEN];
+        strncpy(currentName, getName(chefList[i]), ACTUAL_MAX_NAME_LEN);
+        lowerStr(currentName, strlen(currentName));
 
+        int matchNameResult = strncmp(currentName, nameQuery, MAX_NAME_LEN);
         if (matchNameResult != 0) { continue; }
 
         insertChefIntoList(matchList, listLen, chefList[i]);
@@ -358,4 +357,17 @@ chefSearchResult* searchChefBySalaryRange(
     }
 
     return handleSearchResult(matchList, matches, listLen);
+}
+
+int findChefOriginalIndex(chefObj ** chefList, int listLen, chefObj* queriedChef) {
+    if (chefList == NULL || listLen <= 0 || queriedChef == NULL) {
+        return -1;
+    }
+    int i;
+    for (i = 0; i < listLen; i++) {
+        if (chefList[i] == queriedChef) {
+            return i;
+        }
+    }
+    return -1;
 }

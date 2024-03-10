@@ -50,6 +50,7 @@ double getDoubleInput(void);
 int getStringInput(char* strPtr, int maxLen);
 
 int handleMaxLens(maxLenObj* maxLens, int listLen);
+maxLenObj* getPropertiesMaxLen(chefObj ** chefList, int listLen);
 short int getMaxLineLen(maxLenObj* maxLens);
 
 void printHorizontalDivider(const char* ch, int maxLineLen);
