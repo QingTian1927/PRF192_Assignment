@@ -178,10 +178,7 @@ chefObj ** copyChefList(chefObj ** sourcedList, int listLen) {
     int i;
     for (i = 0; i < listLen; i++) {
         chefObj* originalChef = sourcedList[i];
-        if (originalChef == NULL) {
-            copiedList[i] = NULL;
-            continue;
-        }
+        if (originalChef == NULL) { continue; }
 
         chefObj* copiedChef = newChef();
         if (copiedChef == NULL) {
