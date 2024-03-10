@@ -43,7 +43,6 @@ void editListWrapper(chefObj *** chefListPtr, int* listLenPtr);
 void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr);
 
 void editChefWrapper(chefObj ** chefList, int* listLenPtr) {
-
     int hasNotExited = 1;
     int isInvalidOption = 0;
 
@@ -77,159 +76,6 @@ void editChefWrapper(chefObj ** chefList, int* listLenPtr) {
             default:
                 isInvalidOption = 1;
         }
-    }
-}
-
-void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
-    chefObj ** chefList = *chefListPtr;
-    int listLen = *listLenPtr;
-
-    chefObj* chef = newChef();
-    if (chef == NULL) {
-        printf("Failed to allocate memory for the new chef\n");
-        printf("Please try again later or restart the program.\n");
-        pressEnterTo("return to the menu");
-        return;
-    }
-
-    int inputResult = 0;
-    int propertyResult = -1;
-    char name[MAX_NAME_LEN + 1];
-
-    while (inputResult <= 0 && propertyResult <= 0) {
-        if (inputResult == -1) {
-            printf("> Failed to register the chef's name!\n\n");
-            inputResult = 0;
-        }
-        else if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> You've entered an invalid name!\n\n");
-            propertyResult = -1;
-        }
-
-        printf("Enter the name of the new chef [max %d characters]:\n", MAX_NAME_LEN);
-        printf("> ");
-
-        inputResult = getStringInput(name, MAX_NAME_LEN + 1);
-        propertyResult = setName(chef, name);
-        printf("\n");
-    }
-
-    propertyResult = -1;
-
-    while (propertyResult <= 0) {
-        if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> Failed to register the chef's role\n\n");
-            propertyResult = -1;
-        }
-
-        char* ROLES_TABLE[] = {
-            "APPRENTICE COOK",
-            "JUNIOR CHEF",
-            "SEASONED CHEF",
-            "MASTER CHEF"
-        };
-
-        printf("Assign the new chef one of the following roles:\n\n");
-        printf("1) %s\n", ROLES_TABLE[0]);
-        printf("2) %s\n", ROLES_TABLE[1]);
-        printf("3) %s\n", ROLES_TABLE[2]);
-        printf("4) %s\n\n", ROLES_TABLE[3]);
-
-        printf("Enter your choice: ");
-        char choice = getchar();
-        flushBuffer();
-        printf("\n");
-
-        switch (choice) {
-            case '1':
-                propertyResult = setRole(chef, ROLES_TABLE[0]);
-                break;
-            case '2':
-                propertyResult = setRole(chef, ROLES_TABLE[1]);
-                break;
-            case '3':
-                propertyResult = setRole(chef, ROLES_TABLE[2]);
-                break;
-            case '4':
-                propertyResult = setRole(chef, ROLES_TABLE[0]);
-                break;
-            default:
-                printf("> Please enter a valid option\n\n");
-        }
-    }
-
-    inputResult = 0;
-    propertyResult = -1;
-    char dob[MAX_DATE_LEN + 1];
-
-    while (inputResult <= 0 && propertyResult <= 0) {
-        if (inputResult == -1) {
-            printf("> Failed to register the chef's date of birth!\n\n");
-            inputResult = 0;
-        }
-        else if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> You've entered an invalid date!\n\n");
-            propertyResult = -1;
-        }
-
-        printf("Enter the date of birth of the new chef [YYYY-MM-DD]:\n");
-        printf("> ");
-
-        inputResult = getStringInput(dob, MAX_DATE_LEN + 1);
-        propertyResult = setDateOfBirth(chef, dob);
-        printf("\n");
-    }
-
-    propertyResult = -1;
-    long salary;
-
-    while (propertyResult <= 0) {
-        if (propertyResult == SET_PROPERTY_FAIL) {
-            printf("> You've entered an invalid date!\n\n");
-            propertyResult = -1;
-        }
-        printf("Enter the salary of the new chef [max %d]:\n", MAX_SALARY);
-        printf("> ");
-
-        salary = getLongInput();
-        flushBuffer();
-
-        propertyResult = setSalary(chef, salary);
-        printf("\n");
-    }
-
-    int listStatus = checkChefListStatus(chefList, listLen);
-    if (listStatus == CHEFLIST_FULL) {
-        int newLen = listLen + DEFAULT_CHEFLIST_SIZE;
-        chefObj ** resizedList = resizeChefList(chefList, listLen, newLen);
-
-        if (resizedList == NULL) {
-            printf("Failed to resize the chef list for the new chef\n");
-            printf("Please try again later or restart the program.\n");
-            pressEnterTo("return to the menu");
-            free(chef);
-            return;
-        }
-
-        listLen = newLen;
-        *listLenPtr = listLen;
-        chefList = resizedList;
-        *chefListPtr = chefList;
-    }
-
-    int insertionResult = insertChefIntoList(chefList, listLen, chef);
-    if (insertionResult == APPEND_CHEF_OKAY) {
-        printf("Successfully added the new chef to the list\n");
-        pressEnterTo("return to the menu");
-        return;
-    }
-
-    if (insertionResult == APPEND_CHEF_FAIL) {
-        printf("Failed to add the new chef to the list\n");
-        printf("Please try again later or restart the program.\n");
-        pressEnterTo("return to the menu");
-        free(chef);
-        return;
     }
 }
 
@@ -396,6 +242,46 @@ int main() {
     exit(EXIT_SUCCESS);
 }
 
+void displayChefsWrapper(chefObj ** chefList, int listLen) {
+    int isInvalidOption = 0;
+    int pagerOption = -1;
+
+    if (listLen <= DEFAULT_PAGE_SIZE) {
+        pagerOption = DISABLE_PAGER;
+        clearScreen();
+        printTitleCard();
+    }
+
+    while (pagerOption == -1) {
+        clearScreen();
+        printTitleCard();
+
+        if (isInvalidOption == 0) {
+            printf("Do you wish to view the entire chef list at once? [y/n]: ");
+        } else {
+            printf("%s", INVALID_YESNO_PROMPT);
+            isInvalidOption = 0;
+        }
+        char choice = lower(getchar());
+        flushBuffer();
+
+        switch (choice) {
+            case 'y':
+                pagerOption = DISABLE_PAGER;
+                break;
+            case 'n':
+                pagerOption = ENABLE_PAGER;
+                break;
+            default:
+                isInvalidOption = 1;
+        }
+    }
+    if (listLen > DEFAULT_PAGE_SIZE) { printf("\n"); }
+
+    printUnsortedChefList(chefList, listLen, pagerOption);
+    pressEnterTo("continue to the main program");
+}
+
 chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option) {
     int isInvalidOption = 0;
     int hasToLoadFile = -1;
@@ -458,46 +344,6 @@ chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option) {
     pressEnterTo("continue to the main program");
 
     return chefFile;
-}
-
-void displayChefsWrapper(chefObj ** chefList, int listLen) {
-    int isInvalidOption = 0;
-    int pagerOption = -1;
-
-    if (listLen <= DEFAULT_PAGE_SIZE) {
-        pagerOption = DISABLE_PAGER;
-        clearScreen();
-        printTitleCard();
-    }
-
-    while (pagerOption == -1) {
-        clearScreen();
-        printTitleCard();
-
-        if (isInvalidOption == 0) {
-            printf("Do you wish to view the entire chef list at once? [y/n]: ");
-        } else {
-            printf("%s", INVALID_YESNO_PROMPT);
-            isInvalidOption = 0;
-        }
-        char choice = lower(getchar());
-        flushBuffer();
-
-        switch (choice) {
-            case 'y':
-                pagerOption = DISABLE_PAGER;
-                break;
-            case 'n':
-                pagerOption = ENABLE_PAGER;
-                break;
-            default:
-                isInvalidOption = 1;
-        }
-    }
-    if (listLen > DEFAULT_PAGE_SIZE) { printf("\n"); }
-
-    printUnsortedChefList(chefList, listLen, pagerOption);
-    pressEnterTo("continue to the main program");
 }
 
 int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
@@ -582,4 +428,157 @@ int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
     }
 
     return WRITE_FILE_FAIL;
+}
+
+void addChefWrapper(chefObj *** chefListPtr, int* listLenPtr) {
+    chefObj ** chefList = *chefListPtr;
+    int listLen = *listLenPtr;
+
+    chefObj* chef = newChef();
+    if (chef == NULL) {
+        printf("Failed to allocate memory for the new chef\n");
+        printf("Please try again later or restart the program.\n");
+        pressEnterTo("return to the menu");
+        return;
+    }
+
+    int inputResult = 0;
+    int propertyResult = -1;
+    char name[MAX_NAME_LEN + 1];
+
+    while (inputResult <= 0 && propertyResult <= 0) {
+        if (inputResult == -1) {
+            printf("> Failed to register the chef's name!\n\n");
+            inputResult = 0;
+        }
+        else if (propertyResult == SET_PROPERTY_FAIL) {
+            printf("> You've entered an invalid name!\n\n");
+            propertyResult = -1;
+        }
+
+        printf("Enter the name of the new chef [max %d characters]:\n", MAX_NAME_LEN);
+        printf("> ");
+
+        inputResult = getStringInput(name, MAX_NAME_LEN + 1);
+        propertyResult = setName(chef, name);
+        printf("\n");
+    }
+
+    propertyResult = -1;
+
+    while (propertyResult <= 0) {
+        if (propertyResult == SET_PROPERTY_FAIL) {
+            printf("> Failed to register the chef's role\n\n");
+            propertyResult = -1;
+        }
+
+        char* ROLES_TABLE[] = {
+            "APPRENTICE COOK",
+            "JUNIOR CHEF",
+            "SEASONED CHEF",
+            "MASTER CHEF"
+        };
+
+        printf("Assign the new chef one of the following roles:\n\n");
+        printf("1) %s\n", ROLES_TABLE[0]);
+        printf("2) %s\n", ROLES_TABLE[1]);
+        printf("3) %s\n", ROLES_TABLE[2]);
+        printf("4) %s\n\n", ROLES_TABLE[3]);
+
+        printf("Enter your choice: ");
+        char choice = getchar();
+        flushBuffer();
+        printf("\n");
+
+        switch (choice) {
+            case '1':
+                propertyResult = setRole(chef, ROLES_TABLE[0]);
+                break;
+            case '2':
+                propertyResult = setRole(chef, ROLES_TABLE[1]);
+                break;
+            case '3':
+                propertyResult = setRole(chef, ROLES_TABLE[2]);
+                break;
+            case '4':
+                propertyResult = setRole(chef, ROLES_TABLE[0]);
+                break;
+            default:
+                printf("> Please enter a valid option\n\n");
+        }
+    }
+
+    inputResult = 0;
+    propertyResult = -1;
+    char dob[MAX_DATE_LEN + 1];
+
+    while (inputResult <= 0 && propertyResult <= 0) {
+        if (inputResult == -1) {
+            printf("> Failed to register the chef's date of birth!\n\n");
+            inputResult = 0;
+        }
+        else if (propertyResult == SET_PROPERTY_FAIL) {
+            printf("> You've entered an invalid date!\n\n");
+            propertyResult = -1;
+        }
+
+        printf("Enter the date of birth of the new chef [YYYY-MM-DD]:\n");
+        printf("> ");
+
+        inputResult = getStringInput(dob, MAX_DATE_LEN + 1);
+        propertyResult = setDateOfBirth(chef, dob);
+        printf("\n");
+    }
+
+    propertyResult = -1;
+    long salary;
+
+    while (propertyResult <= 0) {
+        if (propertyResult == SET_PROPERTY_FAIL) {
+            printf("> You've entered an invalid date!\n\n");
+            propertyResult = -1;
+        }
+        printf("Enter the salary of the new chef [max %d]:\n", MAX_SALARY);
+        printf("> ");
+
+        salary = getLongInput();
+        flushBuffer();
+
+        propertyResult = setSalary(chef, salary);
+        printf("\n");
+    }
+
+    int listStatus = checkChefListStatus(chefList, listLen);
+    if (listStatus == CHEFLIST_FULL) {
+        int newLen = listLen + DEFAULT_CHEFLIST_SIZE;
+        chefObj ** resizedList = resizeChefList(chefList, listLen, newLen);
+
+        if (resizedList == NULL) {
+            printf("Failed to resize the chef list for the new chef\n");
+            printf("Please try again later or restart the program.\n");
+            pressEnterTo("return to the menu");
+            free(chef);
+            return;
+        }
+
+        listLen = newLen;
+        *listLenPtr = listLen;
+        chefList = resizedList;
+        *chefListPtr = chefList;
+    }
+
+    int insertionResult = insertChefIntoList(chefList, listLen, chef);
+    if (insertionResult == APPEND_CHEF_OKAY) {
+        printf("Successfully added the new chef to the list\n");
+        pressEnterTo("return to the menu");
+        return;
+    }
+
+    if (insertionResult == APPEND_CHEF_FAIL) {
+        printf("Failed to add the new chef to the list\n");
+        printf("Please try again later or restart the program.\n");
+        pressEnterTo("return to the menu");
+        free(chef);
+        return;
+    }
 }
