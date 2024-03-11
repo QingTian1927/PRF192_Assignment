@@ -10,7 +10,7 @@
 #include "../chefobject/chefobject.h"
 #include "../stringformat/stringformat.h"
 
-#define MAX_CHEFS 10000
+#define MAX_CHEFS 250
 #define DEFAULT_CHEFLIST_SIZE 10
 
 #define APPEND_CHEF_FAIL -1

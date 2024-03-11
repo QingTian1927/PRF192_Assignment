@@ -248,9 +248,9 @@ int fullTrim(char* str, int len) {
 
 short int getNumLen(long num) {
     short int numLen = 1;
-    while (num < -1 || num > 1) {
-        num /= 10;
+    while (num > 9) {
         numLen++;
+        num /= 10;
     }
     return numLen;
 }
