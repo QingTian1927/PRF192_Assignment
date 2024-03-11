@@ -81,6 +81,7 @@ maxLenObj* getPropertiesMaxLen(chefObj ** chefList, int listLen) {
     short int maxName = 0;
     short int maxRole = 0;
     short int maxSal = 0;
+    short int maxPos = 0;
 
     int i;
     for (i = 0; i < listLen; i++) {
@@ -93,10 +94,12 @@ maxLenObj* getPropertiesMaxLen(chefObj ** chefList, int listLen) {
         short int nameLen = strlen(name);
         short int roleLen = strlen(role);
         short int salLen = getNumLen(sal);
+        short int posLen = getNumLen(i + 1);
 
         maxName = (nameLen > maxName) ? nameLen : maxName;
         maxRole = (roleLen > maxRole) ? roleLen : maxRole;
         maxSal = (salLen > maxSal) ? salLen : maxSal;
+        maxPos = (posLen > maxPos) ? posLen : maxPos;
     }
     /* FOCUS */
 
@@ -104,7 +107,7 @@ maxLenObj* getPropertiesMaxLen(chefObj ** chefList, int listLen) {
     maxLens->maxRoleLen = maxRole;
     maxLens->maxSalLen = maxSal;
     maxLens->maxDobLen = MAX_DATE_LEN;
-    maxLens->maxPosLen = getNumLen(listLen - 1);
+    maxLens->maxPosLen = maxPos;
 
     return maxLens;
 }
@@ -333,7 +336,7 @@ void printSortedChefList(
         );
 
         if (enablePager && (i % DEFAULT_PAGE_SIZE == 0 && i > 0)) {
-            printf("\nPress <ENTER> to continue or type 'q' to exit the pager: ");
+            printf("\nPress <Enter> to continue or type 'q' to exit the pager: ");
 
             char choice = lower(getchar());
             if (choice == 'q') {

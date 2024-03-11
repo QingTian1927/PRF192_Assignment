@@ -771,23 +771,35 @@ void handleSearchResult(
         return;
     }
 
-    short int maxNameLen, maxRoleLen, maxSalLen, maxDobLen, maxPosLen;
+    short int maxNameLen, maxRoleLen, maxSalLen, maxDobLen;
 
     maxLenObj* maxLens = getPropertiesMaxLen(resultList, resultLen);
     handleMaxLens(maxLens, resultLen);
+
+    short int maxPosLen = 0;
+    int i;
+    for (i = 0; i < resultLen; i++) {
+        if (resultList[i] == NULL) { continue; }
+
+        int idx = findChefOriginalIndex(chefList, listLen, resultList[i]);
+        int pos = idx + 1;
+
+        short int posLen = getNumLen(pos);
+        maxPosLen = (posLen > maxPosLen) ? posLen : maxPosLen;
+    }
 
     maxNameLen = maxLens->maxNameLen;
     maxRoleLen = maxLens->maxRoleLen;
     maxSalLen = maxLens->maxSalLen;
     maxDobLen = maxLens->maxDobLen;
-    maxPosLen = maxLens->maxPosLen;
+    maxLens->maxPosLen = maxPosLen;
 
     short int maxLineLen = getMaxLineLen(maxLens);
 
+    printf("-> Found a total of %d matching chef(s)\n\n", resultLen);
     printTableHeader(maxLens);
     printHorizontalDivider("-", maxLineLen);
 
-    int i;
     for (i = 0; i < resultLen; i++) {
         chefObj* currentChef = resultList[i];
 
@@ -806,9 +818,23 @@ void handleSearchResult(
             maxDobLen, dob,
             maxSalLen, sal
         );
+
+        if (i % DEFAULT_PAGE_SIZE == 0 && i > 0) {
+            printf("\nPress <Enter> to continue or type 'q' to exit the pager: ");
+
+            char choice = lower(getchar());
+            if (choice == 'q') {
+                flushBuffer();
+                break;
+            }
+            else if (choice != '\n') { flushBuffer(); }
+
+            printf("\n");
+
+            printTableHeader(maxLens);
+            printHorizontalDivider("-", maxLineLen);
+        }
     }
-    printf("\n");
-    printf("-> Found a total of %d matching chef(s)\n", resultLen);
 
     free(maxLens);
     free(resultList);
