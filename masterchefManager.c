@@ -529,13 +529,6 @@ void editRoleWrapper(chefObj* chefPtr) {
             propertyResult = -1;
         }
 
-        char* ROLES_TABLE[] = {
-            "APPRENTICE COOK",
-            "JUNIOR CHEF",
-            "SEASONED CHEF",
-            "MASTER CHEF"
-        };
-
         printf("Assign the chef one of the following roles:\n\n");
         printf("1) %s\n", ROLES_TABLE[0]);
         printf("2) %s\n", ROLES_TABLE[1]);
@@ -547,18 +540,20 @@ void editRoleWrapper(chefObj* chefPtr) {
         flushBuffer();
         printf("\n");
 
+        // (char*) typecasting to disable warning messages (don't try this at home)
+        // setRole() doesn't modify rolePtr so this is safe.
         switch (choice) {
             case '1':
-                propertyResult = setRole(chefPtr, ROLES_TABLE[0]);
+                propertyResult = setRole(chefPtr, (char*) ROLES_TABLE[0]);
                 break;
             case '2':
-                propertyResult = setRole(chefPtr, ROLES_TABLE[1]);
+                propertyResult = setRole(chefPtr, (char*) ROLES_TABLE[1]);
                 break;
             case '3':
-                propertyResult = setRole(chefPtr, ROLES_TABLE[2]);
+                propertyResult = setRole(chefPtr, (char*) ROLES_TABLE[2]);
                 break;
             case '4':
-                propertyResult = setRole(chefPtr, ROLES_TABLE[3]);
+                propertyResult = setRole(chefPtr, (char*) ROLES_TABLE[3]);
                 break;
             default:
                 printf("-> Please enter a valid option\n\n");
@@ -640,13 +635,14 @@ char editChefWrapper(chefObj ** chefList, int listLen) {
             printf("-> You've entered an invalid value!\n\n");
             position = 0;
         }
-        printf("Enter the number of the chef to be edited [1 -> %d]:\n", listLen);
+        printf("Select the chef to be edited [1 -> %d] or enter 0 to exit:\n", listLen);
         printf("> ");
 
         position = getLongInput();
         flushBuffer();
         printf("\n");
 
+        if (position == 0) { return EXIT_MENU; }
         if (position < 1 || position > listLen) { position = -1; }
     }
 

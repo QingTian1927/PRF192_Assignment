@@ -34,6 +34,9 @@ typedef struct {
 } chefObj;
 /* FOCUS */
 
+extern const char* ROLES_TABLE[];
+extern const int ROLES_TABLE_LEN;
+
 int isValidRole(char* rolePtr);
 
 /* FOCUS */
