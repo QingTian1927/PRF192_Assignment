@@ -47,14 +47,14 @@ for ((i = 0 ; i < ${#ins[@]} ; i++)); do
 
     echo 'Compiling' $(basename "$in_file") '->' $(basename "$out_file")
 
-    gcc -Wall -c "$in_file" -o "$out_file"
+    gcc -Wall -O1 -c "$in_file" -o "$out_file"
     outs[i]="$in_file"
 done
 
 echo ''
 echo "Building $binName from object files"
 
-gcc -Wall -o "$bin" "${outs[@]}"
+gcc -Wall -O1 -o "$bin" "${outs[@]}"
 
 echo ''
 echo '-----------------------'
