@@ -8,7 +8,6 @@
 #include "libs/cheflist/cheflist.h"
 #include "libs/chefobject/chefobject.h"
 
-#include "libs/dateparser/dateparser.h"
 #include "libs/stringformat/stringformat.h"
 
 #define DISPLAY_CHEFS '1'
@@ -193,12 +192,14 @@ int main() {
     exit(EXIT_SUCCESS);
 }
 
+/* FOCUS */
 chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option) {
     int isInvalidOption = 0;
     int hasToLoadFile = -1;
 
     if (option == LOAD_FILE_MANUAL) { hasToLoadFile = 1; }
 
+    /* IGNORE */
     while (hasToLoadFile == -1) {
         clearScreen();
         printTitleCard();
@@ -223,6 +224,7 @@ chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option) {
                 isInvalidOption = 1;
         }
     }
+    /* IGNORE */
 
     if (hasToLoadFile <= 0) { return NULL; }
 
@@ -256,7 +258,9 @@ chefFileObj* loadFileWrapper(char* fileNameSavePtr, int option) {
 
     return chefFile;
 }
+/* FOCUS */
 
+/* FOCUS */
 int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
     char fileName[MAX_PATH_LEN + 1];
     fileName[0] = '\0';
@@ -265,6 +269,7 @@ int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
     int isInvalidOption = 0;
 
     if (strlen(savedFileName) > 0) {
+        /* IGNORE */
         while (reuseFile == -1) {
             clearScreen();
             printTitleCard();
@@ -292,6 +297,7 @@ int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
                     isInvalidOption = 1;
             }
         }
+        /* IGNORE */
         if (reuseFile) {
             strncpy(fileName, savedFileName, MAX_PATH_LEN + 1);
         }
@@ -340,6 +346,7 @@ int saveFileWrapper(char* savedFileName, chefObj ** chefList, int listLen) {
 
     return WRITE_FILE_FAIL;
 }
+/* FOCUS */
 
 void manualSaveHandler(
     char* fileName,

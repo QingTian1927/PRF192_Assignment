@@ -77,6 +77,7 @@ maxLenObj* getPropertiesMaxLen(chefObj ** chefList, int listLen) {
     maxLenObj* maxLens = malloc(sizeof(maxLenObj));
     if (maxLens == NULL) { return NULL; }
 
+    /* FOCUS */
     short int maxName = 0;
     short int maxRole = 0;
     short int maxSal = 0;
@@ -97,6 +98,7 @@ maxLenObj* getPropertiesMaxLen(chefObj ** chefList, int listLen) {
         maxRole = (roleLen > maxRole) ? roleLen : maxRole;
         maxSal = (salLen > maxSal) ? salLen : maxSal;
     }
+    /* FOCUS */
 
     maxLens->maxNameLen = maxName;
     maxLens->maxRoleLen = maxRole;
@@ -229,6 +231,7 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
         long sal = getSalary(chefList[i]);
         int pos = i + 1;
 
+        /* FOCUS */
         printf(
             "%0*d | %-*s | %-*s | %*s | %*ld\n",
             maxPosLen, pos,
@@ -237,9 +240,10 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
             maxDobLen, dob,
             maxSalLen, sal
         );
+        /* FOCUS */
 
         if (enablePager && pos % DEFAULT_PAGE_SIZE == 0) {
-            printf("\nPress <ENTER> to continue or type 'q' to exit the pager: ");
+            printf("\nPress <Enter> to continue or type 'q' to exit the pager: ");
 
             char choice = lower(getchar());
             if (choice == 'q') {

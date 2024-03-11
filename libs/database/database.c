@@ -54,6 +54,7 @@ int writeChefsFile (const char* fileName, chefObj ** chefList, int listLen) {
     FILE* file = fopen(fileName, "w");
     if (file == NULL) { return WRITE_FILE_FAIL; }
 
+    /* FOCUS */
     int i;
     for (i = 0; i < listLen; i++) {
         chefObj* chef = chefList[i];
@@ -70,6 +71,7 @@ int writeChefsFile (const char* fileName, chefObj ** chefList, int listLen) {
             name, role, dob, sal
         );
     }
+    /* FOCUS */
 
     fclose(file);
     return WRITE_FILE_OKAY;
@@ -128,6 +130,7 @@ int interpretIdentifierFlag(chefObj* chefPtr, char* identifier, const char ident
     }
 }
 
+/* FOCUS */
 int parseChefProperty(char* property, chefObj* chefPtr) {
     if (property == NULL || chefPtr == NULL) { return SET_PROPERTY_FAIL; }
 
@@ -153,6 +156,7 @@ int parseChefProperty(char* property, chefObj* chefPtr) {
     }
     return SET_PROPERTY_OKAY;
 }
+/* FOCUS */
 
 chefObj* parseChefLine(char* line) {
     if (line == NULL) { return NULL; }
@@ -163,6 +167,7 @@ chefObj* parseChefLine(char* line) {
     char* property;
     char* propertySavePtr;
 
+    /* FOCUS */
     property = strtok_r(line, PROPERTY_SEPARATOR, &propertySavePtr);
 
     while (property != NULL) {
@@ -179,6 +184,8 @@ chefObj* parseChefLine(char* line) {
 
         property = strtok_r(NULL, PROPERTY_SEPARATOR, &propertySavePtr);
     }
+    /* FOCUS */
+
     return chefPtr;
 }
 
@@ -194,6 +201,7 @@ chefFileObj* readChefsFile(const char* fileName) {
         return NULL;
     }
 
+    /* FOCUS */
     int chefCount = 0;
     while (fgets(line, MAX_LINE_LEN, file) != NULL) {
         if (chefCount > MAX_CHEFS) { break; }
@@ -208,6 +216,7 @@ chefFileObj* readChefsFile(const char* fileName) {
         chefCount++;
     }
     fclose(file);
+    /* FOCUS */
 
     if (chefCount <= 0) {
         free(chefList);

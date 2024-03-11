@@ -25,19 +25,24 @@
 #define SET_PROPERTY_FAIL 0
 #define SET_PROPERTY_OKAY 1
 
+/* FOCUS */
 typedef struct {
     char name[ACTUAL_MAX_NAME_LEN];
     char role[ACTUAL_MAX_ROLE_LEN];
     char dateOfBirth[ACTUAL_MAX_DATE_LEN];
     long salary;
 } chefObj;
+/* FOCUS */
 
 int isValidRole(char* rolePtr);
 
+/* FOCUS */
 int setName(chefObj* chefPtr, char* namePtr);
 int setRole(chefObj* chefPtr, char* rolePtr);
 int setSalary(chefObj* chefPtr, long salary);
 int setDateOfBirth(chefObj* chefPtr, char* dateOfBirth);
+/* FOCUS */
+
 int setAll(
     chefObj* chefPtr,
     char* namePtr,
@@ -46,9 +51,11 @@ int setAll(
     long salary
 );
 
+/* FOCUS */
 char* getName(chefObj* chef);
 char* getRole(chefObj* chef);
 char* getDateOfBirth(chefObj* chef);
 long getSalary(chefObj* chef);
+/* FOCUS */
 
 #endif

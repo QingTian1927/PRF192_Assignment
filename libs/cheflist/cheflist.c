@@ -20,6 +20,8 @@ int initializeChefList(chefObj** chefList, int listLen) {
     return 1;
 }
 
+/* FOCUS */
+
 // Returns an array of pointers to structs
 chefObj ** newChefList(int listLen) {
     if (listLen <= 0 || listLen > MAX_CHEFS) { return NULL; }
@@ -37,6 +39,8 @@ chefObj* newChef(void) {
 
     return newChef;
 }
+
+/* FOCUS */
 
 chefObj* copyChef(chefObj* chefPtr) {
     chefObj* copiedChef = newChef();
@@ -93,17 +97,6 @@ void shiftListLeft(
     }
 }
 
-int checkChefListStatus(chefObj ** chefList, int listLen) {
-    if (chefList == NULL || listLen <= 0) { return CHEFLIST_ERRO; }
-
-    int i;
-    for (i = 0; i < listLen; i++) {
-        if (chefList[i] != NULL) { continue; }
-        return i;
-    }
-    return CHEFLIST_FULL;
-}
-
 int countChefsInList(chefObj ** chefList, int listLen) {
     if (chefList == NULL || listLen <= 0) { return CHEFLIST_ERRO; }
 
@@ -114,6 +107,18 @@ int countChefsInList(chefObj ** chefList, int listLen) {
         if (chefList[i] != NULL) { count++; }
     }
     return count;
+}
+
+/* FOCUS */
+int checkChefListStatus(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return CHEFLIST_ERRO; }
+
+    int i;
+    for (i = 0; i < listLen; i++) {
+        if (chefList[i] != NULL) { continue; }
+        return i;
+    }
+    return CHEFLIST_FULL;
 }
 
 int insertChefIntoList(chefObj ** chefList, int listLen, chefObj* chefPtr) {
@@ -127,7 +132,9 @@ int insertChefIntoList(chefObj ** chefList, int listLen, chefObj* chefPtr) {
     chefList[listStatus] = chefPtr;
     return APPEND_CHEF_OKAY;
 }
+/* FOCUS */
 
+/* FOCUS */
 long long calculateChefTotalSalary(chefObj ** chefList, int listLen) {
     if (chefList == NULL || listLen <= 0) { return 0; }
 
@@ -141,6 +148,7 @@ long long calculateChefTotalSalary(chefObj ** chefList, int listLen) {
     }
     return total;
 }
+/* FOCUS */
 
 chefObj ** appendChefToFullList(
     chefObj ** chefList,
@@ -208,37 +216,11 @@ chefObj ** copyChefList(chefObj ** sourcedList, int listLen) {
     return copiedList;
 }
 
+/* FOCUS */
 void swapChef(chefObj ** firstChef, chefObj ** secondChef) {
     chefObj* temp = *firstChef;
     *firstChef = *secondChef;
     *secondChef = temp;
-}
-
-chefObj ** orderBySalary(chefObj ** chefList, int listLen) {
-    if (chefList == NULL || listLen <= 0) { return NULL; }
-
-    chefObj ** sortedList = copyChefList(chefList, listLen);
-    if (sortedList == NULL) { return NULL; }
-
-    // Reverse selection sort.
-    int i, j;
-    for (i = 0; i < listLen; i++) {
-        if (sortedList[i] == NULL) { continue; }
-        int maxIndex = i;
-
-        for (j = i + 1; j < listLen; j++) {
-            if (sortedList[j] == NULL) { continue; }
-
-            long comparedSalary = getSalary(sortedList[maxIndex]);
-            long currentSalary = getSalary(sortedList[j]);
-
-            if (currentSalary <= comparedSalary) { continue; }
-            maxIndex = j;
-        }
-        swapChef(&sortedList[maxIndex], &sortedList[i]);
-    }
-
-    return sortedList;
 }
 
 chefObj ** orderByName(chefObj ** chefList, int listLen) {
@@ -267,6 +249,34 @@ chefObj ** orderByName(chefObj ** chefList, int listLen) {
             minIndex = j;
         }
         swapChef(&sortedList[minIndex], &sortedList[i]);
+    }
+
+    return sortedList;
+}
+/* FOCUS */
+
+chefObj ** orderBySalary(chefObj ** chefList, int listLen) {
+    if (chefList == NULL || listLen <= 0) { return NULL; }
+
+    chefObj ** sortedList = copyChefList(chefList, listLen);
+    if (sortedList == NULL) { return NULL; }
+
+    // Reverse selection sort.
+    int i, j;
+    for (i = 0; i < listLen; i++) {
+        if (sortedList[i] == NULL) { continue; }
+        int maxIndex = i;
+
+        for (j = i + 1; j < listLen; j++) {
+            if (sortedList[j] == NULL) { continue; }
+
+            long comparedSalary = getSalary(sortedList[maxIndex]);
+            long currentSalary = getSalary(sortedList[j]);
+
+            if (currentSalary <= comparedSalary) { continue; }
+            maxIndex = j;
+        }
+        swapChef(&sortedList[maxIndex], &sortedList[i]);
     }
 
     return sortedList;
@@ -315,6 +325,7 @@ chefSearchResult* processSearchResult(
     return searchResult;
 }
 
+/* FOCUS */
 chefSearchResult* searchChefByName(chefObj ** chefList, int listLen, char* nameQuery) {
     int isInvalidParameter = (
         chefList == NULL || listLen <= 0 || nameQuery == NULL ||
@@ -345,6 +356,7 @@ chefSearchResult* searchChefByName(chefObj ** chefList, int listLen, char* nameQ
 
     return processSearchResult(matchList, matches, listLen);
 }
+/* FOCUS */
 
 chefSearchResult* searchChefBySalaryRange(
     chefObj ** chefList,
