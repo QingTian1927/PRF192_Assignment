@@ -58,6 +58,17 @@ void deleteChef(chefObj ** chefPtrPtr) {
     *chefPtrPtr = NULL;
 }
 
+void freeChefList(chefObj ** chefList, int listLen) {
+    if (listLen <= 0) {
+        free(chefList);
+        return;
+    }
+
+    int i;
+    for (i = 0; i < listLen; i++) { free(chefList[i]); }
+    free(chefList);
+}
+
 void shiftListLeft(
     chefObj ** chefList,
     int listLen,

@@ -345,7 +345,7 @@ void printSortedChefList(
         }
     }
 
-    if (workList != chefList) { free(workList); }
+    if (workList != chefList) { freeChefList(workList, listLen); }
     free(maxLens);
 }
 

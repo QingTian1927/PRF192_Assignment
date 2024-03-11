@@ -137,7 +137,7 @@ int main() {
     }
 
     if (hasModifiedList == 0) {
-        free(chefList);
+        freeChefList(chefList, listLen);
         free(chefFile);
         exit(EXIT_SUCCESS);
     }
@@ -174,14 +174,14 @@ int main() {
     }
 
     if (saveOption == 0) {
-        free(chefList);
+        freeChefList(chefList, listLen);
         free(chefFile);
         printf("All unsaved data has been discarded.\n");
         exit(EXIT_SUCCESS);
     }
 
     saveResult = saveFileWrapper(fileName, chefList, listLen);
-    free(chefList);
+    freeChefList(chefList, listLen);
     free(chefFile);
 
     if (saveResult == WRITE_FILE_FAIL) {
