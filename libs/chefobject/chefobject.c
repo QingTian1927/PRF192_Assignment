@@ -105,21 +105,29 @@ int setAll(
 }
 
 char* getName(chefObj* chef) {
+    if (chef == NULL) { return NULL; }
+
     char* name = chef->name;
     return name;
 }
 
 char* getRole(chefObj* chef) {
+    if (chef == NULL) { return NULL; }
+
     char* role = chef->role;
     return role;
 }
 
 char* getDateOfBirth(chefObj* chef) {
+    if (chef == NULL) { return NULL; }
+
     char* dateOfBirth = chef->dateOfBirth;
     return dateOfBirth;
 }
 
 long getSalary(chefObj* chef) {
+    if (chef == NULL) { return -1; }
+
     long salary = chef->salary;
     return salary;
 }
