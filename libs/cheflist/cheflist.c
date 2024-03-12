@@ -135,6 +135,17 @@ int insertChefIntoList(chefObj ** chefList, int listLen, chefObj* chefPtr) {
 /* FOCUS */
 
 /* FOCUS */
+
+/**
+ * @brief Calculates the total salary of a given chef list.
+ * @author L. Nga
+ *
+ * Calculates the total salary of all chefs within a given chef list.
+ *
+ * @param chefList The sourced chef list.
+ * @param listLen The length of the passed in chef list.
+ * @return long long The total salary of all chefs within the list.
+ */
 long long calculateChefTotalSalary(chefObj ** chefList, int listLen) {
     if (chefList == NULL || listLen <= 0) { return 0; }
 
@@ -148,6 +159,7 @@ long long calculateChefTotalSalary(chefObj ** chefList, int listLen) {
     }
     return total;
 }
+
 /* FOCUS */
 
 chefObj ** appendChefToFullList(
@@ -255,6 +267,20 @@ chefObj ** orderByName(chefObj ** chefList, int listLen) {
 }
 /* FOCUS */
 
+/**
+ * @brief Sorts a given chef list according to salary.
+ * @author L. Nga
+ *
+ * Sorts a list of chefs according to salary, in descending order. The returned
+ * chef list can be safely freed since it is a copy of the original chef list.
+ *
+ * Currently, the functions uses the reversed selection sort algorithm to carry
+ * the sorting.
+ *
+ * @param chefList The chef list to be sorted.
+ * @param listLen The length of the passed in chef list.
+ * @return chefObj** A pointer to the sorted chef list.
+ */
 chefObj ** orderBySalary(chefObj ** chefList, int listLen) {
     if (chefList == NULL || listLen <= 0) { return NULL; }
 

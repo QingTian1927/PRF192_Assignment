@@ -397,6 +397,13 @@ void pressEnterTo(const char* prompt) {
     getchar();
 }
 
+/**
+ * @brief Prints out the main title card.
+ * @author T. Thanh
+ *
+ * Prints out the main title card of the program with an extra newline at the
+ * end.
+ */
 void printTitleCard(void) {
     printf("--------------------------------------------\n");
     printf("***** MASTERCHEFS MANAGEMENT SOFTWARE ******\n");
@@ -411,6 +418,14 @@ void printDisplaySubmenu(const char* prompt) {
     printf("%s", prompt);
 }
 
+/**
+ * @brief Prints out the edit chef submenu.
+ * @author T. Thanh
+ *
+ * Prints out the edit chef submenu with a custom prompt.
+ *
+ * @param prompt The message to be displayed to the user.
+ */
 void printEditChefSubmenu(const char* prompt) {
     printf("1) Edit the name of the chef\n");
     printf("2) Edit the role of the chef\n");
@@ -421,6 +436,14 @@ void printEditChefSubmenu(const char* prompt) {
     printf("%s", prompt);
 }
 
+/**
+ * @brief Prints out the edit chef list submenu.
+ * @author T. Thanh
+ *
+ * Prints out the edit chef list submenu with a custom prompt.
+ *
+ * @param prompt The message to be displayed to the user.
+ */
 void printEditListSubmenu(const char* prompt) {
     printf("1) Add a new chef to the list\n");
     printf("2) Edit the profile of a particular chef\n");
@@ -436,6 +459,14 @@ void printSearchSubmenu(const char* prompt) {
     printf("%s", prompt);
 }
 
+/**
+ * @brief Prints out the main menu.
+ * @author T. Thanh
+ *
+ * Prints out the main menu of the program with a custom prompt.
+ *
+ * @param prompt The message to be displayed to the user.
+ */
 void printMainMenu(const char* prompt) {
     printf("1) Display the list of chefs\n");
     printf("2) Search for specific chefs\n");

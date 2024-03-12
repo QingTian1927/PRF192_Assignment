@@ -589,6 +589,15 @@ void editDateWrapper(chefObj* chefPtr) {
     }
 }
 
+/**
+ * @brief A wrapper function for editing a given chef's salary.
+ * @author L. Nga
+ *
+ * A wrapper function that updates a given chef's salary with a new value
+ * inputted from the user. Includes basic input validation and buffer flushing.
+ *
+ * @param chefPtr The pointer to a chef to be edited.
+ */
 void editSalaryWrapper(chefObj* chefPtr) {
     int propertyResult = -1;
     long salary;

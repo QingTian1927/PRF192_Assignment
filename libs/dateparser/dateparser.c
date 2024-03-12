@@ -110,6 +110,15 @@ int isValidDateObj(dateObj* date) {
     return isValidDate;
 }
 
+/**
+ * @brief Converts dateObj into date string.
+ * @author T. Thanh
+ *
+ * Converts a given dateObj into a formatted date string using sprintf().
+ *
+ * @param date The pointer to a given dateObj
+ * @return char* The converted date string.
+ */
 char* convertToDateString(dateObj* date) {
     int isInvalidParameter = date == NULL || !isValidDateObj(date);
     if (isInvalidParameter) { return NULL; }
