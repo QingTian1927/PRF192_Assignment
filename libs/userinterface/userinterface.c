@@ -265,6 +265,42 @@ void printUnsortedChefList(chefObj ** chefList, int listLen, int enablePager) {
     free(maxLens);
 }
 
+/**
+ * @brief Prints out the chef list without any sorting.
+ * @author T. Thao.
+ *
+ * Thao's implementation of printUnsortedChefList(). A perfectly serviceable
+ * function that just gets the job done. However, when faced with plainly better
+ * alternatives, ideally one that prints out the result in a nicely-formatted
+ * manner, being good enough simply isn't *good enough*.
+ *
+ * Nonetheless, that is just my opinion as a nitpicking perfectionist. As long as
+ * the code executes just fine, credit must be given where credit is due.
+ *
+ * NOTE: the original code has been reworked a little bit to conform better with
+ *       the existing code. Other than that, nothing else has been changed.
+ *
+ * @param employees a pointer to a list of chefs.
+ * @param soLuongNhanVien the length of the passed in chef list.
+ */
+
+/*
+
+void inThongTinNhanVien(struct chefObj ** employees, int soLuongNhanVien) {
+    printf("Danh sach nhan vien:\n");
+
+    for (int i = 0; i < soLuongNhanVien; ++i) {
+        printf("Nhan vien %d:\n", i+1);
+        printf("Ho va ten: %s\n", getName(employees[i]));
+        printf("Vi tri cong viec: %s\n", getRole(employees[i]));
+        printf("Ngay sinh: %s\n", getDateOfBirth(employees[i]));
+        printf("Luong: %ld\n", getSalary(employees[i]));
+        printf("\n");
+    }
+}
+
+*/
+
 void printSortedChefList(
     chefObj ** chefList,
     int listLen,
