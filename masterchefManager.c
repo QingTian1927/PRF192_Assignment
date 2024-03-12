@@ -649,6 +649,13 @@ char editChefWrapper(chefObj ** chefList, int listLen) {
     int index = position - 1;
     chefObj* selectedChef = chefList[index];
 
+    if (selectedChef == NULL) {
+        printf("The selected slot is unoccupied and is thus uneditable.\n");
+        printf("Please add another chef instead.\n");
+        pressEnterTo("continue");
+        return EXIT_MENU;
+    }
+
     int hasNotExited = 1;
     int isInvalidOption = 0;
 
