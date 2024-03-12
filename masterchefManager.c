@@ -743,6 +743,7 @@ void editListWrapper(chefObj *** chefListPtr, int* listLenPtr) {
                 while (editChefStatus == EDIT_ANOTHER) {
                     editChefStatus = editChefWrapper(chefList, listLen);
                 }
+                editChefStatus = EDIT_ANOTHER;
                 // What a bloody hack
                 break;
             case REMOVE_CHEF:
