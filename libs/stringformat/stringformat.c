@@ -125,7 +125,7 @@ void capitalizeString(char* str, int len) {
  * credit is due.
  *
  * NOTE: the original code has been reformatted a bit to make it more readable.
- *       Other than that, nothing else have been changed.
+ *       Other than that, nothing else has been changed.
  *
  * @param arr The string to be capitalized.
  */
